@@ -37,19 +37,27 @@
                 <p class="text-sm text-gray-600">AI Onboarding Assistant</p>
             </div>
 
-            <!-- Program Info Badge (if pre-loaded) -->
+            <!-- Program Info Badge (shown after session loads) -->
             <div id="program-info" class="hidden mb-6 p-4 bg-blue-50 border border-blue-200 rounded-lg">
                 <h3 class="text-sm font-semibold text-blue-900 mb-3">Your Program</h3>
                 <div class="text-xs text-blue-800 space-y-2">
                     <p><strong>Program ID:</strong> <span id="display-program-id" class="font-mono"></span></p>
                     <p><strong>Organization ID:</strong> <span id="display-org-id" class="font-mono"></span></p>
                     <p><strong>Event ID:</strong> <span id="display-event-id" class="font-mono"></span></p>
-                    <div class="mt-3 pt-3 border-t border-blue-200">
+                    <div id="test-link-section" class="hidden mt-3 pt-3 border-t border-blue-200">
                         <p class="mb-1"><strong>Test Link:</strong></p>
                         <a id="display-test-link" href="#" target="_blank" class="text-blue-600 hover:text-blue-800 underline break-all text-xs"></a>
                     </div>
                     <p class="mt-3 pt-3 border-t border-blue-200"><strong>Status:</strong> <span class="text-green-600 font-medium">Ready ✓</span></p>
                     <p id="scripts-ready" class="hidden text-green-600 font-medium text-xs">✓ Implementation scripts loaded</p>
+                </div>
+            </div>
+
+            <!-- Loading Session Indicator -->
+            <div id="session-loading" class="hidden mb-6 p-4 bg-yellow-50 border border-yellow-200 rounded-lg">
+                <div class="flex items-center gap-2">
+                    <div class="w-4 h-4 border-2 border-yellow-600 border-t-transparent rounded-full animate-spin"></div>
+                    <span class="text-xs text-yellow-800 font-medium">Loading your program...</span>
                 </div>
             </div>
 
@@ -218,45 +226,26 @@
         const N8N_WEBHOOK_URL = 'https://harrytradedoubler2026.app.n8n.cloud/webhook/onboarding-chat';
         // ============================================
 
-        // Parse URL parameters - INCLUDES SCRIPTS!
-        function getURLParams() {
+        // Get session ID from URL (ONLY PARAMETER NOW!)
+        function getSessionId() {
             const params = new URLSearchParams(window.location.search);
-            return {
-                programId: params.get('programId') || params.get('pid'),
-                organizationId: params.get('organizationId') || params.get('oid') || params.get('orgId'),
-                eventId: params.get('eventId') || params.get('eid'),
-                testLink: params.get('testLink') || params.get('test'),
-                landingScript: params.get('landingScript') || params.get('landing'),
-                confirmationScript: params.get('confirmationScript') || params.get('confirmation'),
-                implementationGuide: params.get('implementationGuide') || params.get('guide')
-            };
+            return params.get('session') || params.get('sessionId') || params.get('sid');
         }
 
-        // Load program data from URL
-        const preloadedData = getURLParams();
-        const isProgramPreloaded = !!(preloadedData.programId && preloadedData.organizationId);
-        const hasScripts = !!(preloadedData.landingScript || preloadedData.confirmationScript);
+        const sessionId = getSessionId();
 
-        // State management
+        // State management (will be populated by n8n)
         let conversationHistory = [];
         let onboardingData = {
-            programId: preloadedData.programId || null,
-            organizationId: preloadedData.organizationId || null,
-            eventId: preloadedData.eventId || null,
-            testLink: preloadedData.testLink || null,
-            landingScript: preloadedData.landingScript || null,
-            confirmationScript: preloadedData.confirmationScript || null,
-            implementationGuide: preloadedData.implementationGuide || null,
-            programCreated: isProgramPreloaded,
-            scriptsReady: hasScripts
+            sessionLoaded: false
         };
         
         let checklist = {
-            intro: isProgramPreloaded,
-            brandedTracking: isProgramPreloaded,
+            intro: false,
+            brandedTracking: false,
             productFeed: false,
             assets: false,
-            scripts: hasScripts
+            scripts: false
         };
         
         let uploadedFiles = {
@@ -264,8 +253,6 @@
             banners: [],
             terms: []
         };
-        
-        let sessionId = generateSessionId();
 
         // DOM elements
         const chatContainer = document.getElementById('chat-container');
@@ -276,6 +263,7 @@
         const apiStatus = document.getElementById('api-status');
         const apiStatusText = document.getElementById('api-status-text');
         const programInfo = document.getElementById('program-info');
+        const sessionLoading = document.getElementById('session-loading');
 
         // File inputs
         const logoInput = document.getElementById('logo-input');
@@ -286,36 +274,15 @@
         window.addEventListener('DOMContentLoaded', initialize);
 
         function initialize() {
-            // Show program info if pre-loaded
-            if (isProgramPreloaded) {
-                programInfo.classList.remove('hidden');
-                document.getElementById('display-program-id').textContent = onboardingData.programId;
-                document.getElementById('display-org-id').textContent = onboardingData.organizationId;
-                document.getElementById('display-event-id').textContent = onboardingData.eventId || 'N/A';
-                
-                if (onboardingData.testLink) {
-                    const linkEl = document.getElementById('display-test-link');
-                    linkEl.textContent = onboardingData.testLink;
-                    linkEl.href = onboardingData.testLink;
-                } else {
-                    document.getElementById('display-test-link').textContent = 'Not provided';
-                }
-                
-                if (hasScripts) {
-                    document.getElementById('scripts-ready').classList.remove('hidden');
-                }
-                
-                updateDataSummary();
-                updateChecklist(checklist);
+            // Show loading if we have a session ID
+            if (sessionId) {
+                sessionLoading.classList.remove('hidden');
             }
 
-            // Create initial AI message
-            let initialMessage;
-            if (isProgramPreloaded) {
-                initialMessage = `Hi! 👋 I'm your Tradedoubler onboarding assistant.\n\nYour program is ready:\n\n✓ Program ID: ${onboardingData.programId}\n✓ Organization ID: ${onboardingData.organizationId}\n${onboardingData.eventId ? `✓ Event ID: ${onboardingData.eventId}\n` : ''}${onboardingData.testLink ? `✓ Test Link: ${onboardingData.testLink}\n` : ''}${hasScripts ? `✓ Implementation scripts ready\n` : ''}\n\nLet's complete your setup! First, what's your name and company?`;
-            } else {
-                initialMessage = "Hi! 👋 I'm your Tradedoubler onboarding assistant.\n\nI'll help you set up your affiliate program step by step.\n\nLet's get started! What's your name and company?";
-            }
+            // Initial greeting - session data will be loaded on first message
+            const initialMessage = sessionId 
+                ? "Hi! 👋 I'm loading your program details..." 
+                : "Hi! 👋 I'm your Tradedoubler onboarding assistant.\n\nI'll help you set up your affiliate program step by step.\n\nLet's get started! What's your name and company?";
 
             conversationHistory.push({
                 role: 'assistant',
@@ -323,6 +290,14 @@
             });
             
             addMessageToChat('assistant', initialMessage);
+
+            // If we have a session, send an initial "hello" to trigger session load
+            if (sessionId) {
+                setTimeout(() => {
+                    messageInput.value = "Hello";
+                    sendMessage();
+                }, 500);
+            }
         }
 
         // Event listeners
@@ -339,10 +314,6 @@
         termsInput.addEventListener('change', (e) => handleFileUpload(e, 'terms', 'terms-list'));
         
         sendAllFilesBtn.addEventListener('click', sendAllFiles);
-
-        function generateSessionId() {
-            return 'session_' + Date.now() + '_' + Math.random().toString(36).substr(2, 9);
-        }
 
         async function sendMessage() {
             const message = messageInput.value.trim();
@@ -364,7 +335,7 @@
                         'Content-Type': 'application/json',
                     },
                     body: JSON.stringify({
-                        sessionId: sessionId,
+                        sessionId: sessionId, // Pass session ID to n8n
                         message: message,
                         conversationHistory: conversationHistory,
                         onboardingData: onboardingData,
@@ -377,12 +348,22 @@
 
                 removeLoadingIndicator(loadingId);
 
+                // Hide session loading indicator
+                sessionLoading.classList.add('hidden');
+
                 addMessageToChat('assistant', data.response);
                 conversationHistory.push({ role: 'assistant', content: data.response });
 
                 if (data.onboardingData) {
+                    const wasFirstLoad = !onboardingData.sessionLoaded && data.onboardingData.sessionLoaded;
+                    
                     onboardingData = { ...onboardingData, ...data.onboardingData };
                     updateDataSummary();
+                    
+                    // If session just loaded, show program info
+                    if (wasFirstLoad) {
+                        showProgramInfo(onboardingData);
+                    }
                     
                     if (data.onboardingData.filesUploaded) {
                         showApiStatus('success', 'All Files Uploaded!');
@@ -399,11 +380,32 @@
             } catch (error) {
                 console.error('Error:', error);
                 removeLoadingIndicator(loadingId);
+                sessionLoading.classList.add('hidden');
                 addMessageToChat('assistant', 'I apologize, but I encountered an error. Please try again.');
             } finally {
                 messageInput.disabled = false;
                 sendBtn.disabled = false;
                 messageInput.focus();
+            }
+        }
+
+        function showProgramInfo(data) {
+            if (data.programId && data.organizationId) {
+                programInfo.classList.remove('hidden');
+                document.getElementById('display-program-id').textContent = data.programId;
+                document.getElementById('display-org-id').textContent = data.organizationId;
+                document.getElementById('display-event-id').textContent = data.eventId || 'N/A';
+                
+                if (data.testLink) {
+                    document.getElementById('test-link-section').classList.remove('hidden');
+                    const linkEl = document.getElementById('display-test-link');
+                    linkEl.textContent = data.testLink;
+                    linkEl.href = data.testLink;
+                }
+                
+                if (data.scriptsReady || data.landingScript || data.confirmationScript) {
+                    document.getElementById('scripts-ready').classList.remove('hidden');
+                }
             }
         }
 
@@ -574,7 +576,7 @@
             if (onboardingData.productFeedUrl) {
                 summary.push(`<p><strong>Feed:</strong> ${onboardingData.productFeedUrl.substring(0, 30)}...</p>`);
             }
-            if (onboardingData.scriptsReady) {
+            if (onboardingData.scriptsReady || onboardingData.landingScript) {
                 summary.push(`<p class="text-green-600"><strong>✓ Scripts Ready</strong></p>`);
             }
             if (onboardingData.filesUploaded) {
