@@ -38,12 +38,17 @@
             </div>
 
             <!-- Program Info Badge (if pre-loaded) -->
-            <div id="program-info" class="hidden mb-6 p-3 bg-blue-50 border border-blue-200 rounded-lg">
-                <h3 class="text-sm font-semibold text-blue-900 mb-2">Your Program</h3>
-                <div class="text-xs text-blue-800 space-y-1">
-                    <p><strong>Program ID:</strong> <span id="display-program-id"></span></p>
-                    <p><strong>Organization ID:</strong> <span id="display-org-id"></span></p>
-                    <p><strong>Status:</strong> <span class="text-green-600 font-medium">Ready</span></p>
+            <div id="program-info" class="hidden mb-6 p-4 bg-blue-50 border border-blue-200 rounded-lg">
+                <h3 class="text-sm font-semibold text-blue-900 mb-3">Your Program</h3>
+                <div class="text-xs text-blue-800 space-y-2">
+                    <p><strong>Program ID:</strong> <span id="display-program-id" class="font-mono"></span></p>
+                    <p><strong>Organization ID:</strong> <span id="display-org-id" class="font-mono"></span></p>
+                    <p><strong>Event ID:</strong> <span id="display-event-id" class="font-mono"></span></p>
+                    <div class="mt-3 pt-3 border-t border-blue-200">
+                        <p class="mb-1"><strong>Test Link:</strong></p>
+                        <a id="display-test-link" href="#" target="_blank" class="text-blue-600 hover:text-blue-800 underline break-all text-xs"></a>
+                    </div>
+                    <p class="mt-3 pt-3 border-t border-blue-200"><strong>Status:</strong> <span class="text-green-600 font-medium">Ready</span></p>
                 </div>
             </div>
 
@@ -212,46 +217,33 @@
         const N8N_WEBHOOK_URL = 'https://harrytradedoubler2026.app.n8n.cloud/webhook/onboarding-chat';
         // ============================================
 
-        // Parse URL parameters to get pre-loaded program data
+        // SIMPLIFIED: Parse URL parameters - JUST 4 VALUES
         function getURLParams() {
             const params = new URLSearchParams(window.location.search);
             return {
                 programId: params.get('programId') || params.get('pid'),
                 organizationId: params.get('organizationId') || params.get('oid') || params.get('orgId'),
-                clientName: params.get('clientName') || params.get('name'),
-                companyName: params.get('companyName') || params.get('company'),
-                email: params.get('email'),
-                visitDomain: params.get('visitDomain') || params.get('visit'),
-                staticsDomain: params.get('staticsDomain') || params.get('statics'),
-                implementationUrl: params.get('implementationUrl') || params.get('implUrl'),
-                trackingScript: params.get('trackingScript')
+                eventId: params.get('eventId') || params.get('eid'),
+                testLink: params.get('testLink') || params.get('test')
             };
         }
 
-        // Load pre-seeded program data
+        // Load program data from URL
         const preloadedData = getURLParams();
         const isProgramPreloaded = !!(preloadedData.programId && preloadedData.organizationId);
 
-        // State management - PRE-LOADED WITH URL DATA
+        // State management
         let conversationHistory = [];
         let onboardingData = {
             programId: preloadedData.programId || null,
             organizationId: preloadedData.organizationId || null,
-            clientName: preloadedData.clientName || null,
-            companyName: preloadedData.companyName || null,
-            email: preloadedData.email || null,
-            brandedTracking: {
-                visit: preloadedData.visitDomain || null,
-                statics: preloadedData.staticsDomain || null
-            },
-            implementationUrl: preloadedData.implementationUrl || null,
-            trackingScript: preloadedData.trackingScript || null,
-            programCreated: isProgramPreloaded, // Already created!
-            detailsConfirmed: false
+            eventId: preloadedData.eventId || null,
+            testLink: preloadedData.testLink || null,
+            programCreated: isProgramPreloaded
         };
         
         let checklist = {
-            intro: isProgramPreloaded, // Already done if program exists
+            intro: isProgramPreloaded,
             brandedTracking: isProgramPreloaded,
             productFeed: false,
             assets: false,
@@ -261,8 +253,7 @@
         let uploadedFiles = {
             logo: [],
             banners: [],
-            terms: [],
-            other: []
+            terms: []
         };
         
         let sessionId = generateSessionId();
@@ -291,14 +282,24 @@
                 programInfo.classList.remove('hidden');
                 document.getElementById('display-program-id').textContent = onboardingData.programId;
                 document.getElementById('display-org-id').textContent = onboardingData.organizationId;
+                document.getElementById('display-event-id').textContent = onboardingData.eventId || 'N/A';
+                
+                if (onboardingData.testLink) {
+                    const linkEl = document.getElementById('display-test-link');
+                    linkEl.textContent = onboardingData.testLink;
+                    linkEl.href = onboardingData.testLink;
+                } else {
+                    document.getElementById('display-test-link').textContent = 'Not provided';
+                }
+                
                 updateDataSummary();
                 updateChecklist(checklist);
             }
 
-            // Create initial AI message based on whether program is pre-loaded
+            // Create initial AI message
             let initialMessage;
             if (isProgramPreloaded) {
-                initialMessage = `Hi ${onboardingData.clientName || 'there'}! 👋 I'm your Tradedoubler onboarding assistant.\n\nI've already set up your program:\n\n✓ Program ID: ${onboardingData.programId}\n✓ Organization ID: ${onboardingData.organizationId}\n${onboardingData.brandedTracking.visit ? `✓ Visit Domain: ${onboardingData.brandedTracking.visit}` : ''}\n${onboardingData.brandedTracking.statics ? `✓ Statics Domain: ${onboardingData.brandedTracking.statics}` : ''}\n\nLet me help you complete the setup. Could you please confirm these details are correct?`;
+                initialMessage = `Hi! 👋 I'm your Tradedoubler onboarding assistant.\n\nYour program is ready:\n\n✓ Program ID: ${onboardingData.programId}\n✓ Organization ID: ${onboardingData.organizationId}\n${onboardingData.eventId ? `✓ Event ID: ${onboardingData.eventId}\n` : ''}${onboardingData.testLink ? `✓ Test Link: ${onboardingData.testLink}\n` : ''}\n\nLet's complete your setup! First, what's your name and company?`;
             } else {
                 initialMessage = "Hi! 👋 I'm your Tradedoubler onboarding assistant.\n\nI'll help you set up your affiliate program step by step.\n\nLet's get started! What's your name and company?";
             }
@@ -353,7 +354,7 @@
                         sessionId: sessionId,
                         message: message,
                         conversationHistory: conversationHistory,
-                        onboardingData: onboardingData, // Includes pre-loaded data!
+                        onboardingData: onboardingData,
                         checklist: checklist,
                         uploadedFiles: uploadedFiles
                     })
@@ -367,24 +368,14 @@
                 conversationHistory.push({ role: 'assistant', content: data.response });
 
                 if (data.onboardingData) {
-                    onboardingData = { ...onboardingData, ...data.onboardingData }; // Merge with pre-loaded
+                    onboardingData = { ...onboardingData, ...data.onboardingData };
                     updateDataSummary();
                     
-                    // Show API status
-                    if (data.onboardingData.detailsConfirmed) {
-                        showApiStatus('success', 'Details Confirmed!');
-                    }
-                    if (data.onboardingData.feedProcessed) {
-                        showApiStatus('success', `Feed Processed (${data.onboardingData.feedProductCount} products)`);
-                    }
                     if (data.onboardingData.filesUploaded) {
                         showApiStatus('success', 'All Files Uploaded!');
-                        uploadedFiles = { logo: [], banners: [], terms: [], other: [] };
+                        uploadedFiles = { logo: [], banners: [], terms: [] };
                         clearAllFileLists();
                         updateSendAllButton();
-                    }
-                    if (data.onboardingData.scriptsGenerated) {
-                        showApiStatus('success', 'Implementation Scripts Generated!');
                     }
                 }
                 if (data.checklist) {
@@ -549,6 +540,9 @@
             if (onboardingData.organizationId) {
                 summary.push(`<p><strong>Org ID:</strong> ${onboardingData.organizationId}</p>`);
             }
+            if (onboardingData.eventId) {
+                summary.push(`<p><strong>Event ID:</strong> ${onboardingData.eventId}</p>`);
+            }
             if (onboardingData.clientName) {
                 summary.push(`<p><strong>Client:</strong> ${onboardingData.clientName}</p>`);
             }
@@ -567,11 +561,8 @@
             if (onboardingData.productFeedUrl) {
                 summary.push(`<p><strong>Feed:</strong> ${onboardingData.productFeedUrl.substring(0, 30)}...</p>`);
             }
-            if (onboardingData.detailsConfirmed) {
-                summary.push(`<p class="text-green-600"><strong>✓ Details Confirmed</strong></p>`);
-            }
-            if (onboardingData.scriptsGenerated) {
-                summary.push(`<p class="text-green-600"><strong>✓ Scripts Generated</strong></p>`);
+            if (onboardingData.filesUploaded) {
+                summary.push(`<p class="text-green-600"><strong>✓ Assets Uploaded</strong></p>`);
             }
 
             dataSummary.innerHTML = summary.length > 0 ? summary.join('') : '<p>No data yet</p>';
