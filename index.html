@@ -1,4 +1,5 @@
 <!DOCTYPE html>
+
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
@@ -585,8 +586,8 @@
             step,
             message: text,
             conversationHistory: trimmedHistory,
-            onboardingData,
-            checklist,
+           onboardingData: {},
+checklist: {},
             uploadedFiles: filesPayload,
           }),
         });
@@ -654,37 +655,43 @@
     }
 
     function addLoadingIndicator(step) {
-      const chatEl = document.getElementById('chat-' + step);
-      if (!chatEl) return;
+  const chatEl = document.getElementById('chat-' + step);
+  if (!chatEl) return;
 
-      const id = `loading_${step}_${Date.now()}`;
-      const wrapper = document.createElement('div');
-      wrapper.id = id;
-      wrapper.className = 'flex justify-start';
+  const id = `loading_${step}_${Date.now()}`;
+  const wrapper = document.createElement('div');
+  wrapper.id = id;
+  wrapper.className = 'flex justify-start';
 
-      const inner = document.createElement('div');
-      inner.className = 'max-w-[1100px] w-full flex justify-start';
+  const inner = document.createElement('div');
+  inner.className = 'max-w-[1100px] w-full flex justify-start';
 
-      inner.innerHTML = `
-        <div class="px-3 py-2 rounded-[14px] bg-white border border-gray-200">
-          <div class="flex gap-1">
-            <div class="w-2 h-2 rounded-full bg-[#2A73FF] pulse-loader"></div>
-            <div class="w-2 h-2 rounded-full bg-[#2A73FF] pulse-loader" style="animation-delay:0.15s"></div>
-            <div class="w-2 h-2 rounded-full bg-[#2A73FF] pulse-loader" style="animation-delay:0.3s"></div>
-          </div>
-        </div>
-      `;
+  inner.innerHTML = `
+    <div class="px-3 py-2 rounded-[14px] bg-white border border-gray-200">
+      <div class="flex gap-1">
+        <div class="w-2 h-2 rounded-full bg-[#2A73FF] pulse-loader"></div>
+        <div class="w-2 h-2 rounded-full bg-[#2A73FF] pulse-loader" style="animation-delay:0.15s"></div>
+        <div class="w-2 h-2 rounded-full bg-[#2A73FF] pulse-loader" style="animation-delay:0.3s"></div>
+      </div>
+    </div>
+  `;
 
-      wrapper.appendChild(inner);
-      chatEl.appendChild(wrapper);
+  wrapper.appendChild(inner);
+  chatEl.appendChild(wrapper);
 
-      // Auto-scroll
-      setTimeout(() => {
-        chatEl.scrollTop = chatEl.scrollHeight;
-      }, 20);
+  // Auto-scroll
+  setTimeout(() => {
+    chatEl.scrollTop = chatEl.scrollHeight;
+  }, 20);
 
-      return id;
-    }
+  return id; // IMPORTANT!
+}
+
+// ✅ Place this OUTSIDE
+function removeLoadingIndicator(id) {
+  const el = document.getElementById(id);
+  if (el) el.remove();
+}
 
     function updateChecklistUI() {
       const doneCount = Object.values(checklist).filter(Boolean).length;
