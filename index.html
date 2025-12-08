@@ -10,7 +10,7 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Instrument+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
 
-  <!-- Tailwind config -->
+  <!-- Tailwind config MUST come before CDN -->
   <script>
     tailwind = window.tailwind || {};
     tailwind.config = {
@@ -22,23 +22,18 @@
           },
           colors: {
             'td-blue': '#2A73FF',
-            'td-blue-light': '#5B97FF',
             'td-blue-dark': '#1F5ED8',
             'td-bg-light': '#F7F9FF',
             'td-bg-dark': '#0E1117',
-            'td-gray': '#556070',
           },
           boxShadow: {
-            brand: '0 4px 14px rgba(42, 115, 255, 0.15)',
+            brand: '0 4px 14px rgba(42, 115, 255, 0.18)',
           },
           borderRadius: {
             brand: '14px',
-          },
-          transitionTimingFunction: {
-            brand: 'cubic-bezier(0.22, 0.61, 0.36, 1)',
-          },
-        },
-      },
+          }
+        }
+      }
     };
   </script>
   <script src="https://cdn.tailwindcss.com"></script>
@@ -48,31 +43,18 @@
       font-family: 'Instrument Sans', sans-serif;
     }
     .chat-message {
-      animation: slideIn 0.3s ease-out;
+      animation: slideIn 0.25s ease-out;
     }
     @keyframes slideIn {
-      from {
-        opacity: 0;
-        transform: translateY(10px);
-      }
-      to {
-        opacity: 1;
-        transform: translateY(0);
-      }
+      from { opacity: 0; transform: translateY(8px); }
+      to   { opacity: 1; transform: translateY(0); }
     }
     .pulse-loader {
       animation: pulse 1.5s ease-in-out infinite;
     }
     @keyframes pulse {
       0%, 100% { opacity: 1; }
-      50% { opacity: 0.5; }
-    }
-    @keyframes fadeIn {
-      from { opacity: 0; transform: translateY(10px); }
-      to   { opacity: 1; transform: translateY(0); }
-    }
-    .animate-fadeIn {
-      animation: fadeIn 0.4s ease-out;
+      50% { opacity: 0.4; }
     }
   </style>
 </head>
@@ -80,244 +62,189 @@
 <body class="bg-gradient-to-br from-td-bg-light to-indigo-50 dark:from-td-bg-dark dark:to-black text-gray-900 dark:text-gray-100">
   <div class="flex h-screen">
     <!-- Sidebar -->
-    <div class="w-96 bg-white dark:bg-[#111827] shadow-lg p-6 overflow-y-auto flex flex-col">
-      <div class="mb-6 flex items-center justify-between">
+    <aside class="w-80 bg-white dark:bg-[#111827] p-5 border-r border-gray-200 dark:border-gray-800 flex flex-col">
+      <div class="flex items-center justify-between mb-5">
         <div>
-          <h2 class="text-2xl font-bold text-td-blue mb-1">Tradedoubler</h2>
-          <p class="text-sm text-gray-600 dark:text-gray-300">AI Onboarding Assistant</p>
+          <h1 class="text-xl font-semibold text-td-blue">Tradedoubler</h1>
+          <p class="text-xs text-gray-500 dark:text-gray-300">AI Onboarding Assistant</p>
         </div>
         <button
           onclick="toggleDarkMode()"
-          class="px-2.5 py-1.5 rounded-full text-[11px] bg-gray-100 dark:bg-gray-800 text-gray-700 dark:text-gray-200 border border-gray-300 dark:border-gray-700 hover:bg-gray-200 dark:hover:bg-gray-700 transition"
-        >
-          Toggle theme
+          class="px-2 py-1 rounded-full text-[11px] bg-gray-100 dark:bg-gray-800 text-gray-700 dark:text-gray-200 border border-gray-300 dark:border-gray-700 hover:bg-gray-200 dark:hover:bg-gray-700 transition">
+          Theme
         </button>
       </div>
 
-      <!-- Progress bar -->
-      <div class="mb-6">
-        <div class="flex items-center justify-between mb-2">
-          <span class="text-sm font-medium text-gray-700 dark:text-gray-200">Progress</span>
-          <span id="progress-percentage" class="text-sm font-medium text-td-blue">0%</span>
+      <!-- Steps nav -->
+      <div class="mb-5">
+        <h2 class="text-xs font-semibold text-gray-500 dark:text-gray-400 mb-2">Onboarding steps</h2>
+        <nav id="steps-nav" class="space-y-1 text-sm">
+          <button data-step="intro"      class="step-nav-btn w-full flex items-center justify-between px-3 py-2 rounded-lg text-left hover:bg-gray-100 dark:hover:bg-gray-800">
+            <span>1. Introduction</span>
+          </button>
+          <button data-step="branded"    class="step-nav-btn w-full flex items-center justify-between px-3 py-2 rounded-lg text-left hover:bg-gray-100 dark:hover:bg-gray-800">
+            <span>2. Branded Tracking</span>
+          </button>
+          <button data-step="feed"       class="step-nav-btn w-full flex items-center justify-between px-3 py-2 rounded-lg text-left hover:bg-gray-100 dark:hover:bg-gray-800">
+            <span>3. Product Feed</span>
+          </button>
+          <button data-step="assets"     class="step-nav-btn w-full flex items-center justify-between px-3 py-2 rounded-lg text-left hover:bg-gray-100 dark:hover:bg-gray-800">
+            <span>4. Program Assets</span>
+          </button>
+          <button data-step="ip"         class="step-nav-btn w-full flex items-center justify-between px-3 py-2 rounded-lg text-left hover:bg-gray-100 dark:hover:bg-gray-800">
+            <span>5. IP Addresses</span>
+          </button>
+          <button data-step="scripts"    class="step-nav-btn w-full flex items-center justify-between px-3 py-2 rounded-lg text-left hover:bg-gray-100 dark:hover:bg-gray-800">
+            <span>6. Tracking Scripts</span>
+          </button>
+        </nav>
+      </div>
+
+      <!-- Progress -->
+      <div class="mb-5">
+        <div class="flex items-center justify-between mb-1">
+          <span class="text-xs font-medium text-gray-600 dark:text-gray-300">Overall Progress</span>
+          <span id="progress-percentage" class="text-xs font-semibold text-td-blue">0%</span>
         </div>
-        <div class="w-full bg-gray-200 dark:bg-gray-800 rounded-full h-2">
-          <div id="progress-bar" class="bg-td-blue h-2 rounded-full transition-all duration-500" style="width: 0%"></div>
+        <div class="w-full h-1.5 rounded-full bg-gray-200 dark:bg-gray-800 overflow-hidden">
+          <div id="progress-bar" class="h-1.5 rounded-full bg-td-blue transition-all duration-500" style="width: 0%"></div>
         </div>
       </div>
 
-      <!-- API Status -->
-      <div id="api-status" class="hidden mb-6 p-3 rounded-lg">
-        <div class="flex items-center gap-2">
-          <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
-            <path fill-rule="evenodd"
-              d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"
-              clip-rule="evenodd" />
-          </svg>
-          <span id="api-status-text" class="text-sm font-medium"></span>
-        </div>
-      </div>
-
-      <!-- Checklist -->
-      <div class="space-y-3 mb-6">
-        <h3 class="text-sm font-semibold text-gray-700 dark:text-gray-200 mb-3">Onboarding Checklist</h3>
-
-        <div id="checklist-intro" class="checklist-item flex items-center gap-3">
-          <svg class="w-5 h-5 text-gray-300 dark:text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <circle cx="12" cy="12" r="10" stroke-width="2" />
-          </svg>
-          <span class="text-sm text-gray-500 dark:text-gray-400">Introduction &amp; Details</span>
-        </div>
-
-        <div id="checklist-brandedTracking" class="checklist-item flex items-center gap-3">
-          <svg class="w-5 h-5 text-gray-300 dark:text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <circle cx="12" cy="12" r="10" stroke-width="2" />
-          </svg>
-          <span class="text-sm text-gray-500 dark:text-gray-400">DNS Configuration</span>
-        </div>
-
-        <div id="checklist-productFeed" class="checklist-item flex items-center gap-3">
-          <svg class="w-5 h-5 text-gray-300 dark:text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <circle cx="12" cy="12" r="10" stroke-width="2" />
-          </svg>
-          <span class="text-sm text-gray-500 dark:text-gray-400">Product Feed</span>
-        </div>
-
-        <div id="checklist-assets" class="checklist-item flex items-center gap-3">
-          <svg class="w-5 h-5 text-gray-300 dark:text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <circle cx="12" cy="12" r="10" stroke-width="2" />
-          </svg>
-          <span class="text-sm text-gray-500 dark:text-gray-400">Logos &amp; Banners</span>
-        </div>
-
-        <div id="checklist-ipAddresses" class="checklist-item flex items-center gap-3">
-          <svg class="w-5 h-5 text-gray-300 dark:text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <circle cx="12" cy="12" r="10" stroke-width="2" />
-          </svg>
-          <span class="text-sm text-gray-500 dark:text-gray-400">Office IP Addresses</span>
-        </div>
-
-        <div id="checklist-trackingScripts" class="checklist-item flex items-center gap-3">
-          <svg class="w-5 h-5 text-gray-300 dark:text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <circle cx="12" cy="12" r="10" stroke-width="2" />
-          </svg>
-          <span class="text-sm text-gray-500 dark:text-gray-400">Tracking Scripts</span>
-        </div>
-      </div>
-
-      <!-- File Upload Sections -->
-      <div class="space-y-4 border-t border-gray-200 dark:border-gray-800 pt-6">
-        <div class="flex items-center justify-between mb-2">
-          <h3 class="text-sm font-semibold text-gray-700 dark:text-gray-200">Upload Program Assets</h3>
-        </div>
-
-        <!-- Logo -->
-        <div class="bg-td-bg-light dark:bg-gray-900 rounded-lg p-3 border border-gray-200 dark:border-gray-700">
-          <div class="flex items-center justify-between mb-2">
-            <h4 class="text-xs font-medium text-gray-700 dark:text-gray-200">Logo</h4>
-            <span class="text-xs text-gray-500">350x130px</span>
-          </div>
-          <button
-            onclick="document.getElementById('logo-input').click()"
-            class="w-full flex items-center justify-center gap-2 px-3 py-2 bg-white dark:bg-gray-900 border border-gray-300 dark:border-gray-700 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors text-xs"
-          >
-            <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
-            </svg>
-            Upload Logo
-          </button>
-          <input type="file" id="logo-input" accept=".png,.jpg,.jpeg" class="hidden" />
-          <div id="logo-list" class="mt-2 space-y-1"></div>
-        </div>
-
-        <!-- Banners -->
-        <div class="bg-td-bg-light dark:bg-gray-900 rounded-lg p-3 border border-gray-200 dark:border-gray-700">
-          <div class="flex items-center justify-between mb-2">
-            <h4 class="text-xs font-medium text-gray-700 dark:text-gray-200">Banners</h4>
-            <span class="text-xs text-gray-500">Multiple</span>
-          </div>
-          <p class="text-xs text-gray-400 mb-2">
-            160x600, 300x250, 300x600, 728x90, 928x70
-          </p>
-          <button
-            onclick="document.getElementById('banners-input').click()"
-            class="w-full flex items-center justify-center gap-2 px-3 py-2 bg-white dark:bg-gray-900 border border-gray-300 dark:border-gray-700 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors text-xs"
-          >
-            <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
-            </svg>
-            Upload Banners
-          </button>
-          <input type="file" id="banners-input" accept=".jpg,.jpeg,.gif,.png" multiple class="hidden" />
-          <div id="banners-list" class="mt-2 space-y-1"></div>
-        </div>
-
-        <!-- Terms -->
-        <div class="bg-td-bg-light dark:bg-gray-900 rounded-lg p-3 border border-gray-200 dark:border-gray-700">
-          <div class="flex items-center justify-between mb-2">
-            <h4 class="text-xs font-medium text-gray-700 dark:text-gray-200">Terms &amp; Conditions</h4>
-            <span class="text-xs text-gray-500">PDF</span>
-          </div>
-          <button
-            onclick="document.getElementById('terms-input').click()"
-            class="w-full flex items-center justify-center gap-2 px-3 py-2 bg-white dark:bg-gray-900 border border-gray-300 dark:border-gray-700 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors text-xs"
-          >
-            <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
-            </svg>
-            Upload T&amp;Cs
-          </button>
-          <input type="file" id="terms-input" accept=".pdf" class="hidden" />
-          <div id="terms-list" class="mt-2 space-y-1"></div>
-        </div>
-
-        <!-- Other -->
-        <div class="bg-td-bg-light dark:bg-gray-900 rounded-lg p-3 border border-gray-200 dark:border-gray-700">
-          <div class="flex items-center justify-between mb-2">
-            <h4 class="text-xs font-medium text-gray-700 dark:text-gray-200">Other Documents</h4>
-            <span class="text-xs text-gray-500">Optional</span>
-          </div>
-          <button
-            onclick="document.getElementById('other-input').click()"
-            class="w-full flex items-center justify-center gap-2 px-3 py-2 bg-white dark:bg-gray-900 border border-gray-300 dark:border-gray-700 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors text-xs"
-          >
-            <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12" />
-            </svg>
-            Upload Files
-          </button>
-          <input type="file" id="other-input" multiple class="hidden" />
-          <div id="other-list" class="mt-2 space-y-1"></div>
-        </div>
-
-        <!-- Send All Button -->
-        <button
-          id="send-all-files"
-          class="w-full px-4 py-2.5 bg-td-blue text-white rounded-lg hover:bg-td-blue-dark transition-colors text-sm font-medium shadow-brand disabled:bg-gray-300 disabled:cursor-not-allowed"
-          disabled
-        >
-          Send All Files
-        </button>
-      </div>
-
-      <!-- Reset session -->
-      <button
-        onclick="resetOnboarding()"
-        class="mt-4 w-full px-3 py-2 bg-red-50 dark:bg-transparent text-red-600 border border-red-200 dark:border-red-500 rounded-lg text-xs hover:bg-red-100 dark:hover:bg-red-900 transition"
-      >
-        Reset Onboarding Session
-      </button>
-
-      <!-- Collected Data Summary -->
-      <div class="mt-6 pt-6 border-t border-gray-200 dark:border-gray-800">
-        <h3 class="text-sm font-semibold text-gray-700 dark:text-gray-200 mb-3">Collected Data</h3>
-        <div id="data-summary" class="text-xs text-gray-600 dark:text-gray-300 space-y-1">
+      <!-- Summary -->
+      <div class="mt-auto pt-4 border-t border-gray-200 dark:border-gray-800">
+        <h3 class="text-xs font-semibold text-gray-500 dark:text-gray-400 mb-1">Collected Data</h3>
+        <div id="data-summary" class="text-xs text-gray-600 dark:text-gray-300 space-y-0.5">
           <p>No data collected yet</p>
         </div>
-      </div>
-    </div>
 
-    <!-- Chat area -->
-    <div class="flex-1 flex flex-col">
-      <!-- Chat messages -->
-      <div id="chat-container" class="flex-1 overflow-y-auto p-6 space-y-4 bg-transparent">
-        <!-- Initial message will be injected by JS -->
+        <button
+          onclick="resetOnboarding()"
+          class="mt-3 w-full px-3 py-1.5 rounded-lg border border-red-200 dark:border-red-600 text-[11px] text-red-600 hover:bg-red-50 dark:hover:bg-red-900/40">
+          Reset onboarding
+        </button>
       </div>
+    </aside>
 
-      <!-- Input area -->
-      <div class="border-t border-gray-200 dark:border-gray-800 bg-white dark:bg-[#020617] p-4">
-        <div class="max-w-4xl mx-auto flex gap-3">
-          <input
-            type="text"
-            id="message-input"
-            placeholder="Type your message..."
-            class="flex-1 px-4 py-3 border border-gray-300 dark:border-gray-700 rounded-xl bg-white dark:bg-gray-900 text-gray-900 dark:text-gray-100 focus:outline-none focus:ring-2 focus:ring-td-blue focus:border-transparent"
-          />
-          <button
-            id="send-btn"
-            class="px-6 py-3 bg-td-blue text-white rounded-xl hover:bg-td-blue-dark disabled:bg-gray-300 disabled:cursor-not-allowed transition-colors flex items-center gap-2 shadow-brand"
-          >
-            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8" />
-            </svg>
-          </button>
+    <!-- Main area -->
+    <main class="flex-1 flex flex-col">
+      <!-- Step header -->
+      <div class="border-b border-gray-200 dark:border-gray-800 bg-white dark:bg-[#020617] px-6 py-3 flex items-center justify-between">
+        <div>
+          <h2 id="step-title" class="text-sm font-semibold text-gray-900 dark:text-gray-100">Introduction</h2>
+          <p id="step-subtitle" class="text-xs text-gray-500 dark:text-gray-400">
+            Tell me who you are and which company you represent.
+          </p>
         </div>
       </div>
-    </div>
+
+      <!-- Step content: each step has its own chat container -->
+      <div class="flex-1 overflow-hidden">
+        <!-- INTRO -->
+        <section id="step-intro" class="step-page h-full flex flex-col">
+          <div id="chat-intro" class="flex-1 overflow-y-auto p-6 space-y-3"></div>
+          <div class="border-t border-gray-200 dark:border-gray-800 bg-white dark:bg-[#020617] p-3">
+            <div class="max-w-3xl mx-auto flex gap-2">
+              <input id="input-intro" type="text" placeholder="Type your message..."
+                     class="flex-1 px-3 py-2 text-sm border border-gray-300 dark:border-gray-700 rounded-xl bg-white dark:bg-gray-900 text-gray-900 dark:text-gray-100 focus:outline-none focus:ring-2 focus:ring-td-blue" />
+              <button id="send-intro" class="px-4 py-2 bg-td-blue text-white text-sm rounded-xl hover:bg-td-blue-dark transition shadow-brand">
+                Send
+              </button>
+            </div>
+          </div>
+        </section>
+
+        <!-- BRANDED TRACKING -->
+        <section id="step-branded" class="step-page h-full flex flex-col hidden">
+          <div id="chat-branded" class="flex-1 overflow-y-auto p-6 space-y-3"></div>
+          <div class="border-t border-gray-200 dark:border-gray-800 bg-white dark:bg-[#020617] p-3">
+            <div class="max-w-3xl mx-auto flex gap-2">
+              <input id="input-branded" type="text" placeholder="Share your branded tracking domains..."
+                     class="flex-1 px-3 py-2 text-sm border border-gray-300 dark:border-gray-700 rounded-xl bg-white dark:bg-gray-900 text-gray-900 dark:text-gray-100 focus:outline-none focus:ring-2 focus:ring-td-blue" />
+              <button id="send-branded" class="px-4 py-2 bg-td-blue text-white text-sm rounded-xl hover:bg-td-blue-dark transition shadow-brand">
+                Send
+              </button>
+            </div>
+          </div>
+        </section>
+
+        <!-- PRODUCT FEED -->
+        <section id="step-feed" class="step-page h-full flex flex-col hidden">
+          <div id="chat-feed" class="flex-1 overflow-y-auto p-6 space-y-3"></div>
+          <div class="border-t border-gray-200 dark:border-gray-800 bg-white dark:bg-[#020617] p-3">
+            <div class="max-w-3xl mx-auto flex gap-2">
+              <input id="input-feed" type="text" placeholder="Paste your product feed URL..."
+                     class="flex-1 px-3 py-2 text-sm border border-gray-300 dark:border-gray-700 rounded-xl bg-white dark:bg-gray-900 text-gray-900 dark:text-gray-100 focus:outline-none focus:ring-2 focus:ring-td-blue" />
+              <button id="send-feed" class="px-4 py-2 bg-td-blue text-white text-sm rounded-xl hover:bg-td-blue-dark transition shadow-brand">
+                Send
+              </button>
+            </div>
+          </div>
+        </section>
+
+        <!-- ASSETS -->
+        <section id="step-assets" class="step-page h-full flex flex-col hidden">
+          <div id="chat-assets" class="flex-1 overflow-y-auto p-6 space-y-3"></div>
+          <div class="border-t border-gray-200 dark:border-gray-800 bg-white dark:bg-[#020617] p-3">
+            <div class="max-w-3xl mx-auto flex gap-2">
+              <input id="input-assets" type="text" placeholder="Tell me what assets you're uploading..."
+                     class="flex-1 px-3 py-2 text-sm border border-gray-300 dark:border-gray-700 rounded-xl bg-white dark:bg-gray-900 text-gray-900 dark:text-gray-100 focus:outline-none focus:ring-2 focus:ring-td-blue" />
+              <button id="send-assets" class="px-4 py-2 bg-td-blue text-white text-sm rounded-xl hover:bg-td-blue-dark transition shadow-brand">
+                Send
+              </button>
+            </div>
+          </div>
+        </section>
+
+        <!-- IP ADDRESSES -->
+        <section id="step-ip" class="step-page h-full flex flex-col hidden">
+          <div id="chat-ip" class="flex-1 overflow-y-auto p-6 space-y-3"></div>
+          <div class="border-t border-gray-200 dark:border-gray-800 bg-white dark:bg-[#020617] p-3">
+            <div class="max-w-3xl mx-auto flex gap-2">
+              <input id="input-ip" type="text" placeholder="Share the IP addresses to exclude..."
+                     class="flex-1 px-3 py-2 text-sm border border-gray-300 dark:border-gray-700 rounded-xl bg-white dark:bg-gray-900 text-gray-900 dark:text-gray-100 focus:outline-none focus:ring-2 focus:ring-td-blue" />
+              <button id="send-ip" class="px-4 py-2 bg-td-blue text-white text-sm rounded-xl hover:bg-td-blue-dark transition shadow-brand">
+                Send
+              </button>
+            </div>
+          </div>
+        </section>
+
+        <!-- TRACKING SCRIPTS -->
+        <section id="step-scripts" class="step-page h-full flex flex-col hidden">
+          <div id="chat-scripts" class="flex-1 overflow-y-auto p-6 space-y-3"></div>
+          <div class="border-t border-gray-200 dark:border-gray-800 bg-white dark:bg-[#020617] p-3">
+            <div class="max-w-3xl mx-auto flex gap-2">
+              <input id="input-scripts" type="text" placeholder="Ask about implementing your tracking scripts..."
+                     class="flex-1 px-3 py-2 text-sm border border-gray-300 dark:border-gray-700 rounded-xl bg-white dark:bg-gray-900 text-gray-900 dark:text-gray-100 focus:outline-none focus:ring-2 focus:ring-td-blue" />
+              <button id="send-scripts" class="px-4 py-2 bg-td-blue text-white text-sm rounded-xl hover:bg-td-blue-dark transition shadow-brand">
+                Send
+              </button>
+            </div>
+          </div>
+        </section>
+      </div>
+    </main>
   </div>
 
   <script>
-    // ============================================
-    // CONFIGURATION
-    // ============================================
+    // ===== CONFIG =====
     const N8N_WEBHOOK_URL = 'https://harrytradedoubler2026.app.n8n.cloud/webhook/onboarding-chat';
+    const STEPS = ['intro', 'branded', 'feed', 'assets', 'ip', 'scripts'];
 
-    // State
-    let conversationHistory = [];
+    const stepMeta = {
+      intro:   { title: 'Introduction',      subtitle: 'Tell me who you are and which company you represent.' },
+      branded: { title: 'Branded Tracking', subtitle: 'We’ll configure your visit.* and statics.* tracking domains.' },
+      feed:    { title: 'Product Feed',     subtitle: 'Share your product feed URL and format so we can map it.' },
+      assets:  { title: 'Program Assets',   subtitle: 'Upload your logo, banners and program documents.' },
+      ip:      { title: 'IP Addresses',     subtitle: 'Provide office IPs to exclude internal traffic from tracking.' },
+      scripts: { title: 'Tracking Scripts', subtitle: 'We’ll walk through integrating your Tradedoubler tracking tags.' },
+    };
+
+    // ===== GLOBAL STATE =====
+    let currentStep = 'intro';
+    let sessionId = generateSessionId();
+    let histories = {};  // { step: [{role, content}, ...] }
     let onboardingData = {};
     let checklist = {
       intro: false,
@@ -327,171 +254,149 @@
       ipAddresses: false,
       trackingScripts: false,
     };
-    let uploadedFiles = {
-      logo: [],
-      banners: [],
-      terms: [],
-      other: [],
-    };
-    let sessionId = generateSessionId();
-    let firstLoad = true;
 
-    // DOM elements
-    const chatContainer = document.getElementById('chat-container');
-    const messageInput = document.getElementById('message-input');
-    const sendBtn = document.getElementById('send-btn');
-    const sendAllFilesBtn = document.getElementById('send-all-files');
+    // ===== DOM =====
+    const stepTitle = document.getElementById('step-title');
+    const stepSubtitle = document.getElementById('step-subtitle');
+    const navButtons = document.querySelectorAll('.step-nav-btn');
+    const progressBar = document.getElementById('progress-bar');
+    const progressPct = document.getElementById('progress-percentage');
     const dataSummary = document.getElementById('data-summary');
-    const apiStatus = document.getElementById('api-status');
-    const apiStatusText = document.getElementById('api-status-text');
 
-    // File inputs
-    const logoInput = document.getElementById('logo-input');
-    const bannersInput = document.getElementById('banners-input');
-    const termsInput = document.getElementById('terms-input');
-    const otherInput = document.getElementById('other-input');
-
-    // =============== LOCAL STORAGE HELPERS ===============
-    function saveState() {
-      try {
-        localStorage.setItem('td_onboarding_history', JSON.stringify(conversationHistory || []));
-        localStorage.setItem('td_onboarding_data', JSON.stringify(onboardingData || {}));
-        localStorage.setItem('td_onboarding_checklist', JSON.stringify(checklist || {}));
-        localStorage.setItem('td_uploaded_files', JSON.stringify(uploadedFiles || {}));
-      } catch (e) {
-        console.warn('Could not save state to localStorage', e);
-      }
-    }
-
-    function loadState() {
-      try {
-        const h = localStorage.getItem('td_onboarding_history');
-        const d = localStorage.getItem('td_onboarding_data');
-        const c = localStorage.getItem('td_onboarding_checklist');
-        const f = localStorage.getItem('td_uploaded_files');
-
-        if (h) conversationHistory = JSON.parse(h);
-        if (d) onboardingData = JSON.parse(d);
-        if (c) checklist = JSON.parse(c);
-        if (f) uploadedFiles = JSON.parse(f);
-      } catch (e) {
-        console.warn('Could not load state from localStorage', e);
-      }
-    }
-
+    // ===== DARK MODE =====
     function loadDarkMode() {
-      const saved = localStorage.getItem('td_dark_mode');
-      if (saved === '1') {
+      if (localStorage.getItem('td_dark_mode') === '1') {
         document.documentElement.classList.add('dark');
       }
     }
-
     function toggleDarkMode() {
-      const isDark = document.documentElement.classList.toggle('dark');
+      const html = document.documentElement;
+      const isDark = html.classList.toggle('dark');
       localStorage.setItem('td_dark_mode', isDark ? '1' : '0');
     }
-
-    // Initial load
     loadDarkMode();
+
+    // ===== STORAGE HELPERS =====
+    function saveState() {
+      localStorage.setItem('td_step', currentStep);
+      localStorage.setItem('td_histories', JSON.stringify(histories));
+      localStorage.setItem('td_onboarding_data', JSON.stringify(onboardingData));
+      localStorage.setItem('td_checklist', JSON.stringify(checklist));
+    }
+    function loadState() {
+      const s = localStorage.getItem('td_step');
+      const h = localStorage.getItem('td_histories');
+      const d = localStorage.getItem('td_onboarding_data');
+      const c = localStorage.getItem('td_checklist');
+
+      if (s && STEPS.includes(s)) currentStep = s;
+      histories = h ? JSON.parse(h) : {};
+      onboardingData = d ? JSON.parse(d) : {};
+      checklist = c ? JSON.parse(c) : checklist;
+    }
+
+    function resetOnboarding() {
+      localStorage.removeItem('td_step');
+      localStorage.removeItem('td_histories');
+      localStorage.removeItem('td_onboarding_data');
+      localStorage.removeItem('td_checklist');
+      location.reload();
+    }
+
+    // ===== INIT =====
     loadState();
 
-    function showWelcomeBackCard() {
-      const hasData = onboardingData && (onboardingData.clientName || onboardingData.companyName);
-      const hasHistory = conversationHistory && conversationHistory.length > 0;
-      if (!hasData || !hasHistory || !firstLoad) return;
-
-      const completed = Object.values(checklist).filter(Boolean).length;
-      const total = Object.keys(checklist).length;
-
-      const wrapper = document.createElement('div');
-      wrapper.className = 'flex justify-start mb-4 animate-fadeIn';
-      wrapper.innerHTML = `
-        <div class="max-w-xl bg-white dark:bg-gray-900 shadow-brand rounded-brand p-5 border border-gray-200 dark:border-gray-800">
-          <h2 class="text-lg font-semibold text-td-blue mb-2">Welcome back 👋</h2>
-          <p class="text-sm text-gray-700 dark:text-gray-300 mb-4">
-            I’ve restored your onboarding session.
-          </p>
-          <p class="text-sm mb-1"><strong>Client:</strong> ${onboardingData.clientName || '—'}</p>
-          <p class="text-sm mb-1"><strong>Company:</strong> ${onboardingData.companyName || '—'}</p>
-          <p class="text-sm mb-4"><strong>Progress:</strong> ${completed}/${total} steps completed</p>
-          <div class="flex gap-3">
-            <button onclick="continueOnboarding()" class="px-4 py-2 bg-td-blue text-white rounded-brand text-sm hover:bg-td-blue-dark transition">
-              Continue
-            </button>
-            <button onclick="resetOnboarding()" class="px-4 py-2 bg-gray-100 dark:bg-gray-800 text-gray-600 dark:text-gray-300 border border-gray-300 dark:border-gray-700 rounded-brand text-sm hover:bg-gray-200 dark:hover:bg-gray-700 transition">
-              Start Over
-            </button>
-          </div>
-        </div>
-      `;
-      chatContainer.appendChild(wrapper);
-      chatContainer.scrollTop = chatContainer.scrollHeight;
-
-      firstLoad = false;
-    }
-
-    // If no previous session, create initial assistant message
-    if (!conversationHistory || conversationHistory.length === 0) {
-      conversationHistory = [
-        {
-          role: 'assistant',
-          content:
-            "Hi! 👋 I'm your Tradedoubler onboarding assistant.\n\nI'll help you configure your affiliate program by setting up DNS, product feeds and program assets.\n\nLet's get started! What's your name and company?",
-        },
-      ];
-    }
-
-    // Render existing history
-    conversationHistory.forEach((m) => addMessageToChat(m.role, m.content));
-    updateChecklist(checklist);
-    updateDataSummary();
-    updateFileLists();
-    updateSendAllButton();
-    showWelcomeBackCard();
-    firstLoad = false;
-
-    // Event listeners
-    sendBtn.addEventListener('click', sendMessage);
-    messageInput.addEventListener('keypress', (e) => {
-      if (e.key === 'Enter' && !e.shiftKey) {
-        e.preventDefault();
-        sendMessage();
-      }
+    // ensure histories object has arrays per step
+    STEPS.forEach(step => {
+      if (!Array.isArray(histories[step])) histories[step] = [];
     });
 
-    logoInput.addEventListener('change', (e) => handleFileUpload(e, 'logo', 'logo-list'));
-    bannersInput.addEventListener('change', (e) => handleFileUpload(e, 'banners', 'banners-list'));
-    termsInput.addEventListener('change', (e) => handleFileUpload(e, 'terms', 'terms-list'));
-    otherInput.addEventListener('change', (e) => handleFileUpload(e, 'other', 'other-list'));
-    sendAllFilesBtn.addEventListener('click', sendAllFiles);
+    // default intro greeting if first time
+    if (histories.intro.length === 0) {
+      histories.intro.push({
+        role: 'assistant',
+        content:
+          "Hi! 👋 I'm your Tradedoubler onboarding assistant.\n\nWe'll go through your setup step by step.\n\nLet’s start with a quick introduction. What's your name and company?",
+      });
+    }
 
-    // Functions
+    // Wire inputs/send buttons per step
+    STEPS.forEach(step => {
+      const input = document.getElementById('input-' + step);
+      const sendBtn = document.getElementById('send-' + step);
+      if (!input || !sendBtn) return;
+
+      sendBtn.addEventListener('click', () => sendMessage(step));
+      input.addEventListener('keypress', (e) => {
+        if (e.key === 'Enter' && !e.shiftKey) {
+          e.preventDefault();
+          sendMessage(step);
+        }
+      });
+    });
+
+    // Sidebar nav clicks
+    navButtons.forEach(btn => {
+      btn.addEventListener('click', () => {
+        const step = btn.getAttribute('data-step');
+        goToStep(step);
+      });
+    });
+
+    // Initial render
+    goToStep(currentStep);
+    updateChecklistUI();
+    updateDataSummary();
+
+    // ===== CORE FUNCTIONS =====
     function generateSessionId() {
-      return 'session_' + Date.now() + '_' + Math.random().toString(36).substr(2, 9);
+      return 'session_' + Date.now() + '_' + Math.random().toString(36).slice(2, 10);
     }
 
-    function continueOnboarding() {
-      addMessageToChat('assistant', "Great! Let's pick up right where we left off. 🚀");
+    function goToStep(step) {
+      if (!STEPS.includes(step)) step = 'intro';
+      currentStep = step;
+
+      // hide all step sections
+      document.querySelectorAll('.step-page').forEach(s => s.classList.add('hidden'));
+      document.getElementById('step-' + step).classList.remove('hidden');
+
+      // update header
+      stepTitle.textContent = stepMeta[step].title;
+      stepSubtitle.textContent = stepMeta[step].subtitle;
+
+      // update nav highlighting
+      navButtons.forEach(btn => {
+        const s = btn.getAttribute('data-step');
+        if (s === step) {
+          btn.classList.add('bg-td-blue', 'text-white', 'shadow-brand');
+        } else {
+          btn.classList.remove('bg-td-blue', 'text-white', 'shadow-brand');
+        }
+      });
+
+      // render that step's history
+      const chatEl = document.getElementById('chat-' + step);
+      chatEl.innerHTML = '';
+      histories[step].forEach(msg => addMessageToChat(step, msg.role, msg.content));
+
+      saveState();
     }
 
-    async function sendMessage() {
-      const message = messageInput.value.trim();
-      if (!message || sendBtn.disabled) return;
+    async function sendMessage(step) {
+      const input = document.getElementById('input-' + step);
+      const chatEl = document.getElementById('chat-' + step);
+      if (!input || !chatEl) return;
 
-      // Local commands
-      if (message.toLowerCase() === 'start over' || message === '2') {
-        resetOnboarding();
-        return;
-      }
+      const text = input.value.trim();
+      if (!text) return;
 
-      messageInput.disabled = true;
-      sendBtn.disabled = true;
+      // append user message
+      histories[step].push({ role: 'user', content: text });
+      addMessageToChat(step, 'user', text);
+      input.value = '';
 
-      addMessageToChat('user', message);
-      conversationHistory.push({ role: 'user', content: message });
-      messageInput.value = '';
-
-      const loadingId = addLoadingIndicator();
+      const loadingId = addLoadingIndicator(step);
 
       try {
         const response = await fetch(N8N_WEBHOOK_URL, {
@@ -499,286 +404,112 @@
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({
             sessionId,
-            message,
-            conversationHistory,
+            step,
+            message: text,
+            conversationHistory: histories[step],
             onboardingData,
             checklist,
-            uploadedFiles,
           }),
         });
 
         const data = await response.json();
         removeLoadingIndicator(loadingId);
 
-        addMessageToChat('assistant', data.response);
-        conversationHistory.push({ role: 'assistant', content: data.response });
+        histories[step].push({ role: 'assistant', content: data.response });
+        addMessageToChat(step, 'assistant', data.response);
 
-        if (data.onboardingData) {
-          onboardingData = data.onboardingData;
-          updateDataSummary();
-        }
-        if (data.checklist) {
-          checklist = data.checklist;
-          updateChecklist(checklist);
-        }
+        if (data.onboardingData) onboardingData = data.onboardingData;
+        if (data.checklist) checklist = data.checklist;
 
+        updateChecklistUI();
+        updateDataSummary();
         saveState();
-      } catch (error) {
-        console.error('Error:', error);
+      } catch (err) {
+        console.error(err);
         removeLoadingIndicator(loadingId);
-        addMessageToChat('assistant', 'I ran into a problem responding. Please try again.');
-      } finally {
-        messageInput.disabled = false;
-        sendBtn.disabled = false;
-        messageInput.focus();
+        histories[step].push({
+          role: 'assistant',
+          content: 'I ran into an issue responding just now. Please try again in a moment.',
+        });
+        addMessageToChat(step, 'assistant', 'I ran into an issue responding just now. Please try again in a moment.');
       }
     }
 
-    function handleFileUpload(event, category, listId) {
-      const files = Array.from(event.target.files);
-      if (files.length === 0) return;
-
-      const listElement = document.getElementById(listId);
-
-      files.forEach((file) => {
-        const reader = new FileReader();
-        reader.onload = (e) => {
-          uploadedFiles[category].push({
-            name: file.name,
-            type: file.type,
-            size: file.size,
-            data: e.target.result.split(',')[1],
-            category,
-          });
-
-          const fileDiv = document.createElement('div');
-          fileDiv.className =
-            'text-xs text-gray-600 dark:text-gray-200 flex items-center gap-2 p-1.5 bg-white dark:bg-gray-900 rounded border border-gray-200 dark:border-gray-700';
-          fileDiv.innerHTML = `
-            <svg class="w-3 h-3 text-green-500 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
-              <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/>
-            </svg>
-            <span class="flex-1 truncate text-xs">${file.name}</span>
-            <button onclick="removeFile('${category}', '${file.name}')" class="text-red-500 hover:text-red-700">
-              <svg class="w-3 h-3" fill="currentColor" viewBox="0 0 20 20">
-                <path fill-rule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clip-rule="evenodd"/>
-              </svg>
-            </button>
-          `;
-          listElement.appendChild(fileDiv);
-
-          updateSendAllButton();
-          saveState();
-        };
-        reader.readAsDataURL(file);
-      });
-
-      event.target.value = '';
-    }
-
-    function removeFile(category, fileName) {
-      uploadedFiles[category] = uploadedFiles[category].filter((f) => f.name !== fileName);
-      updateFileLists();
-      updateSendAllButton();
-      saveState();
-    }
-
-    function updateFileLists() {
-      const lists = {
-        logo: 'logo-list',
-        banners: 'banners-list',
-        terms: 'terms-list',
-        other: 'other-list',
-      };
-
-      Object.keys(lists).forEach((category) => {
-        const listElement = document.getElementById(lists[category]);
-        listElement.innerHTML = '';
-
-        uploadedFiles[category].forEach((file) => {
-          const fileDiv = document.createElement('div');
-          fileDiv.className =
-            'text-xs text-gray-600 dark:text-gray-200 flex items-center gap-2 p-1.5 bg-white dark:bg-gray-900 rounded border border-gray-200 dark:border-gray-700';
-          fileDiv.innerHTML = `
-            <svg class="w-3 h-3 text-green-500 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
-              <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/>
-            </svg>
-            <span class="flex-1 truncate text-xs">${file.name}</span>
-            <button onclick="removeFile('${category}', '${file.name}')" class="text-red-500 hover:text-red-700">
-              <svg class="w-3 h-3" fill="currentColor" viewBox="0 0 20 20">
-                <path fill-rule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clip-rule="evenodd"/>
-              </svg>
-            </button>
-          `;
-          listElement.appendChild(fileDiv);
-        });
-      });
-    }
-
-    function clearAllFileLists() {
-      document.getElementById('logo-list').innerHTML = '';
-      document.getElementById('banners-list').innerHTML = '';
-      document.getElementById('terms-list').innerHTML = '';
-      document.getElementById('other-list').innerHTML = '';
-    }
-
-    function updateSendAllButton() {
-      const totalFiles = Object.values(uploadedFiles).reduce((sum, arr) => sum + arr.length, 0);
-      sendAllFilesBtn.disabled = totalFiles === 0;
-      sendAllFilesBtn.textContent = totalFiles > 0 ? `Send All Files (${totalFiles})` : 'Send All Files';
-    }
-
-    async function sendAllFiles() {
-      const totalFiles = Object.values(uploadedFiles).reduce((sum, arr) => sum + arr.length, 0);
-      if (totalFiles === 0) return;
-
-      const filesSummary = Object.entries(uploadedFiles)
-        .filter(([_, files]) => files.length > 0)
-        .map(([category, files]) => `${category}: ${files.length} file(s)`)
-        .join(', ');
-
-      messageInput.value = `I'm uploading ${totalFiles} files: ${filesSummary}`;
-      await sendMessage();
-    }
-
-    function addMessageToChat(role, content) {
-      const messageDiv = document.createElement('div');
-      messageDiv.className = `flex ${role === 'user' ? 'justify-end' : 'justify-start'}`;
-
-      const bubble = document.createElement('div');
-      bubble.className = `max-w-2xl rounded-brand px-4 py-3 chat-message ${
-        role === 'user'
-          ? 'bg-td-blue text-white shadow-brand'
-          : 'bg-white dark:bg-gray-900 shadow-md text-gray-800 dark:text-gray-100 border border-gray-200 dark:border-gray-700'
-      }`;
-
-      const html = content
-        .split('\n')
-        .map((line) => {
-          if (!line.trim()) return '<p class="mb-1">&nbsp;</p>';
-          if (line.startsWith('•') || line.startsWith('-')) {
-            return `<p class="ml-4 text-sm">${line}</p>`;
-          }
-          return `<p class="mb-1 text-sm">${line}</p>`;
-        })
-        .join('');
-
-      bubble.innerHTML = html;
-      messageDiv.appendChild(bubble);
-      chatContainer.appendChild(messageDiv);
-      chatContainer.scrollTop = chatContainer.scrollHeight;
-    }
-
-    function addLoadingIndicator() {
-      const loadingId = 'loading_' + Date.now();
-      const messageDiv = document.createElement('div');
-      messageDiv.id = loadingId;
-      messageDiv.className = 'flex justify-start';
+    function addMessageToChat(step, role, content) {
+      const chatEl = document.getElementById('chat-' + step);
+      const wrapper = document.createElement('div');
+      wrapper.className = `flex ${role === 'user' ? 'justify-end' : 'justify-start'}`;
 
       const bubble = document.createElement('div');
       bubble.className =
-        'bg-white dark:bg-gray-900 shadow-md rounded-brand px-4 py-3 border border-gray-200 dark:border-gray-700';
-      bubble.innerHTML = `
-        <div class="flex gap-1">
-          <div class="w-2 h-2 bg-td-blue rounded-full pulse-loader"></div>
-          <div class="w-2 h-2 bg-td-blue rounded-full pulse-loader" style="animation-delay: 0.2s"></div>
-          <div class="w-2 h-2 bg-td-blue rounded-full pulse-loader" style="animation-delay: 0.4s"></div>
+        'max-w-2xl px-3 py-2 rounded-brand text-sm chat-message ' +
+        (role === 'user'
+          ? 'bg-td-blue text-white shadow-brand'
+          : 'bg-white dark:bg-gray-900 text-gray-800 dark:text-gray-100 border border-gray-200 dark:border-gray-700 shadow-sm');
+
+      bubble.innerHTML = content
+        .split('\n')
+        .map((line) => {
+          if (!line.trim()) return '<p class="mb-1">&nbsp;</p>';
+          if (line.startsWith('•') || line.startsWith('-')) return `<p class="ml-4">${line}</p>`;
+          return `<p class="mb-1">${line}</p>`;
+        })
+        .join('');
+
+      wrapper.appendChild(bubble);
+      chatEl.appendChild(wrapper);
+      chatEl.scrollTop = chatEl.scrollHeight;
+    }
+
+    function addLoadingIndicator(step) {
+      const chatEl = document.getElementById('chat-' + step);
+      const id = `loading_${step}_${Date.now()}`;
+      const wrapper = document.createElement('div');
+      wrapper.id = id;
+      wrapper.className = 'flex justify-start';
+
+      wrapper.innerHTML = `
+        <div class="px-3 py-2 rounded-brand bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-700">
+          <div class="flex gap-1">
+            <div class="w-2 h-2 rounded-full bg-td-blue pulse-loader"></div>
+            <div class="w-2 h-2 rounded-full bg-td-blue pulse-loader" style="animation-delay:0.15s"></div>
+            <div class="w-2 h-2 rounded-full bg-td-blue pulse-loader" style="animation-delay:0.3s"></div>
+          </div>
         </div>
       `;
-
-      messageDiv.appendChild(bubble);
-      chatContainer.appendChild(messageDiv);
-      chatContainer.scrollTop = chatContainer.scrollHeight;
-
-      return loadingId;
+      chatEl.appendChild(wrapper);
+      chatEl.scrollTop = chatEl.scrollHeight;
+      return id;
     }
 
-    function removeLoadingIndicator(loadingId) {
-      const element = document.getElementById(loadingId);
-      if (element) element.remove();
+    function removeLoadingIndicator(id) {
+      const el = document.getElementById(id);
+      if (el) el.remove();
     }
 
-    function updateChecklist(checklistData) {
-      const items = ['intro', 'brandedTracking', 'productFeed', 'assets', 'ipAddresses', 'trackingScripts'];
-      let completed = 0;
-
-      items.forEach((item) => {
-        const element = document.getElementById(`checklist-${item}`);
-        if (!element) return;
-
-        const icon = element.querySelector('svg');
-        const label = element.querySelector('span');
-
-        if (checklistData[item]) {
-          icon.innerHTML =
-            '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" fill="currentColor"/>';
-          icon.classList.remove('text-gray-300', 'dark:text-gray-600');
-          icon.classList.add('text-green-500');
-          label.classList.remove('text-gray-500', 'dark:text-gray-400');
-          label.classList.add('text-gray-700', 'dark:text-gray-200', 'font-medium');
-          completed++;
-        }
-      });
-
-      const percentage = Math.round((completed / items.length) * 100);
-      document.getElementById('progress-percentage').textContent = `${percentage}%`;
-      document.getElementById('progress-bar').style.width = `${percentage}%`;
+    function updateChecklistUI() {
+      const doneCount = Object.values(checklist).filter(Boolean).length;
+      const total = Object.keys(checklist).length;
+      const pct = Math.round((doneCount / total) * 100);
+      progressPct.textContent = `${pct}%`;
+      progressBar.style.width = `${pct}%`;
     }
 
     function updateDataSummary() {
-      const summary = [];
+      const parts = [];
+      if (onboardingData.clientName) parts.push(`<p><strong>Client:</strong> ${onboardingData.clientName}</p>`);
+      if (onboardingData.companyName) parts.push(`<p><strong>Company:</strong> ${onboardingData.companyName}</p>`);
+      if (onboardingData.email) parts.push(`<p><strong>Email:</strong> ${onboardingData.email}</p>`);
+      if (onboardingData.brandedTracking?.visit)
+        parts.push(`<p><strong>Visit:</strong> ${onboardingData.brandedTracking.visit}</p>`);
+      if (onboardingData.brandedTracking?.statics)
+        parts.push(`<p><strong>Statics:</strong> ${onboardingData.brandedTracking.statics}</p>`);
+      if (onboardingData.productFeedUrl)
+        parts.push(`<p><strong>Feed URL:</strong> ${onboardingData.productFeedUrl}</p>`);
+      if (onboardingData.officeIPs?.length)
+        parts.push(`<p><strong>IPs:</strong> ${onboardingData.officeIPs.length} address(es)</p>`);
 
-      if (onboardingData.clientName) {
-        summary.push(`<p><strong>Client:</strong> ${onboardingData.clientName}</p>`);
-      }
-      if (onboardingData.companyName) {
-        summary.push(`<p><strong>Company:</strong> ${onboardingData.companyName}</p>`);
-      }
-      if (onboardingData.email) {
-        summary.push(`<p><strong>Email:</strong> ${onboardingData.email}</p>`);
-      }
-      if (onboardingData.brandedTracking?.visit) {
-        summary.push(`<p><strong>Visit:</strong> ${onboardingData.brandedTracking.visit}</p>`);
-      }
-      if (onboardingData.brandedTracking?.statics) {
-        summary.push(`<p><strong>Statics:</strong> ${onboardingData.brandedTracking.statics}</p>`);
-      }
-      if (onboardingData.productFeedUrl) {
-        summary.push(
-          `<p><strong>Feed:</strong> ${onboardingData.productFeedUrl.substring(0, 30)}...</p>`
-        );
-      }
-      if (onboardingData.officeIPs && onboardingData.officeIPs.length > 0) {
-        summary.push(`<p><strong>IPs:</strong> ${onboardingData.officeIPs.length} address(es)</p>`);
-      }
-      if (onboardingData.filesUploaded) {
-        summary.push(`<p class="text-green-600"><strong>✓ Assets Uploaded</strong></p>`);
-      }
-
-      dataSummary.innerHTML =
-        summary.length > 0 ? summary.join('') : '<p>No data collected yet</p>';
-    }
-
-    function showApiStatus(type, message) {
-      apiStatus.className = `mb-6 p-3 rounded-lg ${
-        type === 'success'
-          ? 'bg-green-50 text-green-800'
-          : 'bg-orange-50 text-orange-800'
-      }`;
-      apiStatusText.textContent = message;
-      apiStatus.classList.remove('hidden');
-
-      setTimeout(() => {
-        apiStatus.classList.add('hidden');
-      }, 5000);
-    }
-
-    function resetOnboarding() {
-      localStorage.removeItem('td_onboarding_history');
-      localStorage.removeItem('td_onboarding_data');
-      localStorage.removeItem('td_onboarding_checklist');
-      localStorage.removeItem('td_uploaded_files');
-      location.reload();
+      dataSummary.innerHTML = parts.length ? parts.join('') : '<p>No data collected yet</p>';
     }
   </script>
 </body>
