@@ -835,6 +835,13 @@ function removeLoadingIndicator(id) {
         await sendMessage();
       }
     }
+
+    function removeLoadingIndicator(id) {
+  const el = document.getElementById(id);
+  if (el) el.remove();
+}
+
+    
   </script>
 </body>
 </html>
