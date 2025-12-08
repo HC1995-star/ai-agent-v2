@@ -8,9 +8,12 @@
   <!-- Brand font -->
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Instrument+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+  <link
+    href="https://fonts.googleapis.com/css2?family=Instrument+Sans:wght@300;400;500;600;700&display=swap"
+    rel="stylesheet"
+  />
 
-  <!-- Tailwind config MUST come before CDN -->
+  <!-- Tailwind config (must be before CDN) -->
   <script>
     tailwind = window.tailwind || {};
     tailwind.config = {
@@ -31,9 +34,9 @@
           },
           borderRadius: {
             brand: '14px',
-          }
-        }
-      }
+          },
+        },
+      },
     };
   </script>
   <script src="https://cdn.tailwindcss.com"></script>
@@ -46,55 +49,93 @@
       animation: slideIn 0.25s ease-out;
     }
     @keyframes slideIn {
-      from { opacity: 0; transform: translateY(8px); }
-      to   { opacity: 1; transform: translateY(0); }
+      from {
+        opacity: 0;
+        transform: translateY(8px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
     }
     .pulse-loader {
       animation: pulse 1.5s ease-in-out infinite;
     }
     @keyframes pulse {
-      0%, 100% { opacity: 1; }
-      50% { opacity: 0.4; }
+      0%,
+      100% {
+        opacity: 1;
+      }
+      50% {
+        opacity: 0.4;
+      }
     }
   </style>
 </head>
 
-<body class="bg-gradient-to-br from-td-bg-light to-indigo-50 dark:from-td-bg-dark dark:to-black text-gray-900 dark:text-gray-100">
+<body
+  class="bg-gradient-to-br from-td-bg-light to-indigo-50 dark:from-td-bg-dark dark:to-black text-gray-900 dark:text-gray-100"
+>
   <div class="flex h-screen">
     <!-- Sidebar -->
-    <aside class="w-80 bg-white dark:bg-[#111827] p-5 border-r border-gray-200 dark:border-gray-800 flex flex-col">
+    <aside
+      class="w-80 bg-white dark:bg-[#111827] p-5 border-r border-gray-200 dark:border-gray-800 flex flex-col"
+    >
       <div class="flex items-center justify-between mb-5">
         <div>
           <h1 class="text-xl font-semibold text-td-blue">Tradedoubler</h1>
-          <p class="text-xs text-gray-500 dark:text-gray-300">AI Onboarding Assistant</p>
+          <p class="text-xs text-gray-500 dark:text-gray-300">
+            AI Onboarding Assistant
+          </p>
         </div>
         <button
           onclick="toggleDarkMode()"
-          class="px-2 py-1 rounded-full text-[11px] bg-gray-100 dark:bg-gray-800 text-gray-700 dark:text-gray-200 border border-gray-300 dark:border-gray-700 hover:bg-gray-200 dark:hover:bg-gray-700 transition">
+          class="px-2 py-1 rounded-full text-[11px] bg-gray-100 dark:bg-gray-800 text-gray-700 dark:text-gray-200 border border-gray-300 dark:border-gray-700 hover:bg-gray-200 dark:hover:bg-gray-700 transition"
+        >
           Theme
         </button>
       </div>
 
       <!-- Steps nav -->
       <div class="mb-5">
-        <h2 class="text-xs font-semibold text-gray-500 dark:text-gray-400 mb-2">Onboarding steps</h2>
+        <h2 class="text-xs font-semibold text-gray-500 dark:text-gray-400 mb-2">
+          Onboarding steps
+        </h2>
         <nav id="steps-nav" class="space-y-1 text-sm">
-          <button data-step="intro"      class="step-nav-btn w-full flex items-center justify-between px-3 py-2 rounded-lg text-left hover:bg-gray-100 dark:hover:bg-gray-800">
+          <button
+            data-step="intro"
+            class="step-nav-btn w-full flex items-center justify-between px-3 py-2 rounded-lg text-left hover:bg-gray-100 dark:hover:bg-gray-800"
+          >
             <span>1. Introduction</span>
           </button>
-          <button data-step="branded"    class="step-nav-btn w-full flex items-center justify-between px-3 py-2 rounded-lg text-left hover:bg-gray-100 dark:hover:bg-gray-800">
+          <button
+            data-step="branded"
+            class="step-nav-btn w-full flex items-center justify-between px-3 py-2 rounded-lg text-left hover:bg-gray-100 dark:hover:bg-gray-800"
+          >
             <span>2. Branded Tracking</span>
           </button>
-          <button data-step="feed"       class="step-nav-btn w-full flex items-center justify-between px-3 py-2 rounded-lg text-left hover:bg-gray-100 dark:hover:bg-gray-800">
+          <button
+            data-step="feed"
+            class="step-nav-btn w-full flex items-center justify-between px-3 py-2 rounded-lg text-left hover:bg-gray-100 dark:hover:bg-gray-800"
+          >
             <span>3. Product Feed</span>
           </button>
-          <button data-step="assets"     class="step-nav-btn w-full flex items-center justify-between px-3 py-2 rounded-lg text-left hover:bg-gray-100 dark:hover:bg-gray-800">
-            <span>4. Program Assets</span>
+          <button
+            data-step="assets"
+            class="step-nav-btn w-full flex items-center justify-between px-3 py-2 rounded-lg text-left hover:bg-gray-100 dark:hover:bg-gray-800"
+          >
+            <span>4. Program Assets (Upload)</span>
           </button>
-          <button data-step="ip"         class="step-nav-btn w-full flex items-center justify-between px-3 py-2 rounded-lg text-left hover:bg-gray-100 dark:hover:bg-gray-800">
+          <button
+            data-step="ip"
+            class="step-nav-btn w-full flex items-center justify-between px-3 py-2 rounded-lg text-left hover:bg-gray-100 dark:hover:bg-gray-800"
+          >
             <span>5. IP Addresses</span>
           </button>
-          <button data-step="scripts"    class="step-nav-btn w-full flex items-center justify-between px-3 py-2 rounded-lg text-left hover:bg-gray-100 dark:hover:bg-gray-800">
+          <button
+            data-step="scripts"
+            class="step-nav-btn w-full flex items-center justify-between px-3 py-2 rounded-lg text-left hover:bg-gray-100 dark:hover:bg-gray-800"
+          >
             <span>6. Tracking Scripts</span>
           </button>
         </nav>
@@ -103,24 +144,44 @@
       <!-- Progress -->
       <div class="mb-5">
         <div class="flex items-center justify-between mb-1">
-          <span class="text-xs font-medium text-gray-600 dark:text-gray-300">Overall Progress</span>
-          <span id="progress-percentage" class="text-xs font-semibold text-td-blue">0%</span>
+          <span class="text-xs font-medium text-gray-600 dark:text-gray-300"
+            >Overall Progress</span
+          >
+          <span
+            id="progress-percentage"
+            class="text-xs font-semibold text-td-blue"
+            >0%</span
+          >
         </div>
-        <div class="w-full h-1.5 rounded-full bg-gray-200 dark:bg-gray-800 overflow-hidden">
-          <div id="progress-bar" class="h-1.5 rounded-full bg-td-blue transition-all duration-500" style="width: 0%"></div>
+        <div
+          class="w-full h-1.5 rounded-full bg-gray-200 dark:bg-gray-800 overflow-hidden"
+        >
+          <div
+            id="progress-bar"
+            class="h-1.5 rounded-full bg-td-blue transition-all duration-500"
+            style="width: 0%"
+          ></div>
         </div>
       </div>
 
       <!-- Summary -->
       <div class="mt-auto pt-4 border-t border-gray-200 dark:border-gray-800">
-        <h3 class="text-xs font-semibold text-gray-500 dark:text-gray-400 mb-1">Collected Data</h3>
-        <div id="data-summary" class="text-xs text-gray-600 dark:text-gray-300 space-y-0.5">
+        <h3
+          class="text-xs font-semibold text-gray-500 dark:text-gray-400 mb-1"
+        >
+          Collected Data
+        </h3>
+        <div
+          id="data-summary"
+          class="text-xs text-gray-600 dark:text-gray-300 space-y-0.5"
+        >
           <p>No data collected yet</p>
         </div>
 
         <button
           onclick="resetOnboarding()"
-          class="mt-3 w-full px-3 py-1.5 rounded-lg border border-red-200 dark:border-red-600 text-[11px] text-red-600 hover:bg-red-50 dark:hover:bg-red-900/40">
+          class="mt-3 w-full px-3 py-1.5 rounded-lg border border-red-200 dark:border-red-600 text-[11px] text-red-600 hover:bg-red-50 dark:hover:bg-red-900/40"
+        >
           Reset onboarding
         </button>
       </div>
@@ -129,25 +190,47 @@
     <!-- Main area -->
     <main class="flex-1 flex flex-col">
       <!-- Step header -->
-      <div class="border-b border-gray-200 dark:border-gray-800 bg-white dark:bg-[#020617] px-6 py-3 flex items-center justify-between">
+      <div
+        class="border-b border-gray-200 dark:border-gray-800 bg-white dark:bg-[#020617] px-6 py-3 flex items-center justify-between"
+      >
         <div>
-          <h2 id="step-title" class="text-sm font-semibold text-gray-900 dark:text-gray-100">Introduction</h2>
-          <p id="step-subtitle" class="text-xs text-gray-500 dark:text-gray-400">
+          <h2
+            id="step-title"
+            class="text-sm font-semibold text-gray-900 dark:text-gray-100"
+          >
+            Introduction
+          </h2>
+          <p
+            id="step-subtitle"
+            class="text-xs text-gray-500 dark:text-gray-400"
+          >
             Tell me who you are and which company you represent.
           </p>
         </div>
       </div>
 
-      <!-- Step content: each step has its own chat container -->
+      <!-- Step content -->
       <div class="flex-1 overflow-hidden">
         <!-- INTRO -->
         <section id="step-intro" class="step-page h-full flex flex-col">
-          <div id="chat-intro" class="flex-1 overflow-y-auto p-6 space-y-3"></div>
-          <div class="border-t border-gray-200 dark:border-gray-800 bg-white dark:bg-[#020617] p-3">
+          <div
+            id="chat-intro"
+            class="flex-1 overflow-y-auto p-6 space-y-3 bg-transparent"
+          ></div>
+          <div
+            class="border-t border-gray-200 dark:border-gray-800 bg-gray-50 dark:bg-[#0f131a] p-3"
+          >
             <div class="max-w-3xl mx-auto flex gap-2">
-              <input id="input-intro" type="text" placeholder="Type your message..."
-                     class="flex-1 px-3 py-2 text-sm border border-gray-300 dark:border-gray-700 rounded-xl bg-white dark:bg-gray-900 text-gray-900 dark:text-gray-100 focus:outline-none focus:ring-2 focus:ring-td-blue" />
-              <button id="send-intro" class="px-4 py-2 bg-td-blue text-white text-sm rounded-xl hover:bg-td-blue-dark transition shadow-brand">
+              <input
+                id="input-intro"
+                type="text"
+                placeholder="Type your message..."
+                class="flex-1 px-3 py-2 text-sm border border-gray-300 dark:border-gray-700 rounded-xl bg-white dark:bg-[#1a1f2b] text-gray-900 dark:text-gray-100 placeholder-gray-500 dark:placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-td-blue focus:border-transparent"
+              />
+              <button
+                id="send-intro"
+                class="px-4 py-2 bg-td-blue text-white text-sm rounded-xl hover:bg-td-blue-dark transition shadow-brand"
+              >
                 Send
               </button>
             </div>
@@ -155,13 +238,28 @@
         </section>
 
         <!-- BRANDED TRACKING -->
-        <section id="step-branded" class="step-page h-full flex flex-col hidden">
-          <div id="chat-branded" class="flex-1 overflow-y-auto p-6 space-y-3"></div>
-          <div class="border-t border-gray-200 dark:border-gray-800 bg-white dark:bg-[#020617] p-3">
+        <section
+          id="step-branded"
+          class="step-page h-full flex flex-col hidden"
+        >
+          <div
+            id="chat-branded"
+            class="flex-1 overflow-y-auto p-6 space-y-3 bg-transparent"
+          ></div>
+          <div
+            class="border-t border-gray-200 dark:border-gray-800 bg-gray-50 dark:bg-[#0f131a] p-3"
+          >
             <div class="max-w-3xl mx-auto flex gap-2">
-              <input id="input-branded" type="text" placeholder="Share your branded tracking domains..."
-                     class="flex-1 px-3 py-2 text-sm border border-gray-300 dark:border-gray-700 rounded-xl bg-white dark:bg-gray-900 text-gray-900 dark:text-gray-100 focus:outline-none focus:ring-2 focus:ring-td-blue" />
-              <button id="send-branded" class="px-4 py-2 bg-td-blue text-white text-sm rounded-xl hover:bg-td-blue-dark transition shadow-brand">
+              <input
+                id="input-branded"
+                type="text"
+                placeholder="Share your visit.* and statics.* subdomains..."
+                class="flex-1 px-3 py-2 text-sm border border-gray-300 dark:border-gray-700 rounded-xl bg-white dark:bg-[#1a1f2b] text-gray-900 dark:text-gray-100 placeholder-gray-500 dark:placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-td-blue focus:border-transparent"
+              />
+              <button
+                id="send-branded"
+                class="px-4 py-2 bg-td-blue text-white text-sm rounded-xl hover:bg-td-blue-dark transition shadow-brand"
+              >
                 Send
               </button>
             </div>
@@ -170,26 +268,196 @@
 
         <!-- PRODUCT FEED -->
         <section id="step-feed" class="step-page h-full flex flex-col hidden">
-          <div id="chat-feed" class="flex-1 overflow-y-auto p-6 space-y-3"></div>
-          <div class="border-t border-gray-200 dark:border-gray-800 bg-white dark:bg-[#020617] p-3">
+          <div
+            id="chat-feed"
+            class="flex-1 overflow-y-auto p-6 space-y-3 bg-transparent"
+          ></div>
+          <div
+            class="border-t border-gray-200 dark:border-gray-800 bg-gray-50 dark:bg-[#0f131a] p-3"
+          >
             <div class="max-w-3xl mx-auto flex gap-2">
-              <input id="input-feed" type="text" placeholder="Paste your product feed URL..."
-                     class="flex-1 px-3 py-2 text-sm border border-gray-300 dark:border-gray-700 rounded-xl bg-white dark:bg-gray-900 text-gray-900 dark:text-gray-100 focus:outline-none focus:ring-2 focus:ring-td-blue" />
-              <button id="send-feed" class="px-4 py-2 bg-td-blue text-white text-sm rounded-xl hover:bg-td-blue-dark transition shadow-brand">
+              <input
+                id="input-feed"
+                type="text"
+                placeholder="Paste your product feed URL..."
+                class="flex-1 px-3 py-2 text-sm border border-gray-300 dark:border-gray-700 rounded-xl bg-white dark:bg-[#1a1f2b] text-gray-900 dark:text-gray-100 placeholder-gray-500 dark:placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-td-blue focus:border-transparent"
+              />
+              <button
+                id="send-feed"
+                class="px-4 py-2 bg-td-blue text-white text-sm rounded-xl hover:bg-td-blue-dark transition shadow-brand"
+              >
                 Send
               </button>
             </div>
           </div>
         </section>
 
-        <!-- ASSETS -->
-        <section id="step-assets" class="step-page h-full flex flex-col hidden">
-          <div id="chat-assets" class="flex-1 overflow-y-auto p-6 space-y-3"></div>
-          <div class="border-t border-gray-200 dark:border-gray-800 bg-white dark:bg-[#020617] p-3">
+        <!-- PROGRAM ASSETS (WITH UPLOADS) -->
+        <section
+          id="step-assets"
+          class="step-page h-full flex flex-col hidden"
+        >
+          <div
+            id="chat-assets"
+            class="flex-1 overflow-y-auto p-6 space-y-3 bg-transparent"
+          >
+            <div
+              class="mb-3 p-3 bg-td-blue/10 border border-td-blue/30 text-td-blue rounded-brand text-sm"
+            >
+              Upload your logo, banners, T&Cs and additional documents using the
+              sections below 👇
+            </div>
+          </div>
+
+          <!-- Upload module -->
+          <div
+            class="border-t border-gray-200 dark:border-gray-800 bg-white dark:bg-[#020617] p-4"
+          >
+            <h3
+              class="text-sm font-semibold text-gray-700 dark:text-gray-200 mb-3"
+            >
+              Upload Program Assets
+            </h3>
+
+            <div class="space-y-4">
+              <!-- Logo -->
+              <div
+                class="bg-td-bg-light dark:bg-gray-900 rounded-lg p-3 border border-gray-200 dark:border-gray-700"
+              >
+                <div class="flex items-center justify-between mb-2">
+                  <h4
+                    class="text-xs font-medium text-gray-700 dark:text-gray-200"
+                  >
+                    Logo
+                  </h4>
+                  <span class="text-xs text-gray-500">350×130px</span>
+                </div>
+                <button
+                  onclick="document.getElementById('logo-input').click()"
+                  class="w-full flex items-center justify-center gap-2 px-3 py-2 bg-white dark:bg-gray-900 border border-gray-300 dark:border-gray-700 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors text-xs"
+                >
+                  Upload Logo
+                </button>
+                <input
+                  type="file"
+                  id="logo-input"
+                  accept=".png,.jpg,.jpeg"
+                  class="hidden"
+                />
+                <div id="logo-list" class="mt-2 space-y-1"></div>
+              </div>
+
+              <!-- Banners -->
+              <div
+                class="bg-td-bg-light dark:bg-gray-900 rounded-lg p-3 border border-gray-200 dark:border-gray-700"
+              >
+                <div class="flex items-center justify-between mb-2">
+                  <h4
+                    class="text-xs font-medium text-gray-700 dark:text-gray-200"
+                  >
+                    Banners
+                  </h4>
+                  <span class="text-xs text-gray-500">Multiple sizes</span>
+                </div>
+                <p class="text-xs text-gray-500 mb-2">
+                  160×600, 300×250, 300×600, 728×90, 928×70
+                </p>
+                <button
+                  onclick="document.getElementById('banners-input').click()"
+                  class="w-full flex items-center justify-center gap-2 px-3 py-2 bg-white dark:bg-gray-900 border border-gray-300 dark:border-gray-700 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors text-xs"
+                >
+                  Upload Banners
+                </button>
+                <input
+                  type="file"
+                  id="banners-input"
+                  accept=".jpg,.jpeg,.gif,.png"
+                  multiple
+                  class="hidden"
+                />
+                <div id="banners-list" class="mt-2 space-y-1"></div>
+              </div>
+
+              <!-- Terms -->
+              <div
+                class="bg-td-bg-light dark:bg-gray-900 rounded-lg p-3 border border-gray-200 dark:border-gray-700"
+              >
+                <div class="flex items-center justify-between mb-2">
+                  <h4
+                    class="text-xs font-medium text-gray-700 dark:text-gray-200"
+                  >
+                    Terms &amp; Conditions
+                  </h4>
+                  <span class="text-xs text-gray-500">PDF</span>
+                </div>
+                <button
+                  onclick="document.getElementById('terms-input').click()"
+                  class="w-full flex items-center justify-center gap-2 px-3 py-2 bg-white dark:bg-gray-900 border border-gray-300 dark:border-gray-700 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors text-xs"
+                >
+                  Upload T&amp;Cs
+                </button>
+                <input
+                  type="file"
+                  id="terms-input"
+                  accept=".pdf"
+                  class="hidden"
+                />
+                <div id="terms-list" class="mt-2 space-y-1"></div>
+              </div>
+
+              <!-- Other docs -->
+              <div
+                class="bg-td-bg-light dark:bg-gray-900 rounded-lg p-3 border border-gray-200 dark:border-gray-700"
+              >
+                <div class="flex items-center justify-between mb-2">
+                  <h4
+                    class="text-xs font-medium text-gray-700 dark:text-gray-200"
+                  >
+                    Other Documents
+                  </h4>
+                  <span class="text-xs text-gray-500">Optional</span>
+                </div>
+                <button
+                  onclick="document.getElementById('other-input').click()"
+                  class="w-full flex items-center justify-center gap-2 px-3 py-2 bg-white dark:bg-gray-900 border border-gray-300 dark:border-gray-700 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors text-xs"
+                >
+                  Upload Files
+                </button>
+                <input
+                  type="file"
+                  id="other-input"
+                  multiple
+                  class="hidden"
+                />
+                <div id="other-list" class="mt-2 space-y-1"></div>
+              </div>
+
+              <!-- Send all -->
+              <button
+                id="send-all-files"
+                class="w-full mt-1 px-4 py-2.5 bg-td-blue text-white rounded-lg hover:bg-td-blue-dark transition-colors text-sm font-medium shadow-brand disabled:bg-gray-300 disabled:cursor-not-allowed"
+                disabled
+              >
+                Send All Files
+              </button>
+            </div>
+          </div>
+
+          <!-- Chat input -->
+          <div
+            class="border-t border-gray-200 dark:border-gray-800 bg-gray-50 dark:bg-[#0f131a] p-3"
+          >
             <div class="max-w-3xl mx-auto flex gap-2">
-              <input id="input-assets" type="text" placeholder="Tell me what assets you're uploading..."
-                     class="flex-1 px-3 py-2 text-sm border border-gray-300 dark:border-gray-700 rounded-xl bg-white dark:bg-gray-900 text-gray-900 dark:text-gray-100 focus:outline-none focus:ring-2 focus:ring-td-blue" />
-              <button id="send-assets" class="px-4 py-2 bg-td-blue text-white text-sm rounded-xl hover:bg-td-blue-dark transition shadow-brand">
+              <input
+                id="input-assets"
+                type="text"
+                placeholder="Tell me about the assets you're providing..."
+                class="flex-1 px-3 py-2 text-sm border border-gray-300 dark:border-gray-700 rounded-xl bg-white dark:bg-[#1a1f2b] text-gray-900 dark:text-gray-100 placeholder-gray-500 dark:placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-td-blue focus:border-transparent"
+              />
+              <button
+                id="send-assets"
+                class="px-4 py-2 bg-td-blue text-white text-sm rounded-xl hover:bg-td-blue-dark transition shadow-brand"
+              >
                 Send
               </button>
             </div>
@@ -198,12 +466,24 @@
 
         <!-- IP ADDRESSES -->
         <section id="step-ip" class="step-page h-full flex flex-col hidden">
-          <div id="chat-ip" class="flex-1 overflow-y-auto p-6 space-y-3"></div>
-          <div class="border-t border-gray-200 dark:border-gray-800 bg-white dark:bg-[#020617] p-3">
+          <div
+            id="chat-ip"
+            class="flex-1 overflow-y-auto p-6 space-y-3 bg-transparent"
+          ></div>
+          <div
+            class="border-t border-gray-200 dark:border-gray-800 bg-gray-50 dark:bg-[#0f131a] p-3"
+          >
             <div class="max-w-3xl mx-auto flex gap-2">
-              <input id="input-ip" type="text" placeholder="Share the IP addresses to exclude..."
-                     class="flex-1 px-3 py-2 text-sm border border-gray-300 dark:border-gray-700 rounded-xl bg-white dark:bg-gray-900 text-gray-900 dark:text-gray-100 focus:outline-none focus:ring-2 focus:ring-td-blue" />
-              <button id="send-ip" class="px-4 py-2 bg-td-blue text-white text-sm rounded-xl hover:bg-td-blue-dark transition shadow-brand">
+              <input
+                id="input-ip"
+                type="text"
+                placeholder="Share the IP addresses to exclude..."
+                class="flex-1 px-3 py-2 text-sm border border-gray-300 dark:border-gray-700 rounded-xl bg-white dark:bg-[#1a1f2b] text-gray-900 dark:text-gray-100 placeholder-gray-500 dark:placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-td-blue focus:border-transparent"
+              />
+              <button
+                id="send-ip"
+                class="px-4 py-2 bg-td-blue text-white text-sm rounded-xl hover:bg-td-blue-dark transition shadow-brand"
+              >
                 Send
               </button>
             </div>
@@ -211,13 +491,28 @@
         </section>
 
         <!-- TRACKING SCRIPTS -->
-        <section id="step-scripts" class="step-page h-full flex flex-col hidden">
-          <div id="chat-scripts" class="flex-1 overflow-y-auto p-6 space-y-3"></div>
-          <div class="border-t border-gray-200 dark:border-gray-800 bg-white dark:bg-[#020617] p-3">
+        <section
+          id="step-scripts"
+          class="step-page h-full flex flex-col hidden"
+        >
+          <div
+            id="chat-scripts"
+            class="flex-1 overflow-y-auto p-6 space-y-3 bg-transparent"
+          ></div>
+          <div
+            class="border-t border-gray-200 dark:border-gray-800 bg-gray-50 dark:bg-[#0f131a] p-3"
+          >
             <div class="max-w-3xl mx-auto flex gap-2">
-              <input id="input-scripts" type="text" placeholder="Ask about implementing your tracking scripts..."
-                     class="flex-1 px-3 py-2 text-sm border border-gray-300 dark:border-gray-700 rounded-xl bg-white dark:bg-gray-900 text-gray-900 dark:text-gray-100 focus:outline-none focus:ring-2 focus:ring-td-blue" />
-              <button id="send-scripts" class="px-4 py-2 bg-td-blue text-white text-sm rounded-xl hover:bg-td-blue-dark transition shadow-brand">
+              <input
+                id="input-scripts"
+                type="text"
+                placeholder="Ask anything about implementing your tracking scripts..."
+                class="flex-1 px-3 py-2 text-sm border border-gray-300 dark:border-gray-700 rounded-xl bg-white dark:bg-[#1a1f2b] text-gray-900 dark:text-gray-100 placeholder-gray-500 dark:placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-td-blue focus:border-transparent"
+              />
+              <button
+                id="send-scripts"
+                class="px-4 py-2 bg-td-blue text-white text-sm rounded-xl hover:bg-td-blue-dark transition shadow-brand"
+              >
                 Send
               </button>
             </div>
@@ -228,23 +523,49 @@
   </div>
 
   <script>
-    // ===== CONFIG =====
-    const N8N_WEBHOOK_URL = 'https://harrytradedoubler2026.app.n8n.cloud/webhook/onboarding-chat';
+    // ==============================
+    // CONFIG
+    // ==============================
+    const N8N_WEBHOOK_URL =
+      'https://harrytradedoubler2026.app.n8n.cloud/webhook/onboarding-chat';
     const STEPS = ['intro', 'branded', 'feed', 'assets', 'ip', 'scripts'];
 
     const stepMeta = {
-      intro:   { title: 'Introduction',      subtitle: 'Tell me who you are and which company you represent.' },
-      branded: { title: 'Branded Tracking', subtitle: 'We’ll configure your visit.* and statics.* tracking domains.' },
-      feed:    { title: 'Product Feed',     subtitle: 'Share your product feed URL and format so we can map it.' },
-      assets:  { title: 'Program Assets',   subtitle: 'Upload your logo, banners and program documents.' },
-      ip:      { title: 'IP Addresses',     subtitle: 'Provide office IPs to exclude internal traffic from tracking.' },
-      scripts: { title: 'Tracking Scripts', subtitle: 'We’ll walk through integrating your Tradedoubler tracking tags.' },
+      intro: {
+        title: 'Introduction',
+        subtitle: 'Tell me who you are and which company you represent.',
+      },
+      branded: {
+        title: 'Branded Tracking',
+        subtitle:
+          'We’ll configure your visit.* and statics.* tracking domains.',
+      },
+      feed: {
+        title: 'Product Feed',
+        subtitle: 'Share your product feed URL and format so we can map it.',
+      },
+      assets: {
+        title: 'Program Assets',
+        subtitle:
+          'Upload your logo, banners, T&Cs and additional program documents.',
+      },
+      ip: {
+        title: 'IP Addresses',
+        subtitle:
+          'Provide office IPs so we can exclude internal traffic from tracking.',
+      },
+      scripts: {
+        title: 'Tracking Scripts',
+        subtitle: 'We’ll walk through integrating your Tradedoubler tags.',
+      },
     };
 
-    // ===== GLOBAL STATE =====
+    // ==============================
+    // STATE
+    // ==============================
     let currentStep = 'intro';
     let sessionId = generateSessionId();
-    let histories = {};  // { step: [{role, content}, ...] }
+    let histories = {}; // {step: [{role, content}]}
     let onboardingData = {};
     let checklist = {
       intro: false,
@@ -255,15 +576,33 @@
       trackingScripts: false,
     };
 
-    // ===== DOM =====
+    // Files (for assets step)
+    let uploadedFiles = {
+      logo: [],
+      banners: [],
+      terms: [],
+      other: [],
+    };
+
+    // ==============================
+    // DOM REFERENCES
+    // ==============================
     const stepTitle = document.getElementById('step-title');
     const stepSubtitle = document.getElementById('step-subtitle');
     const navButtons = document.querySelectorAll('.step-nav-btn');
     const progressBar = document.getElementById('progress-bar');
     const progressPct = document.getElementById('progress-percentage');
     const dataSummary = document.getElementById('data-summary');
+    const sendAllFilesBtn = document.getElementById('send-all-files');
 
-    // ===== DARK MODE =====
+    const logoInput = document.getElementById('logo-input');
+    const bannersInput = document.getElementById('banners-input');
+    const termsInput = document.getElementById('terms-input');
+    const otherInput = document.getElementById('other-input');
+
+    // ==============================
+    // DARK MODE
+    // ==============================
     function loadDarkMode() {
       if (localStorage.getItem('td_dark_mode') === '1') {
         document.documentElement.classList.add('dark');
@@ -276,23 +615,29 @@
     }
     loadDarkMode();
 
-    // ===== STORAGE HELPERS =====
+    // ==============================
+    // STORAGE
+    // ==============================
     function saveState() {
       localStorage.setItem('td_step', currentStep);
       localStorage.setItem('td_histories', JSON.stringify(histories));
       localStorage.setItem('td_onboarding_data', JSON.stringify(onboardingData));
       localStorage.setItem('td_checklist', JSON.stringify(checklist));
+      localStorage.setItem('td_uploaded_files', JSON.stringify(uploadedFiles));
     }
+
     function loadState() {
       const s = localStorage.getItem('td_step');
       const h = localStorage.getItem('td_histories');
       const d = localStorage.getItem('td_onboarding_data');
       const c = localStorage.getItem('td_checklist');
+      const f = localStorage.getItem('td_uploaded_files');
 
       if (s && STEPS.includes(s)) currentStep = s;
       histories = h ? JSON.parse(h) : {};
       onboardingData = d ? JSON.parse(d) : {};
       checklist = c ? JSON.parse(c) : checklist;
+      uploadedFiles = f ? JSON.parse(f) : uploadedFiles;
     }
 
     function resetOnboarding() {
@@ -300,18 +645,19 @@
       localStorage.removeItem('td_histories');
       localStorage.removeItem('td_onboarding_data');
       localStorage.removeItem('td_checklist');
+      localStorage.removeItem('td_uploaded_files');
       location.reload();
     }
 
-    // ===== INIT =====
+    // ==============================
+    // INIT
+    // ==============================
     loadState();
-
-    // ensure histories object has arrays per step
-    STEPS.forEach(step => {
+    STEPS.forEach((step) => {
       if (!Array.isArray(histories[step])) histories[step] = [];
     });
 
-    // default intro greeting if first time
+    // Seed intro message
     if (histories.intro.length === 0) {
       histories.intro.push({
         role: 'assistant',
@@ -320,8 +666,8 @@
       });
     }
 
-    // Wire inputs/send buttons per step
-    STEPS.forEach(step => {
+    // Wire chat inputs per step
+    STEPS.forEach((step) => {
       const input = document.getElementById('input-' + step);
       const sendBtn = document.getElementById('send-' + step);
       if (!input || !sendBtn) return;
@@ -336,37 +682,52 @@
     });
 
     // Sidebar nav clicks
-    navButtons.forEach(btn => {
+    navButtons.forEach((btn) => {
       btn.addEventListener('click', () => {
         const step = btn.getAttribute('data-step');
         goToStep(step);
       });
     });
 
+    // File upload listeners (assets step)
+    if (logoInput) logoInput.addEventListener('change', (e) => handleFileUpload(e, 'logo', 'logo-list'));
+    if (bannersInput) bannersInput.addEventListener('change', (e) => handleFileUpload(e, 'banners', 'banners-list'));
+    if (termsInput) termsInput.addEventListener('change', (e) => handleFileUpload(e, 'terms', 'terms-list'));
+    if (otherInput) otherInput.addEventListener('change', (e) => handleFileUpload(e, 'other', 'other-list'));
+    if (sendAllFilesBtn) sendAllFilesBtn.addEventListener('click', sendAllFiles);
+
     // Initial render
     goToStep(currentStep);
     updateChecklistUI();
     updateDataSummary();
+    updateFileLists();
+    updateSendAllButton();
 
-    // ===== CORE FUNCTIONS =====
+    // ==============================
+    // CORE
+    // ==============================
     function generateSessionId() {
-      return 'session_' + Date.now() + '_' + Math.random().toString(36).slice(2, 10);
+      return (
+        'session_' +
+        Date.now() +
+        '_' +
+        Math.random().toString(36).slice(2, 10)
+      );
     }
 
     function goToStep(step) {
       if (!STEPS.includes(step)) step = 'intro';
       currentStep = step;
 
-      // hide all step sections
-      document.querySelectorAll('.step-page').forEach(s => s.classList.add('hidden'));
+      document
+        .querySelectorAll('.step-page')
+        .forEach((s) => s.classList.add('hidden'));
       document.getElementById('step-' + step).classList.remove('hidden');
 
-      // update header
       stepTitle.textContent = stepMeta[step].title;
       stepSubtitle.textContent = stepMeta[step].subtitle;
 
-      // update nav highlighting
-      navButtons.forEach(btn => {
+      navButtons.forEach((btn) => {
         const s = btn.getAttribute('data-step');
         if (s === step) {
           btn.classList.add('bg-td-blue', 'text-white', 'shadow-brand');
@@ -375,10 +736,19 @@
         }
       });
 
-      // render that step's history
       const chatEl = document.getElementById('chat-' + step);
       chatEl.innerHTML = '';
-      histories[step].forEach(msg => addMessageToChat(step, msg.role, msg.content));
+      histories[step].forEach((m) => addMessageToChat(step, m.role, m.content));
+
+      // Scroll upload area into view when going to assets
+      if (step === 'assets') {
+        setTimeout(() => {
+          const logoBox = document.getElementById('logo-list');
+          if (logoBox) {
+            logoBox.scrollIntoView({ behavior: 'smooth', block: 'start' });
+          }
+        }, 200);
+      }
 
       saveState();
     }
@@ -391,7 +761,20 @@
       const text = input.value.trim();
       if (!text) return;
 
-      // append user message
+      // client-side keyword navigation (Option C)
+      const lower = text.toLowerCase();
+      if (
+        step !== 'assets' &&
+        (lower.includes('upload') ||
+          lower.includes('banner') ||
+          lower.includes('logo') ||
+          lower.includes('creative') ||
+          lower.includes('t&c') ||
+          lower.includes('terms'))
+      ) {
+        goToStep('assets');
+      }
+
       histories[step].push({ role: 'user', content: text });
       addMessageToChat(step, 'user', text);
       input.value = '';
@@ -409,6 +792,7 @@
             conversationHistory: histories[step],
             onboardingData,
             checklist,
+            uploadedFiles,
           }),
         });
 
@@ -421,17 +805,21 @@
         if (data.onboardingData) onboardingData = data.onboardingData;
         if (data.checklist) checklist = data.checklist;
 
+        // Option C: backend can explicitly ask to jump to a step
+        if (data.triggerGoToStep && STEPS.includes(data.triggerGoToStep)) {
+          goToStep(data.triggerGoToStep);
+        }
+
         updateChecklistUI();
         updateDataSummary();
         saveState();
       } catch (err) {
         console.error(err);
         removeLoadingIndicator(loadingId);
-        histories[step].push({
-          role: 'assistant',
-          content: 'I ran into an issue responding just now. Please try again in a moment.',
-        });
-        addMessageToChat(step, 'assistant', 'I ran into an issue responding just now. Please try again in a moment.');
+        const msg =
+          'I ran into an issue responding just now. Please try again in a moment.';
+        histories[step].push({ role: 'assistant', content: msg });
+        addMessageToChat(step, 'assistant', msg);
       }
     }
 
@@ -451,7 +839,8 @@
         .split('\n')
         .map((line) => {
           if (!line.trim()) return '<p class="mb-1">&nbsp;</p>';
-          if (line.startsWith('•') || line.startsWith('-')) return `<p class="ml-4">${line}</p>`;
+          if (line.startsWith('•') || line.startsWith('-'))
+            return `<p class="ml-4">${line}</p>`;
           return `<p class="mb-1">${line}</p>`;
         })
         .join('');
@@ -497,19 +886,150 @@
 
     function updateDataSummary() {
       const parts = [];
-      if (onboardingData.clientName) parts.push(`<p><strong>Client:</strong> ${onboardingData.clientName}</p>`);
-      if (onboardingData.companyName) parts.push(`<p><strong>Company:</strong> ${onboardingData.companyName}</p>`);
-      if (onboardingData.email) parts.push(`<p><strong>Email:</strong> ${onboardingData.email}</p>`);
+      if (onboardingData.clientName)
+        parts.push(`<p><strong>Client:</strong> ${onboardingData.clientName}</p>`);
+      if (onboardingData.companyName)
+        parts.push(
+          `<p><strong>Company:</strong> ${onboardingData.companyName}</p>`
+        );
+      if (onboardingData.email)
+        parts.push(`<p><strong>Email:</strong> ${onboardingData.email}</p>`);
       if (onboardingData.brandedTracking?.visit)
-        parts.push(`<p><strong>Visit:</strong> ${onboardingData.brandedTracking.visit}</p>`);
+        parts.push(
+          `<p><strong>Visit:</strong> ${onboardingData.brandedTracking.visit}</p>`
+        );
       if (onboardingData.brandedTracking?.statics)
-        parts.push(`<p><strong>Statics:</strong> ${onboardingData.brandedTracking.statics}</p>`);
+        parts.push(
+          `<p><strong>Statics:</strong> ${onboardingData.brandedTracking.statics}</p>`
+        );
       if (onboardingData.productFeedUrl)
-        parts.push(`<p><strong>Feed URL:</strong> ${onboardingData.productFeedUrl}</p>`);
+        parts.push(
+          `<p><strong>Feed URL:</strong> ${onboardingData.productFeedUrl}</p>`
+        );
       if (onboardingData.officeIPs?.length)
-        parts.push(`<p><strong>IPs:</strong> ${onboardingData.officeIPs.length} address(es)</p>`);
+        parts.push(
+          `<p><strong>IPs:</strong> ${onboardingData.officeIPs.length} address(es)</p>`
+        );
 
-      dataSummary.innerHTML = parts.length ? parts.join('') : '<p>No data collected yet</p>';
+      dataSummary.innerHTML =
+        parts.length > 0 ? parts.join('') : '<p>No data collected yet</p>';
+    }
+
+    // ==============================
+    // FILE UPLOADS (Assets step)
+    // ==============================
+    function handleFileUpload(event, category, listId) {
+      const files = Array.from(event.target.files);
+      if (!files.length) return;
+
+      const listElement = document.getElementById(listId);
+
+      files.forEach((file) => {
+        const reader = new FileReader();
+        reader.onload = (e) => {
+          uploadedFiles[category].push({
+            name: file.name,
+            type: file.type,
+            size: file.size,
+            data: e.target.result.split(',')[1],
+            category,
+          });
+
+          const fileDiv = document.createElement('div');
+          fileDiv.className =
+            'text-xs text-gray-600 dark:text-gray-200 flex items-center gap-2 p-1.5 bg-white dark:bg-gray-900 rounded border border-gray-200 dark:border-gray-700';
+          fileDiv.innerHTML = `
+            <svg class="w-3 h-3 text-green-500 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
+              <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/>
+            </svg>
+            <span class="flex-1 truncate text-xs">${file.name}</span>
+            <button onclick="removeFile('${category}', '${file.name}')" class="text-red-500 hover:text-red-700">
+              <svg class="w-3 h-3" fill="currentColor" viewBox="0 0 20 20">
+                <path fill-rule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clip-rule="evenodd"/>
+              </svg>
+            </button>
+          `;
+          listElement.appendChild(fileDiv);
+
+          updateSendAllButton();
+          saveState();
+        };
+        reader.readAsDataURL(file);
+      });
+
+      event.target.value = '';
+    }
+
+    function removeFile(category, fileName) {
+      uploadedFiles[category] = uploadedFiles[category].filter(
+        (f) => f.name !== fileName
+      );
+      updateFileLists();
+      updateSendAllButton();
+      saveState();
+    }
+
+    function updateFileLists() {
+      const lists = {
+        logo: 'logo-list',
+        banners: 'banners-list',
+        terms: 'terms-list',
+        other: 'other-list',
+      };
+
+      Object.keys(lists).forEach((category) => {
+        const listElement = document.getElementById(lists[category]);
+        if (!listElement) return;
+        listElement.innerHTML = '';
+
+        (uploadedFiles[category] || []).forEach((file) => {
+          const fileDiv = document.createElement('div');
+          fileDiv.className =
+            'text-xs text-gray-600 dark:text-gray-200 flex items-center gap-2 p-1.5 bg-white dark:bg-gray-900 rounded border border-gray-200 dark:border-gray-700';
+          fileDiv.innerHTML = `
+            <svg class="w-3 h-3 text-green-500 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
+              <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/>
+            </svg>
+            <span class="flex-1 truncate text-xs">${file.name}</span>
+            <button onclick="removeFile('${category}', '${file.name}')" class="text-red-500 hover:text-red-700">
+              <svg class="w-3 h-3" fill="currentColor" viewBox="0 0 20 20">
+                <path fill-rule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clip-rule="evenodd"/>
+              </svg>
+            </button>
+          `;
+          listElement.appendChild(fileDiv);
+        });
+      });
+    }
+
+    function updateSendAllButton() {
+      if (!sendAllFilesBtn) return;
+      const totalFiles = Object.values(uploadedFiles).reduce(
+        (sum, arr) => sum + (arr ? arr.length : 0),
+        0
+      );
+      sendAllFilesBtn.disabled = totalFiles === 0;
+      sendAllFilesBtn.textContent =
+        totalFiles > 0 ? `Send All Files (${totalFiles})` : 'Send All Files';
+    }
+
+    async function sendAllFiles() {
+      const totalFiles = Object.values(uploadedFiles).reduce(
+        (sum, arr) => sum + (arr ? arr.length : 0),
+        0
+      );
+      if (totalFiles === 0) return;
+
+      const filesSummary = Object.entries(uploadedFiles)
+        .filter(([_, files]) => files && files.length > 0)
+        .map(([category, files]) => `${category}: ${files.length} file(s)`)
+        .join(', ');
+
+      const inputAssets = document.getElementById('input-assets');
+      if (inputAssets) {
+        inputAssets.value = `I'm uploading ${totalFiles} files: ${filesSummary}`;
+        await sendMessage('assets');
+      }
     }
   </script>
 </body>
