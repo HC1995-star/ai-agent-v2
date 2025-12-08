@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en" class="">
+<html lang="en">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -13,35 +13,12 @@
     rel="stylesheet"
   />
 
-  <!-- Tailwind (no dark mode) -->
-  <script>
-    tailwind = window.tailwind || {};
-    tailwind.config = {
-      theme: {
-        extend: {
-          fontFamily: {
-            sans: ['Instrument Sans', 'system-ui', 'sans-serif'],
-          },
-          colors: {
-            'td-blue': '#2A73FF',
-            'td-blue-dark': '#1F5ED8',
-            'td-bg-light': '#F7F9FF',
-          },
-          boxShadow: {
-            brand: '0 4px 14px rgba(42, 115, 255, 0.18)',
-          },
-          borderRadius: {
-            brand: '14px',
-          },
-        },
-      },
-    };
-  </script>
+  <!-- Tailwind CDN (no custom config needed) -->
   <script src="https://cdn.tailwindcss.com"></script>
 
   <style>
     body {
-      font-family: 'Instrument Sans', sans-serif;
+      font-family: 'Instrument Sans', system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
     }
     .chat-message {
       animation: slideIn 0.25s ease-out;
@@ -72,7 +49,7 @@
     <aside class="w-80 bg-white border-r border-gray-200 p-5 flex flex-col">
       <div class="flex items-center justify-between mb-5">
         <div>
-          <h1 class="text-xl font-semibold text-td-blue">Tradedoubler</h1>
+          <h1 class="text-xl font-semibold text-[#2A73FF]">Tradedoubler</h1>
           <p class="text-xs text-gray-500">AI Onboarding Assistant</p>
         </div>
       </div>
@@ -126,12 +103,12 @@
       <div class="mb-5">
         <div class="flex items-center justify-between mb-1">
           <span class="text-xs font-medium text-gray-600">Overall Progress</span>
-          <span id="progress-percentage" class="text-xs font-semibold text-td-blue">0%</span>
+          <span id="progress-percentage" class="text-xs font-semibold text-[#2A73FF]">0%</span>
         </div>
         <div class="w-full h-1.5 rounded-full bg-gray-200 overflow-hidden">
           <div
             id="progress-bar"
-            class="h-1.5 rounded-full bg-td-blue transition-all duration-500"
+            class="h-1.5 rounded-full bg-[#2A73FF] transition-all duration-500"
             style="width: 0%"
           ></div>
         </div>
@@ -192,11 +169,11 @@
                        bg-white 
                        text-gray-900 
                        placeholder-gray-500 
-                       focus:outline-none focus:ring-2 focus:ring-td-blue focus:border-transparent"
+                       focus:outline-none focus:ring-2 focus:ring-[#2A73FF] focus:border-transparent"
               />
               <button
                 id="send-intro"
-                class="px-4 py-2 bg-td-blue text-white text-sm rounded-xl hover:bg-td-blue-dark transition shadow-brand"
+                class="px-4 py-2 bg-[#2A73FF] text-white text-sm rounded-xl hover:bg-[#1F5ED8] transition shadow-md"
               >
                 Send
               </button>
@@ -222,11 +199,11 @@
                        bg-white 
                        text-gray-900 
                        placeholder-gray-500 
-                       focus:outline-none focus:ring-2 focus:ring-td-blue focus:border-transparent"
+                       focus:outline-none focus:ring-2 focus:ring-[#2A73FF] focus:border-transparent"
               />
               <button
                 id="send-branded"
-                class="px-4 py-2 bg-td-blue text-white text-sm rounded-xl hover:bg-td-blue-dark transition shadow-brand"
+                class="px-4 py-2 bg-[#2A73FF] text-white text-sm rounded-xl hover:bg-[#1F5ED8] transition shadow-md"
               >
                 Send
               </button>
@@ -252,11 +229,11 @@
                        bg-white 
                        text-gray-900 
                        placeholder-gray-500 
-                       focus:outline-none focus:ring-2 focus:ring-td-blue focus:border-transparent"
+                       focus:outline-none focus:ring-2 focus:ring-[#2A73FF] focus:border-transparent"
               />
               <button
                 id="send-feed"
-                class="px-4 py-2 bg-td-blue text-white text-sm rounded-xl hover:bg-td-blue-dark transition shadow-brand"
+                class="px-4 py-2 bg-[#2A73FF] text-white text-sm rounded-xl hover:bg-[#1F5ED8] transition shadow-md"
               >
                 Send
               </button>
@@ -271,7 +248,7 @@
             class="flex-1 overflow-y-auto p-6 space-y-3"
           >
             <div
-              class="mb-3 max-w-[1100px] w-full mx-auto p-3 bg-td-bg-light border border-td-blue/30 text-td-blue rounded-brand text-sm"
+              class="mb-3 max-w-[1100px] w-full mx-auto p-3 bg-[#F7F9FF] border border-[#2A73FF]/30 text-[#2A73FF] rounded-[14px] text-sm"
             >
               Upload your logo, banners, T&Cs and additional documents using the
               sections below 👇
@@ -288,7 +265,7 @@
               <div class="space-y-4">
                 <!-- Logo -->
                 <div
-                  class="bg-td-bg-light rounded-lg p-3 border border-gray-200"
+                  class="bg-[#F7F9FF] rounded-lg p-3 border border-gray-200"
                 >
                   <div class="flex items-center justify-between mb-2">
                     <h4 class="text-xs font-medium text-gray-700">Logo</h4>
@@ -311,7 +288,7 @@
 
                 <!-- Banners -->
                 <div
-                  class="bg-td-bg-light rounded-lg p-3 border border-gray-200"
+                  class="bg-[#F7F9FF] rounded-lg p-3 border border-gray-200"
                 >
                   <div class="flex items-center justify-between mb-2">
                     <h4 class="text-xs font-medium text-gray-700">Banners</h4>
@@ -338,7 +315,7 @@
 
                 <!-- Terms -->
                 <div
-                  class="bg-td-bg-light rounded-lg p-3 border border-gray-200"
+                  class="bg-[#F7F9FF] rounded-lg p-3 border border-gray-200"
                 >
                   <div class="flex items-center justify-between mb-2">
                     <h4 class="text-xs font-medium text-gray-700">
@@ -363,7 +340,7 @@
 
                 <!-- Other docs -->
                 <div
-                  class="bg-td-bg-light rounded-lg p-3 border border-gray-200"
+                  class="bg-[#F7F9FF] rounded-lg p-3 border border-gray-200"
                 >
                   <div class="flex items-center justify-between mb-2">
                     <h4 class="text-xs font-medium text-gray-700">
@@ -389,7 +366,7 @@
                 <!-- Send all -->
                 <button
                   id="send-all-files"
-                  class="w-full mt-1 px-4 py-2.5 bg-td-blue text-white rounded-lg hover:bg-td-blue-dark transition-colors text-sm font-medium shadow-brand disabled:bg-gray-300 disabled:cursor-not-allowed"
+                  class="w-full mt-1 px-4 py-2.5 bg-[#2A73FF] text-white rounded-lg hover:bg-[#1F5ED8] transition-colors text-sm font-medium shadow-md disabled:bg-gray-300 disabled:cursor-not-allowed"
                   disabled
                 >
                   Send All Files
@@ -411,11 +388,11 @@
                        bg-white 
                        text-gray-900 
                        placeholder-gray-500 
-                       focus:outline-none focus:ring-2 focus:ring-td-blue focus:border-transparent"
+                       focus:outline-none focus:ring-2 focus:ring-[#2A73FF] focus:border-transparent"
               />
               <button
                 id="send-assets"
-                class="px-4 py-2 bg-td-blue text-white text-sm rounded-xl hover:bg-td-blue-dark transition shadow-brand"
+                class="px-4 py-2 bg-[#2A73FF] text-white text-sm rounded-xl hover:bg-[#1F5ED8] transition shadow-md"
               >
                 Send
               </button>
@@ -441,11 +418,11 @@
                        bg-white 
                        text-gray-900 
                        placeholder-gray-500 
-                       focus:outline-none focus:ring-2 focus:ring-td-blue focus:border-transparent"
+                       focus:outline-none focus:ring-2 focus:ring-[#2A73FF] focus:border-transparent"
               />
               <button
                 id="send-ip"
-                class="px-4 py-2 bg-td-blue text-white text-sm rounded-xl hover:bg-td-blue-dark transition shadow-brand"
+                class="px-4 py-2 bg-[#2A73FF] text-white text-sm rounded-xl hover:bg-[#1F5ED8] transition shadow-md"
               >
                 Send
               </button>
@@ -471,11 +448,11 @@
                        bg-white 
                        text-gray-900 
                        placeholder-gray-500 
-                       focus:outline-none focus:ring-2 focus:ring-td-blue focus:border-transparent"
+                       focus:outline-none focus:ring-2 focus:ring-[#2A73FF] focus:border-transparent"
               />
               <button
                 id="send-scripts"
-                class="px-4 py-2 bg-td-blue text-white text-sm rounded-xl hover:bg-td-blue-dark transition shadow-brand"
+                class="px-4 py-2 bg-[#2A73FF] text-white text-sm rounded-xl hover:bg-[#1F5ED8] transition shadow-md"
               >
                 Send
               </button>
@@ -678,9 +655,9 @@
       navButtons.forEach((btn) => {
         const s = btn.getAttribute('data-step');
         if (s === step) {
-          btn.classList.add('bg-td-blue', 'text-white', 'shadow-brand');
+          btn.classList.add('bg-[#2A73FF]', 'text-white', 'shadow-md');
         } else {
-          btn.classList.remove('bg-td-blue', 'text-white', 'shadow-brand');
+          btn.classList.remove('bg-[#2A73FF]', 'text-white', 'shadow-md');
         }
       });
 
@@ -779,7 +756,7 @@
 
       const bubble = document.createElement('div');
       bubble.className =
-        'max-w-2xl px-3 py-2 rounded-brand text-sm chat-message bg-td-blue text-white shadow-brand';
+        'max-w-2xl px-3 py-2 rounded-[14px] text-sm chat-message bg-[#2A73FF] text-white shadow-md';
 
       bubble.innerHTML = content
         .split('\n')
@@ -809,11 +786,11 @@
       inner.className = 'max-w-[1100px] w-full flex justify-start';
 
       inner.innerHTML = `
-        <div class="px-3 py-2 rounded-brand bg-white border border-gray-200">
+        <div class="px-3 py-2 rounded-[14px] bg-white border border-gray-200">
           <div class="flex gap-1">
-            <div class="w-2 h-2 rounded-full bg-td-blue pulse-loader"></div>
-            <div class="w-2 h-2 rounded-full bg-td-blue pulse-loader" style="animation-delay:0.15s"></div>
-            <div class="w-2 h-2 rounded-full bg-td-blue pulse-loader" style="animation-delay:0.3s"></div>
+            <div class="w-2 h-2 rounded-full bg-[#2A73FF] pulse-loader"></div>
+            <div class="w-2 h-2 rounded-full bg-[#2A73FF] pulse-loader" style="animation-delay:0.15s"></div>
+            <div class="w-2 h-2 rounded-full bg-[#2A73FF] pulse-loader" style="animation-delay:0.3s"></div>
           </div>
         </div>
       `;
