@@ -615,68 +615,75 @@
       }
     }
 
-    function addMessageToChat(step, role, content) {
-      const chatEl = document.getElementById('chat-' + step);
-      if (!chatEl) return;
+   function addMessageToChat(step, role, content) {
+  const chatEl = document.getElementById('chat-' + step);
+  if (!chatEl) return;
 
-      const wrapper = document.createElement('div');
-      wrapper.className = `flex ${role === 'user' ? 'justify-end' : 'justify-start'}`;
+  const wrapper = document.createElement('div');
+  wrapper.className = `flex ${role === 'user' ? 'justify-end' : 'justify-start'}`;
 
-      const inner = document.createElement('div');
-      inner.className = 'max-w-[1100px] w-full flex ' + (role === 'user' ? 'justify-end' : 'justify-start');
+  const inner = document.createElement('div');
+  inner.className =
+    'max-w-[1100px] w-full flex ' + (role === 'user' ? 'justify-end' : 'justify-start');
 
-      const bubble = document.createElement('div');
-      bubble.className =
-        'max-w-2xl px-3 py-2 rounded-[14px] text-sm chat-message bg-[#2A73FF] text-white shadow-md';
+  const bubble = document.createElement('div');
+  bubble.className =
+    'max-w-2xl px-3 py-2 rounded-[14px] text-sm chat-message bg-[#2A73FF] text-white shadow-md';
 
-      bubble.innerHTML = content
-        .split('\n')
-        .map((line) => {
-          if (!line.trim()) return '<p class="mb-1">&nbsp;</p>';
-          if (line.startsWith('•') || line.startsWith('-')) {
-            return `<p class="ml-4">${line}</p>`;
-          }
-          return `<p class="mb-1">${line}</p>`;
-        })
-        .join('');
+  bubble.innerHTML = content
+    .split('\\n')
+    .map((line) => {
+      if (!line.trim()) return '<p class="mb-1">&nbsp;</p>';
+      if (line.startsWith('•') || line.startsWith('-')) {
+        return `<p class="ml-4">${line}</p>`;
+      }
+      return `<p class="mb-1">${line}</p>`;
+    })
+    .join('');
 
-      inner.appendChild(bubble);
-      wrapper.appendChild(inner);
-      chatEl.appendChild(wrapper);
-      chatEl.scrollTop = chatEl.scrollHeight;
-    }
+  inner.appendChild(bubble);
+  wrapper.appendChild(inner);
+  chatEl.appendChild(wrapper);
 
-    function addLoadingIndicator(step) {
-      const chatEl = document.getElementById('chat-' + step);
-      if (!chatEl) return;
+  // Correct auto-scroll
+  setTimeout(() => {
+    chatEl.scrollTop = chatEl.scrollHeight;
+  }, 20);
+}
 
-      const id = `loading_${step}_${Date.now()}`;
-      const wrapper = document.createElement('div');
-      wrapper.id = id;
-      wrapper.className = 'flex justify-start';
 
-      const inner = document.createElement('div');
-      inner.className = 'max-w-[1100px] w-full flex justify-start';
+ function addLoadingIndicator(step) {
+  const chatEl = document.getElementById('chat-' + step);
+  if (!chatEl) return;
 
-      inner.innerHTML = `
-        <div class="px-3 py-2 rounded-[14px] bg-white border border-gray-200">
-          <div class="flex gap-1">
-            <div class="w-2 h-2 rounded-full bg-[#2A73FF] pulse-loader"></div>
-            <div class="w-2 h-2 rounded-full bg-[#2A73FF] pulse-loader" style="animation-delay:0.15s"></div>
-            <div class="w-2 h-2 rounded-full bg-[#2A73FF] pulse-loader" style="animation-delay:0.3s"></div>
-          </div>
-        </div>
-      `;
-      wrapper.appendChild(inner);
-      chatEl.appendChild(wrapper);
-      chatEl.scrollTop = chatEl.scrollHeight;
-      return id;
-    }
+  const id = `loading_${step}_${Date.now()}`;
+  const wrapper = document.createElement('div');
+  wrapper.id = id;
+  wrapper.className = 'flex justify-start';
 
-    function removeLoadingIndicator(id) {
-      const el = document.getElementById(id);
-      if (el) el.remove();
-    }
+  const inner = document.createElement('div');
+  inner.className = 'max-w-[1100px] w-full flex justify-start';
+
+  inner.innerHTML = `
+    <div class="px-3 py-2 rounded-[14px] bg-white border border-gray-200">
+      <div class="flex gap-1">
+        <div class="w-2 h-2 rounded-full bg-[#2A73FF] pulse-loader"></div>
+        <div class="w-2 h-2 rounded-full bg-[#2A73FF] pulse-loader" style="animation-delay:0.15s"></div>
+        <div class="w-2 h-2 rounded-full bg-[#2A73FF] pulse-loader" style="animation-delay:0.3s"></div>
+      </div>
+    </div>
+  `;
+
+  wrapper.appendChild(inner);
+  chatEl.appendChild(wrapper);
+
+  // Correct auto-scroll
+  setTimeout(() => {
+    chatEl.scrollTop = chatEl.scrollHeight;
+  }, 20);
+
+  return id;
+}
 
     function updateChecklistUI() {
       const doneCount = Object.values(checklist).filter(Boolean).length;
