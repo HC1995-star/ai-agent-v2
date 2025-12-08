@@ -1,600 +1,785 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" class="">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Tradedoubler Onboarding Assistant</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <style>
-        .chat-message {
-            animation: slideIn 0.3s ease-out;
-        }
-        @keyframes slideIn {
-            from {
-                opacity: 0;
-                transform: translateY(10px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-        .pulse-loader {
-            animation: pulse 1.5s ease-in-out infinite;
-        }
-        @keyframes pulse {
-            0%, 100% { opacity: 1; }
-            50% { opacity: 0.5; }
-        }
-    </style>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Tradedoubler Onboarding Assistant</title>
+
+  <!-- Brand font -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Instrument+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+
+  <!-- Tailwind config -->
+  <script>
+    tailwind = window.tailwind || {};
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['Instrument Sans', 'sans-serif'],
+          },
+          colors: {
+            'td-blue': '#2A73FF',
+            'td-blue-light': '#5B97FF',
+            'td-blue-dark': '#1F5ED8',
+            'td-bg-light': '#F7F9FF',
+            'td-bg-dark': '#0E1117',
+            'td-gray': '#556070',
+          },
+          boxShadow: {
+            brand: '0 4px 14px rgba(42, 115, 255, 0.15)',
+          },
+          borderRadius: {
+            brand: '14px',
+          },
+          transitionTimingFunction: {
+            brand: 'cubic-bezier(0.22, 0.61, 0.36, 1)',
+          },
+        },
+      },
+    };
+  </script>
+  <script src="https://cdn.tailwindcss.com"></script>
+
+  <style>
+    body {
+      font-family: 'Instrument Sans', sans-serif;
+    }
+    .chat-message {
+      animation: slideIn 0.3s ease-out;
+    }
+    @keyframes slideIn {
+      from {
+        opacity: 0;
+        transform: translateY(10px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+    .pulse-loader {
+      animation: pulse 1.5s ease-in-out infinite;
+    }
+    @keyframes pulse {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0.5; }
+    }
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(10px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+    .animate-fadeIn {
+      animation: fadeIn 0.4s ease-out;
+    }
+  </style>
 </head>
-<body class="bg-gradient-to-br from-blue-50 to-indigo-50">
-    <div class="flex h-screen">
-        <!-- Sidebar -->
-        <div class="w-96 bg-white shadow-lg p-6 overflow-y-auto">
-            <div class="mb-6">
-                <h2 class="text-2xl font-bold text-gray-800 mb-2">Tradedoubler</h2>
-                <p class="text-sm text-gray-600">AI Onboarding Assistant</p>
-            </div>
 
-            <!-- Program Info Badge (shown after session loads) -->
-            <div id="program-info" class="hidden mb-6 p-4 bg-blue-50 border border-blue-200 rounded-lg">
-                <h3 class="text-sm font-semibold text-blue-900 mb-3">Your Program</h3>
-                <div class="text-xs text-blue-800 space-y-2">
-                    <p><strong>Program ID:</strong> <span id="display-program-id" class="font-mono"></span></p>
-                    <p><strong>Organization ID:</strong> <span id="display-org-id" class="font-mono"></span></p>
-                    <p><strong>Event ID:</strong> <span id="display-event-id" class="font-mono"></span></p>
-                    <div id="test-link-section" class="hidden mt-3 pt-3 border-t border-blue-200">
-                        <p class="mb-1"><strong>Test Link:</strong></p>
-                        <a id="display-test-link" href="#" target="_blank" class="text-blue-600 hover:text-blue-800 underline break-all text-xs"></a>
-                    </div>
-                    <p class="mt-3 pt-3 border-t border-blue-200"><strong>Status:</strong> <span class="text-green-600 font-medium">Ready ✓</span></p>
-                    <p id="scripts-ready" class="hidden text-green-600 font-medium text-xs">✓ Implementation scripts loaded</p>
-                </div>
-            </div>
+<body class="bg-gradient-to-br from-td-bg-light to-indigo-50 dark:from-td-bg-dark dark:to-black text-gray-900 dark:text-gray-100">
+  <div class="flex h-screen">
+    <!-- Sidebar -->
+    <div class="w-96 bg-white dark:bg-[#111827] shadow-lg p-6 overflow-y-auto flex flex-col">
+      <div class="mb-6 flex items-center justify-between">
+        <div>
+          <h2 class="text-2xl font-bold text-td-blue mb-1">Tradedoubler</h2>
+          <p class="text-sm text-gray-600 dark:text-gray-300">AI Onboarding Assistant</p>
+        </div>
+        <button
+          onclick="toggleDarkMode()"
+          class="px-2.5 py-1.5 rounded-full text-[11px] bg-gray-100 dark:bg-gray-800 text-gray-700 dark:text-gray-200 border border-gray-300 dark:border-gray-700 hover:bg-gray-200 dark:hover:bg-gray-700 transition"
+        >
+          Toggle theme
+        </button>
+      </div>
 
-            <!-- Loading Session Indicator -->
-            <div id="session-loading" class="hidden mb-6 p-4 bg-yellow-50 border border-yellow-200 rounded-lg">
-                <div class="flex items-center gap-2">
-                    <div class="w-4 h-4 border-2 border-yellow-600 border-t-transparent rounded-full animate-spin"></div>
-                    <span class="text-xs text-yellow-800 font-medium">Loading your program...</span>
-                </div>
-            </div>
+      <!-- Progress bar -->
+      <div class="mb-6">
+        <div class="flex items-center justify-between mb-2">
+          <span class="text-sm font-medium text-gray-700 dark:text-gray-200">Progress</span>
+          <span id="progress-percentage" class="text-sm font-medium text-td-blue">0%</span>
+        </div>
+        <div class="w-full bg-gray-200 dark:bg-gray-800 rounded-full h-2">
+          <div id="progress-bar" class="bg-td-blue h-2 rounded-full transition-all duration-500" style="width: 0%"></div>
+        </div>
+      </div>
 
-            <!-- Progress bar -->
-            <div class="mb-6">
-                <div class="flex items-center justify-between mb-2">
-                    <span class="text-sm font-medium text-gray-700">Progress</span>
-                    <span id="progress-percentage" class="text-sm font-medium text-blue-600">0%</span>
-                </div>
-                <div class="w-full bg-gray-200 rounded-full h-2">
-                    <div id="progress-bar" class="bg-blue-600 h-2 rounded-full transition-all duration-500" style="width: 0%"></div>
-                </div>
-            </div>
+      <!-- API Status -->
+      <div id="api-status" class="hidden mb-6 p-3 rounded-lg">
+        <div class="flex items-center gap-2">
+          <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
+            <path fill-rule="evenodd"
+              d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"
+              clip-rule="evenodd" />
+          </svg>
+          <span id="api-status-text" class="text-sm font-medium"></span>
+        </div>
+      </div>
 
-            <!-- API Status -->
-            <div id="api-status" class="hidden mb-6 p-3 rounded-lg">
-                <div class="flex items-center gap-2">
-                    <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
-                        <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/>
-                    </svg>
-                    <span id="api-status-text" class="text-sm font-medium"></span>
-                </div>
-            </div>
+      <!-- Checklist -->
+      <div class="space-y-3 mb-6">
+        <h3 class="text-sm font-semibold text-gray-700 dark:text-gray-200 mb-3">Onboarding Checklist</h3>
 
-            <!-- Checklist -->
-            <div class="space-y-3 mb-6">
-                <h3 class="text-sm font-semibold text-gray-700 mb-3">Onboarding Checklist</h3>
-                
-                <div id="checklist-intro" class="checklist-item flex items-center gap-3">
-                    <svg class="w-5 h-5 text-gray-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <circle cx="12" cy="12" r="10" stroke-width="2"/>
-                    </svg>
-                    <span class="text-sm text-gray-500">Confirm Details</span>
-                </div>
-
-                <div id="checklist-brandedTracking" class="checklist-item flex items-center gap-3">
-                    <svg class="w-5 h-5 text-gray-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <circle cx="12" cy="12" r="10" stroke-width="2"/>
-                    </svg>
-                    <span class="text-sm text-gray-500">DNS Configuration</span>
-                </div>
-
-                <div id="checklist-productFeed" class="checklist-item flex items-center gap-3">
-                    <svg class="w-5 h-5 text-gray-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <circle cx="12" cy="12" r="10" stroke-width="2"/>
-                    </svg>
-                    <span class="text-sm text-gray-500">Product Feed</span>
-                </div>
-
-                <div id="checklist-assets" class="checklist-item flex items-center gap-3">
-                    <svg class="w-5 h-5 text-gray-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <circle cx="12" cy="12" r="10" stroke-width="2"/>
-                    </svg>
-                    <span class="text-sm text-gray-500">Program Assets</span>
-                </div>
-
-                <div id="checklist-scripts" class="checklist-item flex items-center gap-3">
-                    <svg class="w-5 h-5 text-gray-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <circle cx="12" cy="12" r="10" stroke-width="2"/>
-                    </svg>
-                    <span class="text-sm text-gray-500">Implementation Scripts</span>
-                </div>
-            </div>
-
-            <!-- File Upload Sections -->
-            <div class="space-y-4 border-t border-gray-200 pt-6">
-                <h3 class="text-sm font-semibold text-gray-700 mb-4">Upload Program Assets</h3>
-
-                <!-- Logo Upload -->
-                <div class="bg-gray-50 rounded-lg p-3 border border-gray-200">
-                    <div class="flex items-center justify-between mb-2">
-                        <h4 class="text-xs font-medium text-gray-700">Logo</h4>
-                        <span class="text-xs text-gray-500">350x130px</span>
-                    </div>
-                    <button onclick="document.getElementById('logo-input').click()" class="w-full flex items-center justify-center gap-2 px-3 py-2 bg-white border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors text-xs">
-                        <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"/>
-                        </svg>
-                        Upload Logo
-                    </button>
-                    <input type="file" id="logo-input" accept=".png,.jpg,.jpeg" class="hidden">
-                    <div id="logo-list" class="mt-2 space-y-1"></div>
-                </div>
-
-                <!-- Banners Upload -->
-                <div class="bg-gray-50 rounded-lg p-3 border border-gray-200">
-                    <div class="flex items-center justify-between mb-2">
-                        <h4 class="text-xs font-medium text-gray-700">Banners</h4>
-                        <span class="text-xs text-gray-500">Multiple</span>
-                    </div>
-                    <p class="text-xs text-gray-400 mb-2">160x600, 300x250, 300x600, 728x90, 928x70</p>
-                    <button onclick="document.getElementById('banners-input').click()" class="w-full flex items-center justify-center gap-2 px-3 py-2 bg-white border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors text-xs">
-                        <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"/>
-                        </svg>
-                        Upload Banners
-                    </button>
-                    <input type="file" id="banners-input" accept=".jpg,.jpeg,.gif,.png" multiple class="hidden">
-                    <div id="banners-list" class="mt-2 space-y-1"></div>
-                </div>
-
-                <!-- Terms & Conditions -->
-                <div class="bg-gray-50 rounded-lg p-3 border border-gray-200">
-                    <div class="flex items-center justify-between mb-2">
-                        <h4 class="text-xs font-medium text-gray-700">Terms & Conditions</h4>
-                        <span class="text-xs text-gray-500">PDF</span>
-                    </div>
-                    <button onclick="document.getElementById('terms-input').click()" class="w-full flex items-center justify-center gap-2 px-3 py-2 bg-white border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors text-xs">
-                        <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>
-                        </svg>
-                        Upload T&Cs
-                    </button>
-                    <input type="file" id="terms-input" accept=".pdf" class="hidden">
-                    <div id="terms-list" class="mt-2 space-y-1"></div>
-                </div>
-
-                <!-- Send All Button -->
-                <button id="send-all-files" class="w-full px-4 py-2.5 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors text-sm font-medium shadow-md disabled:bg-gray-300 disabled:cursor-not-allowed" disabled>
-                    Send All Files
-                </button>
-            </div>
-
-            <!-- Collected Data Summary -->
-            <div class="mt-6 pt-6 border-t border-gray-200">
-                <h3 class="text-sm font-semibold text-gray-700 mb-3">Program Details</h3>
-                <div id="data-summary" class="text-xs text-gray-600 space-y-1">
-                    <p>Loading...</p>
-                </div>
-            </div>
+        <div id="checklist-intro" class="checklist-item flex items-center gap-3">
+          <svg class="w-5 h-5 text-gray-300 dark:text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <circle cx="12" cy="12" r="10" stroke-width="2" />
+          </svg>
+          <span class="text-sm text-gray-500 dark:text-gray-400">Introduction &amp; Details</span>
         </div>
 
-        <!-- Chat area -->
-        <div class="flex-1 flex flex-col">
-            <!-- Chat messages -->
-            <div id="chat-container" class="flex-1 overflow-y-auto p-6 space-y-4">
-                <!-- Messages will be added here -->
-            </div>
-
-            <!-- Input area -->
-            <div class="border-t border-gray-200 bg-white p-4">
-                <div class="max-w-4xl mx-auto flex gap-3">
-                    <input
-                        type="text"
-                        id="message-input"
-                        placeholder="Type your message..."
-                        class="flex-1 px-4 py-3 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                    />
-                    <button
-                        id="send-btn"
-                        class="px-6 py-3 bg-blue-600 text-white rounded-xl hover:bg-blue-700 disabled:bg-gray-300 disabled:cursor-not-allowed transition-colors flex items-center gap-2"
-                    >
-                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8"/>
-                        </svg>
-                    </button>
-                </div>
-            </div>
+        <div id="checklist-brandedTracking" class="checklist-item flex items-center gap-3">
+          <svg class="w-5 h-5 text-gray-300 dark:text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <circle cx="12" cy="12" r="10" stroke-width="2" />
+          </svg>
+          <span class="text-sm text-gray-500 dark:text-gray-400">DNS Configuration</span>
         </div>
+
+        <div id="checklist-productFeed" class="checklist-item flex items-center gap-3">
+          <svg class="w-5 h-5 text-gray-300 dark:text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <circle cx="12" cy="12" r="10" stroke-width="2" />
+          </svg>
+          <span class="text-sm text-gray-500 dark:text-gray-400">Product Feed</span>
+        </div>
+
+        <div id="checklist-assets" class="checklist-item flex items-center gap-3">
+          <svg class="w-5 h-5 text-gray-300 dark:text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <circle cx="12" cy="12" r="10" stroke-width="2" />
+          </svg>
+          <span class="text-sm text-gray-500 dark:text-gray-400">Logos &amp; Banners</span>
+        </div>
+
+        <div id="checklist-ipAddresses" class="checklist-item flex items-center gap-3">
+          <svg class="w-5 h-5 text-gray-300 dark:text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <circle cx="12" cy="12" r="10" stroke-width="2" />
+          </svg>
+          <span class="text-sm text-gray-500 dark:text-gray-400">Office IP Addresses</span>
+        </div>
+
+        <div id="checklist-trackingScripts" class="checklist-item flex items-center gap-3">
+          <svg class="w-5 h-5 text-gray-300 dark:text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <circle cx="12" cy="12" r="10" stroke-width="2" />
+          </svg>
+          <span class="text-sm text-gray-500 dark:text-gray-400">Tracking Scripts</span>
+        </div>
+      </div>
+
+      <!-- File Upload Sections -->
+      <div class="space-y-4 border-t border-gray-200 dark:border-gray-800 pt-6">
+        <div class="flex items-center justify-between mb-2">
+          <h3 class="text-sm font-semibold text-gray-700 dark:text-gray-200">Upload Program Assets</h3>
+        </div>
+
+        <!-- Logo -->
+        <div class="bg-td-bg-light dark:bg-gray-900 rounded-lg p-3 border border-gray-200 dark:border-gray-700">
+          <div class="flex items-center justify-between mb-2">
+            <h4 class="text-xs font-medium text-gray-700 dark:text-gray-200">Logo</h4>
+            <span class="text-xs text-gray-500">350x130px</span>
+          </div>
+          <button
+            onclick="document.getElementById('logo-input').click()"
+            class="w-full flex items-center justify-center gap-2 px-3 py-2 bg-white dark:bg-gray-900 border border-gray-300 dark:border-gray-700 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors text-xs"
+          >
+            <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
+            </svg>
+            Upload Logo
+          </button>
+          <input type="file" id="logo-input" accept=".png,.jpg,.jpeg" class="hidden" />
+          <div id="logo-list" class="mt-2 space-y-1"></div>
+        </div>
+
+        <!-- Banners -->
+        <div class="bg-td-bg-light dark:bg-gray-900 rounded-lg p-3 border border-gray-200 dark:border-gray-700">
+          <div class="flex items-center justify-between mb-2">
+            <h4 class="text-xs font-medium text-gray-700 dark:text-gray-200">Banners</h4>
+            <span class="text-xs text-gray-500">Multiple</span>
+          </div>
+          <p class="text-xs text-gray-400 mb-2">
+            160x600, 300x250, 300x600, 728x90, 928x70
+          </p>
+          <button
+            onclick="document.getElementById('banners-input').click()"
+            class="w-full flex items-center justify-center gap-2 px-3 py-2 bg-white dark:bg-gray-900 border border-gray-300 dark:border-gray-700 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors text-xs"
+          >
+            <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
+            </svg>
+            Upload Banners
+          </button>
+          <input type="file" id="banners-input" accept=".jpg,.jpeg,.gif,.png" multiple class="hidden" />
+          <div id="banners-list" class="mt-2 space-y-1"></div>
+        </div>
+
+        <!-- Terms -->
+        <div class="bg-td-bg-light dark:bg-gray-900 rounded-lg p-3 border border-gray-200 dark:border-gray-700">
+          <div class="flex items-center justify-between mb-2">
+            <h4 class="text-xs font-medium text-gray-700 dark:text-gray-200">Terms &amp; Conditions</h4>
+            <span class="text-xs text-gray-500">PDF</span>
+          </div>
+          <button
+            onclick="document.getElementById('terms-input').click()"
+            class="w-full flex items-center justify-center gap-2 px-3 py-2 bg-white dark:bg-gray-900 border border-gray-300 dark:border-gray-700 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors text-xs"
+          >
+            <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+            </svg>
+            Upload T&amp;Cs
+          </button>
+          <input type="file" id="terms-input" accept=".pdf" class="hidden" />
+          <div id="terms-list" class="mt-2 space-y-1"></div>
+        </div>
+
+        <!-- Other -->
+        <div class="bg-td-bg-light dark:bg-gray-900 rounded-lg p-3 border border-gray-200 dark:border-gray-700">
+          <div class="flex items-center justify-between mb-2">
+            <h4 class="text-xs font-medium text-gray-700 dark:text-gray-200">Other Documents</h4>
+            <span class="text-xs text-gray-500">Optional</span>
+          </div>
+          <button
+            onclick="document.getElementById('other-input').click()"
+            class="w-full flex items-center justify-center gap-2 px-3 py-2 bg-white dark:bg-gray-900 border border-gray-300 dark:border-gray-700 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors text-xs"
+          >
+            <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12" />
+            </svg>
+            Upload Files
+          </button>
+          <input type="file" id="other-input" multiple class="hidden" />
+          <div id="other-list" class="mt-2 space-y-1"></div>
+        </div>
+
+        <!-- Send All Button -->
+        <button
+          id="send-all-files"
+          class="w-full px-4 py-2.5 bg-td-blue text-white rounded-lg hover:bg-td-blue-dark transition-colors text-sm font-medium shadow-brand disabled:bg-gray-300 disabled:cursor-not-allowed"
+          disabled
+        >
+          Send All Files
+        </button>
+      </div>
+
+      <!-- Reset session -->
+      <button
+        onclick="resetOnboarding()"
+        class="mt-4 w-full px-3 py-2 bg-red-50 dark:bg-transparent text-red-600 border border-red-200 dark:border-red-500 rounded-lg text-xs hover:bg-red-100 dark:hover:bg-red-900 transition"
+      >
+        Reset Onboarding Session
+      </button>
+
+      <!-- Collected Data Summary -->
+      <div class="mt-6 pt-6 border-t border-gray-200 dark:border-gray-800">
+        <h3 class="text-sm font-semibold text-gray-700 dark:text-gray-200 mb-3">Collected Data</h3>
+        <div id="data-summary" class="text-xs text-gray-600 dark:text-gray-300 space-y-1">
+          <p>No data collected yet</p>
+        </div>
+      </div>
     </div>
 
-    <script>
-        // ============================================
-        // CONFIGURATION
-        // ============================================
-        const N8N_WEBHOOK_URL = 'https://harrytradedoubler2026.app.n8n.cloud/webhook/onboarding-chat';
-        // ============================================
+    <!-- Chat area -->
+    <div class="flex-1 flex flex-col">
+      <!-- Chat messages -->
+      <div id="chat-container" class="flex-1 overflow-y-auto p-6 space-y-4 bg-transparent">
+        <!-- Initial message will be injected by JS -->
+      </div>
 
-        // Get session ID from URL (ONLY PARAMETER NOW!)
-        function getSessionId() {
-            const params = new URLSearchParams(window.location.search);
-            return params.get('session') || params.get('sessionId') || params.get('sid');
-        }
+      <!-- Input area -->
+      <div class="border-t border-gray-200 dark:border-gray-800 bg-white dark:bg-[#020617] p-4">
+        <div class="max-w-4xl mx-auto flex gap-3">
+          <input
+            type="text"
+            id="message-input"
+            placeholder="Type your message..."
+            class="flex-1 px-4 py-3 border border-gray-300 dark:border-gray-700 rounded-xl bg-white dark:bg-gray-900 text-gray-900 dark:text-gray-100 focus:outline-none focus:ring-2 focus:ring-td-blue focus:border-transparent"
+          />
+          <button
+            id="send-btn"
+            class="px-6 py-3 bg-td-blue text-white rounded-xl hover:bg-td-blue-dark disabled:bg-gray-300 disabled:cursor-not-allowed transition-colors flex items-center gap-2 shadow-brand"
+          >
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8" />
+            </svg>
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
 
-        const sessionId = getSessionId();
+  <script>
+    // ============================================
+    // CONFIGURATION
+    // ============================================
+    const N8N_WEBHOOK_URL = 'https://harrytradedoubler2026.app.n8n.cloud/webhook/onboarding-chat';
 
-        // State management (will be populated by n8n)
-        let conversationHistory = [];
-        let onboardingData = {
-            sessionLoaded: false
-        };
-        
-        let checklist = {
-            intro: false,
-            brandedTracking: false,
-            productFeed: false,
-            assets: false,
-            scripts: false
-        };
-        
-        let uploadedFiles = {
-            logo: [],
-            banners: [],
-            terms: []
-        };
+    // State
+    let conversationHistory = [];
+    let onboardingData = {};
+    let checklist = {
+      intro: false,
+      brandedTracking: false,
+      productFeed: false,
+      assets: false,
+      ipAddresses: false,
+      trackingScripts: false,
+    };
+    let uploadedFiles = {
+      logo: [],
+      banners: [],
+      terms: [],
+      other: [],
+    };
+    let sessionId = generateSessionId();
+    let firstLoad = true;
 
-        // DOM elements
-        const chatContainer = document.getElementById('chat-container');
-        const messageInput = document.getElementById('message-input');
-        const sendBtn = document.getElementById('send-btn');
-        const sendAllFilesBtn = document.getElementById('send-all-files');
-        const dataSummary = document.getElementById('data-summary');
-        const apiStatus = document.getElementById('api-status');
-        const apiStatusText = document.getElementById('api-status-text');
-        const programInfo = document.getElementById('program-info');
-        const sessionLoading = document.getElementById('session-loading');
+    // DOM elements
+    const chatContainer = document.getElementById('chat-container');
+    const messageInput = document.getElementById('message-input');
+    const sendBtn = document.getElementById('send-btn');
+    const sendAllFilesBtn = document.getElementById('send-all-files');
+    const dataSummary = document.getElementById('data-summary');
+    const apiStatus = document.getElementById('api-status');
+    const apiStatusText = document.getElementById('api-status-text');
 
-        // File inputs
-        const logoInput = document.getElementById('logo-input');
-        const bannersInput = document.getElementById('banners-input');
-        const termsInput = document.getElementById('terms-input');
+    // File inputs
+    const logoInput = document.getElementById('logo-input');
+    const bannersInput = document.getElementById('banners-input');
+    const termsInput = document.getElementById('terms-input');
+    const otherInput = document.getElementById('other-input');
 
-        // Initialize on page load
-        window.addEventListener('DOMContentLoaded', initialize);
+    // =============== LOCAL STORAGE HELPERS ===============
+    function saveState() {
+      try {
+        localStorage.setItem('td_onboarding_history', JSON.stringify(conversationHistory || []));
+        localStorage.setItem('td_onboarding_data', JSON.stringify(onboardingData || {}));
+        localStorage.setItem('td_onboarding_checklist', JSON.stringify(checklist || {}));
+        localStorage.setItem('td_uploaded_files', JSON.stringify(uploadedFiles || {}));
+      } catch (e) {
+        console.warn('Could not save state to localStorage', e);
+      }
+    }
 
-        function initialize() {
-            // Show loading if we have a session ID
-            if (sessionId) {
-                sessionLoading.classList.remove('hidden');
-            }
+    function loadState() {
+      try {
+        const h = localStorage.getItem('td_onboarding_history');
+        const d = localStorage.getItem('td_onboarding_data');
+        const c = localStorage.getItem('td_onboarding_checklist');
+        const f = localStorage.getItem('td_uploaded_files');
 
-            // Initial greeting - session data will be loaded on first message
-            const initialMessage = sessionId 
-                ? "Hi! 👋 I'm loading your program details..." 
-                : "Hi! 👋 I'm your Tradedoubler onboarding assistant.\n\nI'll help you set up your affiliate program step by step.\n\nLet's get started! What's your name and company?";
+        if (h) conversationHistory = JSON.parse(h);
+        if (d) onboardingData = JSON.parse(d);
+        if (c) checklist = JSON.parse(c);
+        if (f) uploadedFiles = JSON.parse(f);
+      } catch (e) {
+        console.warn('Could not load state from localStorage', e);
+      }
+    }
 
-            conversationHistory.push({
-                role: 'assistant',
-                content: initialMessage
-            });
-            
-            addMessageToChat('assistant', initialMessage);
+    function loadDarkMode() {
+      const saved = localStorage.getItem('td_dark_mode');
+      if (saved === '1') {
+        document.documentElement.classList.add('dark');
+      }
+    }
 
-            // If we have a session, send an initial "hello" to trigger session load
-            if (sessionId) {
-                setTimeout(() => {
-                    messageInput.value = "Hello";
-                    sendMessage();
-                }, 500);
-            }
-        }
+    function toggleDarkMode() {
+      const isDark = document.documentElement.classList.toggle('dark');
+      localStorage.setItem('td_dark_mode', isDark ? '1' : '0');
+    }
 
-        // Event listeners
-        sendBtn.addEventListener('click', sendMessage);
-        messageInput.addEventListener('keypress', (e) => {
-            if (e.key === 'Enter' && !e.shiftKey) {
-                e.preventDefault();
-                sendMessage();
-            }
+    // Initial load
+    loadDarkMode();
+    loadState();
+
+    function showWelcomeBackCard() {
+      const hasData = onboardingData && (onboardingData.clientName || onboardingData.companyName);
+      const hasHistory = conversationHistory && conversationHistory.length > 0;
+      if (!hasData || !hasHistory || !firstLoad) return;
+
+      const completed = Object.values(checklist).filter(Boolean).length;
+      const total = Object.keys(checklist).length;
+
+      const wrapper = document.createElement('div');
+      wrapper.className = 'flex justify-start mb-4 animate-fadeIn';
+      wrapper.innerHTML = `
+        <div class="max-w-xl bg-white dark:bg-gray-900 shadow-brand rounded-brand p-5 border border-gray-200 dark:border-gray-800">
+          <h2 class="text-lg font-semibold text-td-blue mb-2">Welcome back 👋</h2>
+          <p class="text-sm text-gray-700 dark:text-gray-300 mb-4">
+            I’ve restored your onboarding session.
+          </p>
+          <p class="text-sm mb-1"><strong>Client:</strong> ${onboardingData.clientName || '—'}</p>
+          <p class="text-sm mb-1"><strong>Company:</strong> ${onboardingData.companyName || '—'}</p>
+          <p class="text-sm mb-4"><strong>Progress:</strong> ${completed}/${total} steps completed</p>
+          <div class="flex gap-3">
+            <button onclick="continueOnboarding()" class="px-4 py-2 bg-td-blue text-white rounded-brand text-sm hover:bg-td-blue-dark transition">
+              Continue
+            </button>
+            <button onclick="resetOnboarding()" class="px-4 py-2 bg-gray-100 dark:bg-gray-800 text-gray-600 dark:text-gray-300 border border-gray-300 dark:border-gray-700 rounded-brand text-sm hover:bg-gray-200 dark:hover:bg-gray-700 transition">
+              Start Over
+            </button>
+          </div>
+        </div>
+      `;
+      chatContainer.appendChild(wrapper);
+      chatContainer.scrollTop = chatContainer.scrollHeight;
+
+      firstLoad = false;
+    }
+
+    // If no previous session, create initial assistant message
+    if (!conversationHistory || conversationHistory.length === 0) {
+      conversationHistory = [
+        {
+          role: 'assistant',
+          content:
+            "Hi! 👋 I'm your Tradedoubler onboarding assistant.\n\nI'll help you configure your affiliate program by setting up DNS, product feeds and program assets.\n\nLet's get started! What's your name and company?",
+        },
+      ];
+    }
+
+    // Render existing history
+    conversationHistory.forEach((m) => addMessageToChat(m.role, m.content));
+    updateChecklist(checklist);
+    updateDataSummary();
+    updateFileLists();
+    updateSendAllButton();
+    showWelcomeBackCard();
+    firstLoad = false;
+
+    // Event listeners
+    sendBtn.addEventListener('click', sendMessage);
+    messageInput.addEventListener('keypress', (e) => {
+      if (e.key === 'Enter' && !e.shiftKey) {
+        e.preventDefault();
+        sendMessage();
+      }
+    });
+
+    logoInput.addEventListener('change', (e) => handleFileUpload(e, 'logo', 'logo-list'));
+    bannersInput.addEventListener('change', (e) => handleFileUpload(e, 'banners', 'banners-list'));
+    termsInput.addEventListener('change', (e) => handleFileUpload(e, 'terms', 'terms-list'));
+    otherInput.addEventListener('change', (e) => handleFileUpload(e, 'other', 'other-list'));
+    sendAllFilesBtn.addEventListener('click', sendAllFiles);
+
+    // Functions
+    function generateSessionId() {
+      return 'session_' + Date.now() + '_' + Math.random().toString(36).substr(2, 9);
+    }
+
+    function continueOnboarding() {
+      addMessageToChat('assistant', "Great! Let's pick up right where we left off. 🚀");
+    }
+
+    async function sendMessage() {
+      const message = messageInput.value.trim();
+      if (!message || sendBtn.disabled) return;
+
+      // Local commands
+      if (message.toLowerCase() === 'start over' || message === '2') {
+        resetOnboarding();
+        return;
+      }
+
+      messageInput.disabled = true;
+      sendBtn.disabled = true;
+
+      addMessageToChat('user', message);
+      conversationHistory.push({ role: 'user', content: message });
+      messageInput.value = '';
+
+      const loadingId = addLoadingIndicator();
+
+      try {
+        const response = await fetch(N8N_WEBHOOK_URL, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            sessionId,
+            message,
+            conversationHistory,
+            onboardingData,
+            checklist,
+            uploadedFiles,
+          }),
         });
 
-        logoInput.addEventListener('change', (e) => handleFileUpload(e, 'logo', 'logo-list'));
-        bannersInput.addEventListener('change', (e) => handleFileUpload(e, 'banners', 'banners-list'));
-        termsInput.addEventListener('change', (e) => handleFileUpload(e, 'terms', 'terms-list'));
-        
-        sendAllFilesBtn.addEventListener('click', sendAllFiles);
+        const data = await response.json();
+        removeLoadingIndicator(loadingId);
 
-        async function sendMessage() {
-            const message = messageInput.value.trim();
-            if (!message || sendBtn.disabled) return;
+        addMessageToChat('assistant', data.response);
+        conversationHistory.push({ role: 'assistant', content: data.response });
 
-            messageInput.disabled = true;
-            sendBtn.disabled = true;
-
-            addMessageToChat('user', message);
-            conversationHistory.push({ role: 'user', content: message });
-            messageInput.value = '';
-
-            const loadingId = addLoadingIndicator();
-
-            try {
-                const response = await fetch(N8N_WEBHOOK_URL, {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                    },
-                    body: JSON.stringify({
-                        sessionId: sessionId, // Pass session ID to n8n
-                        message: message,
-                        conversationHistory: conversationHistory,
-                        onboardingData: onboardingData,
-                        checklist: checklist,
-                        uploadedFiles: uploadedFiles
-                    })
-                });
-
-                const data = await response.json();
-
-                removeLoadingIndicator(loadingId);
-
-                // Hide session loading indicator
-                sessionLoading.classList.add('hidden');
-
-                addMessageToChat('assistant', data.response);
-                conversationHistory.push({ role: 'assistant', content: data.response });
-
-                if (data.onboardingData) {
-                    const wasFirstLoad = !onboardingData.sessionLoaded && data.onboardingData.sessionLoaded;
-                    
-                    onboardingData = { ...onboardingData, ...data.onboardingData };
-                    updateDataSummary();
-                    
-                    // If session just loaded, show program info
-                    if (wasFirstLoad) {
-                        showProgramInfo(onboardingData);
-                    }
-                    
-                    if (data.onboardingData.filesUploaded) {
-                        showApiStatus('success', 'All Files Uploaded!');
-                        uploadedFiles = { logo: [], banners: [], terms: [] };
-                        clearAllFileLists();
-                        updateSendAllButton();
-                    }
-                }
-                if (data.checklist) {
-                    checklist = { ...checklist, ...data.checklist };
-                    updateChecklist(checklist);
-                }
-
-            } catch (error) {
-                console.error('Error:', error);
-                removeLoadingIndicator(loadingId);
-                sessionLoading.classList.add('hidden');
-                addMessageToChat('assistant', 'I apologize, but I encountered an error. Please try again.');
-            } finally {
-                messageInput.disabled = false;
-                sendBtn.disabled = false;
-                messageInput.focus();
-            }
+        if (data.onboardingData) {
+          onboardingData = data.onboardingData;
+          updateDataSummary();
+        }
+        if (data.checklist) {
+          checklist = data.checklist;
+          updateChecklist(checklist);
         }
 
-        function showProgramInfo(data) {
-            if (data.programId && data.organizationId) {
-                programInfo.classList.remove('hidden');
-                document.getElementById('display-program-id').textContent = data.programId;
-                document.getElementById('display-org-id').textContent = data.organizationId;
-                document.getElementById('display-event-id').textContent = data.eventId || 'N/A';
-                
-                if (data.testLink) {
-                    document.getElementById('test-link-section').classList.remove('hidden');
-                    const linkEl = document.getElementById('display-test-link');
-                    linkEl.textContent = data.testLink;
-                    linkEl.href = data.testLink;
-                }
-                
-                if (data.scriptsReady || data.landingScript || data.confirmationScript) {
-                    document.getElementById('scripts-ready').classList.remove('hidden');
-                }
-            }
+        saveState();
+      } catch (error) {
+        console.error('Error:', error);
+        removeLoadingIndicator(loadingId);
+        addMessageToChat('assistant', 'I ran into a problem responding. Please try again.');
+      } finally {
+        messageInput.disabled = false;
+        sendBtn.disabled = false;
+        messageInput.focus();
+      }
+    }
+
+    function handleFileUpload(event, category, listId) {
+      const files = Array.from(event.target.files);
+      if (files.length === 0) return;
+
+      const listElement = document.getElementById(listId);
+
+      files.forEach((file) => {
+        const reader = new FileReader();
+        reader.onload = (e) => {
+          uploadedFiles[category].push({
+            name: file.name,
+            type: file.type,
+            size: file.size,
+            data: e.target.result.split(',')[1],
+            category,
+          });
+
+          const fileDiv = document.createElement('div');
+          fileDiv.className =
+            'text-xs text-gray-600 dark:text-gray-200 flex items-center gap-2 p-1.5 bg-white dark:bg-gray-900 rounded border border-gray-200 dark:border-gray-700';
+          fileDiv.innerHTML = `
+            <svg class="w-3 h-3 text-green-500 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
+              <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/>
+            </svg>
+            <span class="flex-1 truncate text-xs">${file.name}</span>
+            <button onclick="removeFile('${category}', '${file.name}')" class="text-red-500 hover:text-red-700">
+              <svg class="w-3 h-3" fill="currentColor" viewBox="0 0 20 20">
+                <path fill-rule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clip-rule="evenodd"/>
+              </svg>
+            </button>
+          `;
+          listElement.appendChild(fileDiv);
+
+          updateSendAllButton();
+          saveState();
+        };
+        reader.readAsDataURL(file);
+      });
+
+      event.target.value = '';
+    }
+
+    function removeFile(category, fileName) {
+      uploadedFiles[category] = uploadedFiles[category].filter((f) => f.name !== fileName);
+      updateFileLists();
+      updateSendAllButton();
+      saveState();
+    }
+
+    function updateFileLists() {
+      const lists = {
+        logo: 'logo-list',
+        banners: 'banners-list',
+        terms: 'terms-list',
+        other: 'other-list',
+      };
+
+      Object.keys(lists).forEach((category) => {
+        const listElement = document.getElementById(lists[category]);
+        listElement.innerHTML = '';
+
+        uploadedFiles[category].forEach((file) => {
+          const fileDiv = document.createElement('div');
+          fileDiv.className =
+            'text-xs text-gray-600 dark:text-gray-200 flex items-center gap-2 p-1.5 bg-white dark:bg-gray-900 rounded border border-gray-200 dark:border-gray-700';
+          fileDiv.innerHTML = `
+            <svg class="w-3 h-3 text-green-500 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
+              <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/>
+            </svg>
+            <span class="flex-1 truncate text-xs">${file.name}</span>
+            <button onclick="removeFile('${category}', '${file.name}')" class="text-red-500 hover:text-red-700">
+              <svg class="w-3 h-3" fill="currentColor" viewBox="0 0 20 20">
+                <path fill-rule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clip-rule="evenodd"/>
+              </svg>
+            </button>
+          `;
+          listElement.appendChild(fileDiv);
+        });
+      });
+    }
+
+    function clearAllFileLists() {
+      document.getElementById('logo-list').innerHTML = '';
+      document.getElementById('banners-list').innerHTML = '';
+      document.getElementById('terms-list').innerHTML = '';
+      document.getElementById('other-list').innerHTML = '';
+    }
+
+    function updateSendAllButton() {
+      const totalFiles = Object.values(uploadedFiles).reduce((sum, arr) => sum + arr.length, 0);
+      sendAllFilesBtn.disabled = totalFiles === 0;
+      sendAllFilesBtn.textContent = totalFiles > 0 ? `Send All Files (${totalFiles})` : 'Send All Files';
+    }
+
+    async function sendAllFiles() {
+      const totalFiles = Object.values(uploadedFiles).reduce((sum, arr) => sum + arr.length, 0);
+      if (totalFiles === 0) return;
+
+      const filesSummary = Object.entries(uploadedFiles)
+        .filter(([_, files]) => files.length > 0)
+        .map(([category, files]) => `${category}: ${files.length} file(s)`)
+        .join(', ');
+
+      messageInput.value = `I'm uploading ${totalFiles} files: ${filesSummary}`;
+      await sendMessage();
+    }
+
+    function addMessageToChat(role, content) {
+      const messageDiv = document.createElement('div');
+      messageDiv.className = `flex ${role === 'user' ? 'justify-end' : 'justify-start'}`;
+
+      const bubble = document.createElement('div');
+      bubble.className = `max-w-2xl rounded-brand px-4 py-3 chat-message ${
+        role === 'user'
+          ? 'bg-td-blue text-white shadow-brand'
+          : 'bg-white dark:bg-gray-900 shadow-md text-gray-800 dark:text-gray-100 border border-gray-200 dark:border-gray-700'
+      }`;
+
+      const html = content
+        .split('\n')
+        .map((line) => {
+          if (!line.trim()) return '<p class="mb-1">&nbsp;</p>';
+          if (line.startsWith('•') || line.startsWith('-')) {
+            return `<p class="ml-4 text-sm">${line}</p>`;
+          }
+          return `<p class="mb-1 text-sm">${line}</p>`;
+        })
+        .join('');
+
+      bubble.innerHTML = html;
+      messageDiv.appendChild(bubble);
+      chatContainer.appendChild(messageDiv);
+      chatContainer.scrollTop = chatContainer.scrollHeight;
+    }
+
+    function addLoadingIndicator() {
+      const loadingId = 'loading_' + Date.now();
+      const messageDiv = document.createElement('div');
+      messageDiv.id = loadingId;
+      messageDiv.className = 'flex justify-start';
+
+      const bubble = document.createElement('div');
+      bubble.className =
+        'bg-white dark:bg-gray-900 shadow-md rounded-brand px-4 py-3 border border-gray-200 dark:border-gray-700';
+      bubble.innerHTML = `
+        <div class="flex gap-1">
+          <div class="w-2 h-2 bg-td-blue rounded-full pulse-loader"></div>
+          <div class="w-2 h-2 bg-td-blue rounded-full pulse-loader" style="animation-delay: 0.2s"></div>
+          <div class="w-2 h-2 bg-td-blue rounded-full pulse-loader" style="animation-delay: 0.4s"></div>
+        </div>
+      `;
+
+      messageDiv.appendChild(bubble);
+      chatContainer.appendChild(messageDiv);
+      chatContainer.scrollTop = chatContainer.scrollHeight;
+
+      return loadingId;
+    }
+
+    function removeLoadingIndicator(loadingId) {
+      const element = document.getElementById(loadingId);
+      if (element) element.remove();
+    }
+
+    function updateChecklist(checklistData) {
+      const items = ['intro', 'brandedTracking', 'productFeed', 'assets', 'ipAddresses', 'trackingScripts'];
+      let completed = 0;
+
+      items.forEach((item) => {
+        const element = document.getElementById(`checklist-${item}`);
+        if (!element) return;
+
+        const icon = element.querySelector('svg');
+        const label = element.querySelector('span');
+
+        if (checklistData[item]) {
+          icon.innerHTML =
+            '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" fill="currentColor"/>';
+          icon.classList.remove('text-gray-300', 'dark:text-gray-600');
+          icon.classList.add('text-green-500');
+          label.classList.remove('text-gray-500', 'dark:text-gray-400');
+          label.classList.add('text-gray-700', 'dark:text-gray-200', 'font-medium');
+          completed++;
         }
+      });
 
-        function handleFileUpload(event, category, listId) {
-            const files = Array.from(event.target.files);
-            if (files.length === 0) return;
+      const percentage = Math.round((completed / items.length) * 100);
+      document.getElementById('progress-percentage').textContent = `${percentage}%`;
+      document.getElementById('progress-bar').style.width = `${percentage}%`;
+    }
 
-            const listElement = document.getElementById(listId);
+    function updateDataSummary() {
+      const summary = [];
 
-            files.forEach(file => {
-                const reader = new FileReader();
-                reader.onload = (e) => {
-                    uploadedFiles[category].push({
-                        name: file.name,
-                        type: file.type,
-                        size: file.size,
-                        data: e.target.result.split(',')[1],
-                        category: category
-                    });
-                    
-                    const fileDiv = document.createElement('div');
-                    fileDiv.className = 'text-xs text-gray-600 flex items-center gap-2 p-1.5 bg-white rounded border border-gray-200';
-                    fileDiv.innerHTML = `
-                        <svg class="w-3 h-3 text-green-500 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
-                            <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/>
-                        </svg>
-                        <span class="flex-1 truncate text-xs">${file.name}</span>
-                    `;
-                    listElement.appendChild(fileDiv);
-                    
-                    updateSendAllButton();
-                };
-                reader.readAsDataURL(file);
-            });
+      if (onboardingData.clientName) {
+        summary.push(`<p><strong>Client:</strong> ${onboardingData.clientName}</p>`);
+      }
+      if (onboardingData.companyName) {
+        summary.push(`<p><strong>Company:</strong> ${onboardingData.companyName}</p>`);
+      }
+      if (onboardingData.email) {
+        summary.push(`<p><strong>Email:</strong> ${onboardingData.email}</p>`);
+      }
+      if (onboardingData.brandedTracking?.visit) {
+        summary.push(`<p><strong>Visit:</strong> ${onboardingData.brandedTracking.visit}</p>`);
+      }
+      if (onboardingData.brandedTracking?.statics) {
+        summary.push(`<p><strong>Statics:</strong> ${onboardingData.brandedTracking.statics}</p>`);
+      }
+      if (onboardingData.productFeedUrl) {
+        summary.push(
+          `<p><strong>Feed:</strong> ${onboardingData.productFeedUrl.substring(0, 30)}...</p>`
+        );
+      }
+      if (onboardingData.officeIPs && onboardingData.officeIPs.length > 0) {
+        summary.push(`<p><strong>IPs:</strong> ${onboardingData.officeIPs.length} address(es)</p>`);
+      }
+      if (onboardingData.filesUploaded) {
+        summary.push(`<p class="text-green-600"><strong>✓ Assets Uploaded</strong></p>`);
+      }
 
-            event.target.value = '';
-        }
+      dataSummary.innerHTML =
+        summary.length > 0 ? summary.join('') : '<p>No data collected yet</p>';
+    }
 
-        function clearAllFileLists() {
-            document.getElementById('logo-list').innerHTML = '';
-            document.getElementById('banners-list').innerHTML = '';
-            document.getElementById('terms-list').innerHTML = '';
-        }
+    function showApiStatus(type, message) {
+      apiStatus.className = `mb-6 p-3 rounded-lg ${
+        type === 'success'
+          ? 'bg-green-50 text-green-800'
+          : 'bg-orange-50 text-orange-800'
+      }`;
+      apiStatusText.textContent = message;
+      apiStatus.classList.remove('hidden');
 
-        function updateSendAllButton() {
-            const totalFiles = Object.values(uploadedFiles).reduce((sum, arr) => sum + arr.length, 0);
-            sendAllFilesBtn.disabled = totalFiles === 0;
-            sendAllFilesBtn.textContent = totalFiles > 0 ? `Send All Files (${totalFiles})` : 'Send All Files';
-        }
+      setTimeout(() => {
+        apiStatus.classList.add('hidden');
+      }, 5000);
+    }
 
-        async function sendAllFiles() {
-            const totalFiles = Object.values(uploadedFiles).reduce((sum, arr) => sum + arr.length, 0);
-            if (totalFiles === 0) return;
-
-            const filesSummary = Object.entries(uploadedFiles)
-                .filter(([_, files]) => files.length > 0)
-                .map(([category, files]) => `${category}: ${files.length}`)
-                .join(', ');
-
-            messageInput.value = `I'm uploading ${totalFiles} files: ${filesSummary}`;
-            await sendMessage();
-        }
-
-        function addMessageToChat(role, content) {
-            const messageDiv = document.createElement('div');
-            messageDiv.className = `flex ${role === 'user' ? 'justify-end' : 'justify-start'}`;
-            
-            const bubble = document.createElement('div');
-            bubble.className = `max-w-2xl rounded-2xl px-4 py-3 chat-message ${
-                role === 'user' 
-                    ? 'bg-blue-600 text-white' 
-                    : 'bg-white shadow-md text-gray-800'
-            }`;
-            
-            const formattedContent = content.split('\n').map(line => {
-                if (line.startsWith('•') || line.startsWith('-')) {
-                    return `<p class="ml-4">${line}</p>`;
-                } else if (line.startsWith('✓')) {
-                    return `<p class="font-medium text-green-600">${line}</p>`;
-                }
-                return line ? `<p class="mb-1">${line}</p>` : '<p class="mb-1"></p>';
-            }).join('');
-            
-            bubble.innerHTML = formattedContent;
-            messageDiv.appendChild(bubble);
-            chatContainer.appendChild(messageDiv);
-            chatContainer.scrollTop = chatContainer.scrollHeight;
-        }
-
-        function addLoadingIndicator() {
-            const loadingId = 'loading_' + Date.now();
-            const messageDiv = document.createElement('div');
-            messageDiv.id = loadingId;
-            messageDiv.className = 'flex justify-start';
-            
-            const bubble = document.createElement('div');
-            bubble.className = 'bg-white shadow-md rounded-2xl px-4 py-3';
-            bubble.innerHTML = `
-                <div class="flex gap-1">
-                    <div class="w-2 h-2 bg-blue-600 rounded-full pulse-loader"></div>
-                    <div class="w-2 h-2 bg-blue-600 rounded-full pulse-loader" style="animation-delay: 0.2s"></div>
-                    <div class="w-2 h-2 bg-blue-600 rounded-full pulse-loader" style="animation-delay: 0.4s"></div>
-                </div>
-            `;
-            
-            messageDiv.appendChild(bubble);
-            chatContainer.appendChild(messageDiv);
-            chatContainer.scrollTop = chatContainer.scrollHeight;
-            
-            return loadingId;
-        }
-
-        function removeLoadingIndicator(loadingId) {
-            const element = document.getElementById(loadingId);
-            if (element) element.remove();
-        }
-
-        function updateChecklist(checklistData) {
-            const items = ['intro', 'brandedTracking', 'productFeed', 'assets', 'scripts'];
-            let completed = 0;
-
-            items.forEach(item => {
-                const element = document.getElementById(`checklist-${item}`);
-                if (checklistData[item]) {
-                    element.querySelector('svg').innerHTML = `
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" fill="currentColor"/>
-                    `;
-                    element.querySelector('svg').classList.remove('text-gray-300');
-                    element.querySelector('svg').classList.add('text-green-500');
-                    element.querySelector('span').classList.remove('text-gray-500');
-                    element.querySelector('span').classList.add('text-gray-700', 'font-medium');
-                    completed++;
-                }
-            });
-
-            const percentage = Math.round((completed / items.length) * 100);
-            document.getElementById('progress-percentage').textContent = `${percentage}%`;
-            document.getElementById('progress-bar').style.width = `${percentage}%`;
-        }
-
-        function updateDataSummary() {
-            const summary = [];
-            
-            if (onboardingData.programId) {
-                summary.push(`<p><strong>Program ID:</strong> ${onboardingData.programId}</p>`);
-            }
-            if (onboardingData.organizationId) {
-                summary.push(`<p><strong>Org ID:</strong> ${onboardingData.organizationId}</p>`);
-            }
-            if (onboardingData.eventId) {
-                summary.push(`<p><strong>Event ID:</strong> ${onboardingData.eventId}</p>`);
-            }
-            if (onboardingData.clientName) {
-                summary.push(`<p><strong>Client:</strong> ${onboardingData.clientName}</p>`);
-            }
-            if (onboardingData.companyName) {
-                summary.push(`<p><strong>Company:</strong> ${onboardingData.companyName}</p>`);
-            }
-            if (onboardingData.email) {
-                summary.push(`<p><strong>Email:</strong> ${onboardingData.email}</p>`);
-            }
-            if (onboardingData.brandedTracking?.visit) {
-                summary.push(`<p><strong>Visit:</strong> ${onboardingData.brandedTracking.visit}</p>`);
-            }
-            if (onboardingData.brandedTracking?.statics) {
-                summary.push(`<p><strong>Statics:</strong> ${onboardingData.brandedTracking.statics}</p>`);
-            }
-            if (onboardingData.productFeedUrl) {
-                summary.push(`<p><strong>Feed:</strong> ${onboardingData.productFeedUrl.substring(0, 30)}...</p>`);
-            }
-            if (onboardingData.scriptsReady || onboardingData.landingScript) {
-                summary.push(`<p class="text-green-600"><strong>✓ Scripts Ready</strong></p>`);
-            }
-            if (onboardingData.filesUploaded) {
-                summary.push(`<p class="text-green-600"><strong>✓ Assets Uploaded</strong></p>`);
-            }
-
-            dataSummary.innerHTML = summary.length > 0 ? summary.join('') : '<p>No data yet</p>';
-        }
-
-        function showApiStatus(type, message) {
-            apiStatus.className = `mb-6 p-3 rounded-lg ${type === 'success' ? 'bg-green-50 text-green-800' : 'bg-orange-50 text-orange-800'}`;
-            apiStatusText.textContent = message;
-            apiStatus.classList.remove('hidden');
-            
-            setTimeout(() => {
-                apiStatus.classList.add('hidden');
-            }, 5000);
-        }
-    </script>
+    function resetOnboarding() {
+      localStorage.removeItem('td_onboarding_history');
+      localStorage.removeItem('td_onboarding_data');
+      localStorage.removeItem('td_onboarding_checklist');
+      localStorage.removeItem('td_uploaded_files');
+      location.reload();
+    }
+  </script>
 </body>
 </html>
