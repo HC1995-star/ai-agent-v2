@@ -13,21 +13,19 @@
     rel="stylesheet"
   />
 
-  <!-- Tailwind config (must be before CDN) -->
+  <!-- Tailwind (no dark mode) -->
   <script>
     tailwind = window.tailwind || {};
     tailwind.config = {
-      darkMode: 'class',
       theme: {
         extend: {
           fontFamily: {
-            sans: ['Instrument Sans', 'sans-serif'],
+            sans: ['Instrument Sans', 'system-ui', 'sans-serif'],
           },
           colors: {
             'td-blue': '#2A73FF',
             'td-blue-dark': '#1F5ED8',
             'td-bg-light': '#F7F9FF',
-            'td-bg-dark': '#0E1117',
           },
           boxShadow: {
             brand: '0 4px 14px rgba(42, 115, 255, 0.18)',
@@ -62,79 +60,62 @@
       animation: pulse 1.5s ease-in-out infinite;
     }
     @keyframes pulse {
-      0%,
-      100% {
-        opacity: 1;
-      }
-      50% {
-        opacity: 0.4;
-      }
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0.4; }
     }
   </style>
 </head>
 
-<body
-  class="bg-gradient-to-br from-td-bg-light to-indigo-50 dark:from-td-bg-dark dark:to-black text-gray-900 dark:text-gray-100"
->
-  <div class="flex h-screen">
+<body class="bg-white text-gray-900">
+  <div class="flex min-h-screen">
     <!-- Sidebar -->
-    <aside
-      class="w-80 bg-white dark:bg-[#111827] p-5 border-r border-gray-200 dark:border-gray-800 flex flex-col"
-    >
+    <aside class="w-80 bg-white border-r border-gray-200 p-5 flex flex-col">
       <div class="flex items-center justify-between mb-5">
         <div>
           <h1 class="text-xl font-semibold text-td-blue">Tradedoubler</h1>
-          <p class="text-xs text-gray-500 dark:text-gray-300">
-            AI Onboarding Assistant
-          </p>
+          <p class="text-xs text-gray-500">AI Onboarding Assistant</p>
         </div>
-        <button
-          onclick="toggleDarkMode()"
-          class="px-2 py-1 rounded-full text-[11px] bg-gray-100 dark:bg-gray-800 text-gray-700 dark:text-gray-200 border border-gray-300 dark:border-gray-700 hover:bg-gray-200 dark:hover:bg-gray-700 transition"
-        >
-          Theme
-        </button>
       </div>
 
       <!-- Steps nav -->
       <div class="mb-5">
-        <h2 class="text-xs font-semibold text-gray-500 dark:text-gray-400 mb-2">
+        <h2 class="text-xs font-semibold text-gray-500 mb-2">
           Onboarding steps
         </h2>
         <nav id="steps-nav" class="space-y-1 text-sm">
           <button
             data-step="intro"
-            class="step-nav-btn w-full flex items-center justify-between px-3 py-2 rounded-lg text-left hover:bg-gray-100 dark:hover:bg-gray-800"
+            class="step-nav-btn w-full flex items-center justify-between px-3 py-2 rounded-lg text-left hover:bg-gray-100"
           >
             <span>1. Introduction</span>
           </button>
           <button
             data-step="branded"
-            class="step-nav-btn w-full flex items-center justify-between px-3 py-2 rounded-lg text-left hover:bg-gray-100 dark:hover:bg-gray-800"
+            class="step-nav-btn w-full flex items-center justify-between px-3 py-2 rounded-lg text-left hover:bg-gray-100"
           >
             <span>2. Branded Tracking</span>
           </button>
           <button
             data-step="feed"
-            class="step-nav-btn w-full flex items-center justify-between px-3 py-2 rounded-lg text-left hover:bg-gray-100 dark:hover:bg-gray-800"
+            class="step-nav-btn w-full flex items-center justify-between px-3 py-2 rounded-lg text-left hover:bg-gray-100"
           >
             <span>3. Product Feed</span>
           </button>
           <button
             data-step="assets"
-            class="step-nav-btn w-full flex items-center justify-between px-3 py-2 rounded-lg text-left hover:bg-gray-100 dark:hover:bg-gray-800"
+            class="step-nav-btn w-full flex items-center justify-between px-3 py-2 rounded-lg text-left hover:bg-gray-100"
           >
             <span>4. Program Assets (Upload)</span>
           </button>
           <button
             data-step="ip"
-            class="step-nav-btn w-full flex items-center justify-between px-3 py-2 rounded-lg text-left hover:bg-gray-100 dark:hover:bg-gray-800"
+            class="step-nav-btn w-full flex items-center justify-between px-3 py-2 rounded-lg text-left hover:bg-gray-100"
           >
             <span>5. IP Addresses</span>
           </button>
           <button
             data-step="scripts"
-            class="step-nav-btn w-full flex items-center justify-between px-3 py-2 rounded-lg text-left hover:bg-gray-100 dark:hover:bg-gray-800"
+            class="step-nav-btn w-full flex items-center justify-between px-3 py-2 rounded-lg text-left hover:bg-gray-100"
           >
             <span>6. Tracking Scripts</span>
           </button>
@@ -144,18 +125,10 @@
       <!-- Progress -->
       <div class="mb-5">
         <div class="flex items-center justify-between mb-1">
-          <span class="text-xs font-medium text-gray-600 dark:text-gray-300"
-            >Overall Progress</span
-          >
-          <span
-            id="progress-percentage"
-            class="text-xs font-semibold text-td-blue"
-            >0%</span
-          >
+          <span class="text-xs font-medium text-gray-600">Overall Progress</span>
+          <span id="progress-percentage" class="text-xs font-semibold text-td-blue">0%</span>
         </div>
-        <div
-          class="w-full h-1.5 rounded-full bg-gray-200 dark:bg-gray-800 overflow-hidden"
-        >
+        <div class="w-full h-1.5 rounded-full bg-gray-200 overflow-hidden">
           <div
             id="progress-bar"
             class="h-1.5 rounded-full bg-td-blue transition-all duration-500"
@@ -165,22 +138,20 @@
       </div>
 
       <!-- Summary -->
-      <div class="mt-auto pt-4 border-t border-gray-200 dark:border-gray-800">
-        <h3
-          class="text-xs font-semibold text-gray-500 dark:text-gray-400 mb-1"
-        >
+      <div class="mt-auto pt-4 border-t border-gray-200">
+        <h3 class="text-xs font-semibold text-gray-500 mb-1">
           Collected Data
         </h3>
         <div
           id="data-summary"
-          class="text-xs text-gray-600 dark:text-gray-300 space-y-0.5"
+          class="text-xs text-gray-600 space-y-0.5"
         >
           <p>No data collected yet</p>
         </div>
 
         <button
           onclick="resetOnboarding()"
-          class="mt-3 w-full px-3 py-1.5 rounded-lg border border-red-200 dark:border-red-600 text-[11px] text-red-600 hover:bg-red-50 dark:hover:bg-red-900/40"
+          class="mt-3 w-full px-3 py-1.5 rounded-lg border border-red-200 text-[11px] text-red-600 hover:bg-red-50"
         >
           Reset onboarding
         </button>
@@ -188,44 +159,40 @@
     </aside>
 
     <!-- Main area -->
-    <main class="flex-1 flex flex-col">
+    <main class="flex-1 flex flex-col bg-white">
       <!-- Step header -->
-      <div
-        class="border-b border-gray-200 dark:border-gray-800 bg-white dark:bg-[#020617] px-6 py-3 flex items-center justify-between"
-      >
-        <div>
-          <h2
-            id="step-title"
-            class="text-sm font-semibold text-gray-900 dark:text-gray-100"
-          >
+      <div class="border-b border-gray-200 bg-white px-6 py-3 flex items-center justify-between">
+        <div class="max-w-[1100px] w-full mx-auto">
+          <h2 id="step-title" class="text-sm font-semibold text-gray-900">
             Introduction
           </h2>
-          <p
-            id="step-subtitle"
-            class="text-xs text-gray-500 dark:text-gray-400"
-          >
+          <p id="step-subtitle" class="text-xs text-gray-500">
             Tell me who you are and which company you represent.
           </p>
         </div>
       </div>
 
       <!-- Step content -->
-      <div class="flex-1 overflow-hidden">
+      <div class="flex-1 overflow-hidden bg-white">
         <!-- INTRO -->
         <section id="step-intro" class="step-page h-full flex flex-col">
           <div
             id="chat-intro"
-            class="flex-1 overflow-y-auto p-6 space-y-3 bg-transparent"
+            class="flex-1 overflow-y-auto p-6 space-y-3"
           ></div>
-          <div
-            class="border-t border-gray-200 dark:border-gray-800 bg-gray-50 dark:bg-[#0f131a] p-3"
-          >
-            <div class="max-w-3xl mx-auto flex gap-2">
+          <div class="border-t border-gray-200 bg-white p-3">
+            <div class="max-w-[1100px] w-full mx-auto flex gap-2">
               <input
                 id="input-intro"
                 type="text"
                 placeholder="Type your message..."
-                class="flex-1 px-3 py-2 text-sm border border-gray-300 dark:border-gray-700 rounded-xl bg-white dark:bg-[#1a1f2b] text-gray-900 dark:text-gray-100 placeholder-gray-500 dark:placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-td-blue focus:border-transparent"
+                class="flex-1 px-3 py-2 text-sm 
+                       border border-gray-300 
+                       rounded-xl 
+                       bg-white 
+                       text-gray-900 
+                       placeholder-gray-500 
+                       focus:outline-none focus:ring-2 focus:ring-td-blue focus:border-transparent"
               />
               <button
                 id="send-intro"
@@ -238,23 +205,24 @@
         </section>
 
         <!-- BRANDED TRACKING -->
-        <section
-          id="step-branded"
-          class="step-page h-full flex flex-col hidden"
-        >
+        <section id="step-branded" class="step-page h-full flex flex-col hidden">
           <div
             id="chat-branded"
-            class="flex-1 overflow-y-auto p-6 space-y-3 bg-transparent"
+            class="flex-1 overflow-y-auto p-6 space-y-3"
           ></div>
-          <div
-            class="border-t border-gray-200 dark:border-gray-800 bg-gray-50 dark:bg-[#0f131a] p-3"
-          >
-            <div class="max-w-3xl mx-auto flex gap-2">
+          <div class="border-t border-gray-200 bg-white p-3">
+            <div class="max-w-[1100px] w-full mx-auto flex gap-2">
               <input
                 id="input-branded"
                 type="text"
                 placeholder="Share your visit.* and statics.* subdomains..."
-                class="flex-1 px-3 py-2 text-sm border border-gray-300 dark:border-gray-700 rounded-xl bg-white dark:bg-[#1a1f2b] text-gray-900 dark:text-gray-100 placeholder-gray-500 dark:placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-td-blue focus:border-transparent"
+                class="flex-1 px-3 py-2 text-sm 
+                       border border-gray-300 
+                       rounded-xl 
+                       bg-white 
+                       text-gray-900 
+                       placeholder-gray-500 
+                       focus:outline-none focus:ring-2 focus:ring-td-blue focus:border-transparent"
               />
               <button
                 id="send-branded"
@@ -270,17 +238,21 @@
         <section id="step-feed" class="step-page h-full flex flex-col hidden">
           <div
             id="chat-feed"
-            class="flex-1 overflow-y-auto p-6 space-y-3 bg-transparent"
+            class="flex-1 overflow-y-auto p-6 space-y-3"
           ></div>
-          <div
-            class="border-t border-gray-200 dark:border-gray-800 bg-gray-50 dark:bg-[#0f131a] p-3"
-          >
-            <div class="max-w-3xl mx-auto flex gap-2">
+          <div class="border-t border-gray-200 bg-white p-3">
+            <div class="max-w-[1100px] w-full mx-auto flex gap-2">
               <input
                 id="input-feed"
                 type="text"
                 placeholder="Paste your product feed URL..."
-                class="flex-1 px-3 py-2 text-sm border border-gray-300 dark:border-gray-700 rounded-xl bg-white dark:bg-[#1a1f2b] text-gray-900 dark:text-gray-100 placeholder-gray-500 dark:placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-td-blue focus:border-transparent"
+                class="flex-1 px-3 py-2 text-sm 
+                       border border-gray-300 
+                       rounded-xl 
+                       bg-white 
+                       text-gray-900 
+                       placeholder-gray-500 
+                       focus:outline-none focus:ring-2 focus:ring-td-blue focus:border-transparent"
               />
               <button
                 id="send-feed"
@@ -293,16 +265,13 @@
         </section>
 
         <!-- PROGRAM ASSETS (WITH UPLOADS) -->
-        <section
-          id="step-assets"
-          class="step-page h-full flex flex-col hidden"
-        >
+        <section id="step-assets" class="step-page h-full flex flex-col hidden">
           <div
             id="chat-assets"
-            class="flex-1 overflow-y-auto p-6 space-y-3 bg-transparent"
+            class="flex-1 overflow-y-auto p-6 space-y-3"
           >
             <div
-              class="mb-3 p-3 bg-td-blue/10 border border-td-blue/30 text-td-blue rounded-brand text-sm"
+              class="mb-3 max-w-[1100px] w-full mx-auto p-3 bg-td-bg-light border border-td-blue/30 text-td-blue rounded-brand text-sm"
             >
               Upload your logo, banners, T&Cs and additional documents using the
               sections below 👇
@@ -310,149 +279,139 @@
           </div>
 
           <!-- Upload module -->
-          <div
-            class="border-t border-gray-200 dark:border-gray-800 bg-white dark:bg-[#020617] p-4"
-          >
-            <h3
-              class="text-sm font-semibold text-gray-700 dark:text-gray-200 mb-3"
-            >
-              Upload Program Assets
-            </h3>
+          <div class="border-t border-gray-200 bg-white p-4">
+            <div class="max-w-[1100px] w-full mx-auto">
+              <h3 class="text-sm font-semibold text-gray-700 mb-3">
+                Upload Program Assets
+              </h3>
 
-            <div class="space-y-4">
-              <!-- Logo -->
-              <div
-                class="bg-td-bg-light dark:bg-gray-900 rounded-lg p-3 border border-gray-200 dark:border-gray-700"
-              >
-                <div class="flex items-center justify-between mb-2">
-                  <h4
-                    class="text-xs font-medium text-gray-700 dark:text-gray-200"
-                  >
-                    Logo
-                  </h4>
-                  <span class="text-xs text-gray-500">350×130px</span>
-                </div>
-                <button
-                  onclick="document.getElementById('logo-input').click()"
-                  class="w-full flex items-center justify-center gap-2 px-3 py-2 bg-white dark:bg-gray-900 border border-gray-300 dark:border-gray-700 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors text-xs"
+              <div class="space-y-4">
+                <!-- Logo -->
+                <div
+                  class="bg-td-bg-light rounded-lg p-3 border border-gray-200"
                 >
-                  Upload Logo
-                </button>
-                <input
-                  type="file"
-                  id="logo-input"
-                  accept=".png,.jpg,.jpeg"
-                  class="hidden"
-                />
-                <div id="logo-list" class="mt-2 space-y-1"></div>
-              </div>
-
-              <!-- Banners -->
-              <div
-                class="bg-td-bg-light dark:bg-gray-900 rounded-lg p-3 border border-gray-200 dark:border-gray-700"
-              >
-                <div class="flex items-center justify-between mb-2">
-                  <h4
-                    class="text-xs font-medium text-gray-700 dark:text-gray-200"
+                  <div class="flex items-center justify-between mb-2">
+                    <h4 class="text-xs font-medium text-gray-700">Logo</h4>
+                    <span class="text-xs text-gray-500">350×130px</span>
+                  </div>
+                  <button
+                    onclick="document.getElementById('logo-input').click()"
+                    class="w-full flex items-center justify-center gap-2 px-3 py-2 bg-white border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors text-xs"
                   >
-                    Banners
-                  </h4>
-                  <span class="text-xs text-gray-500">Multiple sizes</span>
+                    Upload Logo
+                  </button>
+                  <input
+                    type="file"
+                    id="logo-input"
+                    accept=".png,.jpg,.jpeg"
+                    class="hidden"
+                  />
+                  <div id="logo-list" class="mt-2 space-y-1"></div>
                 </div>
-                <p class="text-xs text-gray-500 mb-2">
-                  160×600, 300×250, 300×600, 728×90, 928×70
-                </p>
-                <button
-                  onclick="document.getElementById('banners-input').click()"
-                  class="w-full flex items-center justify-center gap-2 px-3 py-2 bg-white dark:bg-gray-900 border border-gray-300 dark:border-gray-700 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors text-xs"
-                >
-                  Upload Banners
-                </button>
-                <input
-                  type="file"
-                  id="banners-input"
-                  accept=".jpg,.jpeg,.gif,.png"
-                  multiple
-                  class="hidden"
-                />
-                <div id="banners-list" class="mt-2 space-y-1"></div>
-              </div>
 
-              <!-- Terms -->
-              <div
-                class="bg-td-bg-light dark:bg-gray-900 rounded-lg p-3 border border-gray-200 dark:border-gray-700"
-              >
-                <div class="flex items-center justify-between mb-2">
-                  <h4
-                    class="text-xs font-medium text-gray-700 dark:text-gray-200"
+                <!-- Banners -->
+                <div
+                  class="bg-td-bg-light rounded-lg p-3 border border-gray-200"
+                >
+                  <div class="flex items-center justify-between mb-2">
+                    <h4 class="text-xs font-medium text-gray-700">Banners</h4>
+                    <span class="text-xs text-gray-500">Multiple sizes</span>
+                  </div>
+                  <p class="text-xs text-gray-500 mb-2">
+                    160×600, 300×250, 300×600, 728×90, 928×70
+                  </p>
+                  <button
+                    onclick="document.getElementById('banners-input').click()"
+                    class="w-full flex items-center justify-center gap-2 px-3 py-2 bg-white border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors text-xs"
                   >
-                    Terms &amp; Conditions
-                  </h4>
-                  <span class="text-xs text-gray-500">PDF</span>
+                    Upload Banners
+                  </button>
+                  <input
+                    type="file"
+                    id="banners-input"
+                    accept=".jpg,.jpeg,.gif,.png"
+                    multiple
+                    class="hidden"
+                  />
+                  <div id="banners-list" class="mt-2 space-y-1"></div>
                 </div>
-                <button
-                  onclick="document.getElementById('terms-input').click()"
-                  class="w-full flex items-center justify-center gap-2 px-3 py-2 bg-white dark:bg-gray-900 border border-gray-300 dark:border-gray-700 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors text-xs"
-                >
-                  Upload T&amp;Cs
-                </button>
-                <input
-                  type="file"
-                  id="terms-input"
-                  accept=".pdf"
-                  class="hidden"
-                />
-                <div id="terms-list" class="mt-2 space-y-1"></div>
-              </div>
 
-              <!-- Other docs -->
-              <div
-                class="bg-td-bg-light dark:bg-gray-900 rounded-lg p-3 border border-gray-200 dark:border-gray-700"
-              >
-                <div class="flex items-center justify-between mb-2">
-                  <h4
-                    class="text-xs font-medium text-gray-700 dark:text-gray-200"
+                <!-- Terms -->
+                <div
+                  class="bg-td-bg-light rounded-lg p-3 border border-gray-200"
+                >
+                  <div class="flex items-center justify-between mb-2">
+                    <h4 class="text-xs font-medium text-gray-700">
+                      Terms &amp; Conditions
+                    </h4>
+                    <span class="text-xs text-gray-500">PDF</span>
+                  </div>
+                  <button
+                    onclick="document.getElementById('terms-input').click()"
+                    class="w-full flex items-center justify-center gap-2 px-3 py-2 bg-white border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors text-xs"
                   >
-                    Other Documents
-                  </h4>
-                  <span class="text-xs text-gray-500">Optional</span>
+                    Upload T&amp;Cs
+                  </button>
+                  <input
+                    type="file"
+                    id="terms-input"
+                    accept=".pdf"
+                    class="hidden"
+                  />
+                  <div id="terms-list" class="mt-2 space-y-1"></div>
                 </div>
-                <button
-                  onclick="document.getElementById('other-input').click()"
-                  class="w-full flex items-center justify-center gap-2 px-3 py-2 bg-white dark:bg-gray-900 border border-gray-300 dark:border-gray-700 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors text-xs"
-                >
-                  Upload Files
-                </button>
-                <input
-                  type="file"
-                  id="other-input"
-                  multiple
-                  class="hidden"
-                />
-                <div id="other-list" class="mt-2 space-y-1"></div>
-              </div>
 
-              <!-- Send all -->
-              <button
-                id="send-all-files"
-                class="w-full mt-1 px-4 py-2.5 bg-td-blue text-white rounded-lg hover:bg-td-blue-dark transition-colors text-sm font-medium shadow-brand disabled:bg-gray-300 disabled:cursor-not-allowed"
-                disabled
-              >
-                Send All Files
-              </button>
+                <!-- Other docs -->
+                <div
+                  class="bg-td-bg-light rounded-lg p-3 border border-gray-200"
+                >
+                  <div class="flex items-center justify-between mb-2">
+                    <h4 class="text-xs font-medium text-gray-700">
+                      Other Documents
+                    </h4>
+                    <span class="text-xs text-gray-500">Optional</span>
+                  </div>
+                  <button
+                    onclick="document.getElementById('other-input').click()"
+                    class="w-full flex items-center justify-center gap-2 px-3 py-2 bg-white border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors text-xs"
+                  >
+                    Upload Files
+                  </button>
+                  <input
+                    type="file"
+                    id="other-input"
+                    multiple
+                    class="hidden"
+                  />
+                  <div id="other-list" class="mt-2 space-y-1"></div>
+                </div>
+
+                <!-- Send all -->
+                <button
+                  id="send-all-files"
+                  class="w-full mt-1 px-4 py-2.5 bg-td-blue text-white rounded-lg hover:bg-td-blue-dark transition-colors text-sm font-medium shadow-brand disabled:bg-gray-300 disabled:cursor-not-allowed"
+                  disabled
+                >
+                  Send All Files
+                </button>
+              </div>
             </div>
           </div>
 
           <!-- Chat input -->
-          <div
-            class="border-t border-gray-200 dark:border-gray-800 bg-gray-50 dark:bg-[#0f131a] p-3"
-          >
-            <div class="max-w-3xl mx-auto flex gap-2">
+          <div class="border-t border-gray-200 bg-white p-3">
+            <div class="max-w-[1100px] w-full mx-auto flex gap-2">
               <input
                 id="input-assets"
                 type="text"
                 placeholder="Tell me about the assets you're providing..."
-                class="flex-1 px-3 py-2 text-sm border border-gray-300 dark:border-gray-700 rounded-xl bg-white dark:bg-[#1a1f2b] text-gray-900 dark:text-gray-100 placeholder-gray-500 dark:placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-td-blue focus:border-transparent"
+                class="flex-1 px-3 py-2 text-sm 
+                       border border-gray-300 
+                       rounded-xl 
+                       bg-white 
+                       text-gray-900 
+                       placeholder-gray-500 
+                       focus:outline-none focus:ring-2 focus:ring-td-blue focus:border-transparent"
               />
               <button
                 id="send-assets"
@@ -468,17 +427,21 @@
         <section id="step-ip" class="step-page h-full flex flex-col hidden">
           <div
             id="chat-ip"
-            class="flex-1 overflow-y-auto p-6 space-y-3 bg-transparent"
+            class="flex-1 overflow-y-auto p-6 space-y-3"
           ></div>
-          <div
-            class="border-t border-gray-200 dark:border-gray-800 bg-gray-50 dark:bg-[#0f131a] p-3"
-          >
-            <div class="max-w-3xl mx-auto flex gap-2">
+          <div class="border-t border-gray-200 bg-white p-3">
+            <div class="max-w-[1100px] w-full mx-auto flex gap-2">
               <input
                 id="input-ip"
                 type="text"
                 placeholder="Share the IP addresses to exclude..."
-                class="flex-1 px-3 py-2 text-sm border border-gray-300 dark:border-gray-700 rounded-xl bg-white dark:bg-[#1a1f2b] text-gray-900 dark:text-gray-100 placeholder-gray-500 dark:placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-td-blue focus:border-transparent"
+                class="flex-1 px-3 py-2 text-sm 
+                       border border-gray-300 
+                       rounded-xl 
+                       bg-white 
+                       text-gray-900 
+                       placeholder-gray-500 
+                       focus:outline-none focus:ring-2 focus:ring-td-blue focus:border-transparent"
               />
               <button
                 id="send-ip"
@@ -491,23 +454,24 @@
         </section>
 
         <!-- TRACKING SCRIPTS -->
-        <section
-          id="step-scripts"
-          class="step-page h-full flex flex-col hidden"
-        >
+        <section id="step-scripts" class="step-page h-full flex flex-col hidden">
           <div
             id="chat-scripts"
-            class="flex-1 overflow-y-auto p-6 space-y-3 bg-transparent"
+            class="flex-1 overflow-y-auto p-6 space-y-3"
           ></div>
-          <div
-            class="border-t border-gray-200 dark:border-gray-800 bg-gray-50 dark:bg-[#0f131a] p-3"
-          >
-            <div class="max-w-3xl mx-auto flex gap-2">
+          <div class="border-t border-gray-200 bg-white p-3">
+            <div class="max-w-[1100px] w-full mx-auto flex gap-2">
               <input
                 id="input-scripts"
                 type="text"
                 placeholder="Ask anything about implementing your tracking scripts..."
-                class="flex-1 px-3 py-2 text-sm border border-gray-300 dark:border-gray-700 rounded-xl bg-white dark:bg-[#1a1f2b] text-gray-900 dark:text-gray-100 placeholder-gray-500 dark:placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-td-blue focus:border-transparent"
+                class="flex-1 px-3 py-2 text-sm 
+                       border border-gray-300 
+                       rounded-xl 
+                       bg-white 
+                       text-gray-900 
+                       placeholder-gray-500 
+                       focus:outline-none focus:ring-2 focus:ring-td-blue focus:border-transparent"
               />
               <button
                 id="send-scripts"
@@ -537,8 +501,7 @@
       },
       branded: {
         title: 'Branded Tracking',
-        subtitle:
-          'We’ll configure your visit.* and statics.* tracking domains.',
+        subtitle: 'We’ll configure your visit.* and statics.* tracking domains.',
       },
       feed: {
         title: 'Product Feed',
@@ -546,13 +509,11 @@
       },
       assets: {
         title: 'Program Assets',
-        subtitle:
-          'Upload your logo, banners, T&Cs and additional program documents.',
+        subtitle: 'Upload your logo, banners, T&Cs and additional program documents.',
       },
       ip: {
         title: 'IP Addresses',
-        subtitle:
-          'Provide office IPs so we can exclude internal traffic from tracking.',
+        subtitle: 'Provide office IPs so we can exclude internal traffic from tracking.',
       },
       scripts: {
         title: 'Tracking Scripts',
@@ -575,8 +536,6 @@
       ipAddresses: false,
       trackingScripts: false,
     };
-
-    // Files (for assets step)
     let uploadedFiles = {
       logo: [],
       banners: [],
@@ -584,9 +543,7 @@
       other: [],
     };
 
-    // ==============================
-    // DOM REFERENCES
-    // ==============================
+    // DOM
     const stepTitle = document.getElementById('step-title');
     const stepSubtitle = document.getElementById('step-subtitle');
     const navButtons = document.querySelectorAll('.step-nav-btn');
@@ -601,21 +558,6 @@
     const otherInput = document.getElementById('other-input');
 
     // ==============================
-    // DARK MODE
-    // ==============================
-    function loadDarkMode() {
-      if (localStorage.getItem('td_dark_mode') === '1') {
-        document.documentElement.classList.add('dark');
-      }
-    }
-    function toggleDarkMode() {
-      const html = document.documentElement;
-      const isDark = html.classList.toggle('dark');
-      localStorage.setItem('td_dark_mode', isDark ? '1' : '0');
-    }
-    loadDarkMode();
-
-    // ==============================
     // STORAGE
     // ==============================
     function saveState() {
@@ -624,6 +566,7 @@
       localStorage.setItem('td_onboarding_data', JSON.stringify(onboardingData));
       localStorage.setItem('td_checklist', JSON.stringify(checklist));
       localStorage.setItem('td_uploaded_files', JSON.stringify(uploadedFiles));
+      localStorage.setItem('td_has_visited', '1');
     }
 
     function loadState() {
@@ -646,6 +589,7 @@
       localStorage.removeItem('td_onboarding_data');
       localStorage.removeItem('td_checklist');
       localStorage.removeItem('td_uploaded_files');
+      localStorage.removeItem('td_has_visited');
       location.reload();
     }
 
@@ -653,12 +597,14 @@
     // INIT
     // ==============================
     loadState();
+    const hasVisitedBefore = localStorage.getItem('td_has_visited') === '1';
+
     STEPS.forEach((step) => {
       if (!Array.isArray(histories[step])) histories[step] = [];
     });
 
-    // Seed intro message
-    if (histories.intro.length === 0) {
+    // Seed intro first-time
+    if (!hasVisitedBefore && histories.intro.length === 0) {
       histories.intro.push({
         role: 'assistant',
         content:
@@ -666,7 +612,16 @@
       });
     }
 
-    // Wire chat inputs per step
+    // Simple welcome-back message on current step
+    if (hasVisitedBefore && histories[currentStep].length > 0) {
+      histories[currentStep].unshift({
+        role: 'assistant',
+        content:
+          "Welcome back 👋 Here's where we left off last time. We can continue from this step or jump to any step in the sidebar.",
+      });
+    }
+
+    // Wire chat inputs
     STEPS.forEach((step) => {
       const input = document.getElementById('input-' + step);
       const sendBtn = document.getElementById('send-' + step);
@@ -681,7 +636,7 @@
       });
     });
 
-    // Sidebar nav clicks
+    // Sidebar nav
     navButtons.forEach((btn) => {
       btn.addEventListener('click', () => {
         const step = btn.getAttribute('data-step');
@@ -689,7 +644,7 @@
       });
     });
 
-    // File upload listeners (assets step)
+    // Upload listeners
     if (logoInput) logoInput.addEventListener('change', (e) => handleFileUpload(e, 'logo', 'logo-list'));
     if (bannersInput) bannersInput.addEventListener('change', (e) => handleFileUpload(e, 'banners', 'banners-list'));
     if (termsInput) termsInput.addEventListener('change', (e) => handleFileUpload(e, 'terms', 'terms-list'));
@@ -707,21 +662,14 @@
     // CORE
     // ==============================
     function generateSessionId() {
-      return (
-        'session_' +
-        Date.now() +
-        '_' +
-        Math.random().toString(36).slice(2, 10)
-      );
+      return 'session_' + Date.now() + '_' + Math.random().toString(36).slice(2, 10);
     }
 
     function goToStep(step) {
       if (!STEPS.includes(step)) step = 'intro';
       currentStep = step;
 
-      document
-        .querySelectorAll('.step-page')
-        .forEach((s) => s.classList.add('hidden'));
+      document.querySelectorAll('.step-page').forEach((s) => s.classList.add('hidden'));
       document.getElementById('step-' + step).classList.remove('hidden');
 
       stepTitle.textContent = stepMeta[step].title;
@@ -740,7 +688,6 @@
       chatEl.innerHTML = '';
       histories[step].forEach((m) => addMessageToChat(step, m.role, m.content));
 
-      // Scroll upload area into view when going to assets
       if (step === 'assets') {
         setTimeout(() => {
           const logoBox = document.getElementById('logo-list');
@@ -761,7 +708,6 @@
       const text = input.value.trim();
       if (!text) return;
 
-      // client-side keyword navigation (Option C)
       const lower = text.toLowerCase();
       if (
         step !== 'assets' &&
@@ -805,7 +751,6 @@
         if (data.onboardingData) onboardingData = data.onboardingData;
         if (data.checklist) checklist = data.checklist;
 
-        // Option C: backend can explicitly ask to jump to a step
         if (data.triggerGoToStep && STEPS.includes(data.triggerGoToStep)) {
           goToStep(data.triggerGoToStep);
         }
@@ -825,27 +770,30 @@
 
     function addMessageToChat(step, role, content) {
       const chatEl = document.getElementById('chat-' + step);
+
       const wrapper = document.createElement('div');
       wrapper.className = `flex ${role === 'user' ? 'justify-end' : 'justify-start'}`;
 
+      const inner = document.createElement('div');
+      inner.className = 'max-w-[1100px] w-full flex ' + (role === 'user' ? 'justify-end' : 'justify-start');
+
       const bubble = document.createElement('div');
       bubble.className =
-        'max-w-2xl px-3 py-2 rounded-brand text-sm chat-message ' +
-        (role === 'user'
-          ? 'bg-td-blue text-white shadow-brand'
-          : 'bg-white dark:bg-gray-900 text-gray-800 dark:text-gray-100 border border-gray-200 dark:border-gray-700 shadow-sm');
+        'max-w-2xl px-3 py-2 rounded-brand text-sm chat-message bg-td-blue text-white shadow-brand';
 
       bubble.innerHTML = content
         .split('\n')
         .map((line) => {
           if (!line.trim()) return '<p class="mb-1">&nbsp;</p>';
-          if (line.startsWith('•') || line.startsWith('-'))
+          if (line.startsWith('•') || line.startsWith('-')) {
             return `<p class="ml-4">${line}</p>`;
+          }
           return `<p class="mb-1">${line}</p>`;
         })
         .join('');
 
-      wrapper.appendChild(bubble);
+      inner.appendChild(bubble);
+      wrapper.appendChild(inner);
       chatEl.appendChild(wrapper);
       chatEl.scrollTop = chatEl.scrollHeight;
     }
@@ -857,8 +805,11 @@
       wrapper.id = id;
       wrapper.className = 'flex justify-start';
 
-      wrapper.innerHTML = `
-        <div class="px-3 py-2 rounded-brand bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-700">
+      const inner = document.createElement('div');
+      inner.className = 'max-w-[1100px] w-full flex justify-start';
+
+      inner.innerHTML = `
+        <div class="px-3 py-2 rounded-brand bg-white border border-gray-200">
           <div class="flex gap-1">
             <div class="w-2 h-2 rounded-full bg-td-blue pulse-loader"></div>
             <div class="w-2 h-2 rounded-full bg-td-blue pulse-loader" style="animation-delay:0.15s"></div>
@@ -866,6 +817,7 @@
           </div>
         </div>
       `;
+      wrapper.appendChild(inner);
       chatEl.appendChild(wrapper);
       chatEl.scrollTop = chatEl.scrollHeight;
       return id;
@@ -889,34 +841,24 @@
       if (onboardingData.clientName)
         parts.push(`<p><strong>Client:</strong> ${onboardingData.clientName}</p>`);
       if (onboardingData.companyName)
-        parts.push(
-          `<p><strong>Company:</strong> ${onboardingData.companyName}</p>`
-        );
+        parts.push(`<p><strong>Company:</strong> ${onboardingData.companyName}</p>`);
       if (onboardingData.email)
         parts.push(`<p><strong>Email:</strong> ${onboardingData.email}</p>`);
       if (onboardingData.brandedTracking?.visit)
-        parts.push(
-          `<p><strong>Visit:</strong> ${onboardingData.brandedTracking.visit}</p>`
-        );
+        parts.push(`<p><strong>Visit:</strong> ${onboardingData.brandedTracking.visit}</p>`);
       if (onboardingData.brandedTracking?.statics)
-        parts.push(
-          `<p><strong>Statics:</strong> ${onboardingData.brandedTracking.statics}</p>`
-        );
+        parts.push(`<p><strong>Statics:</strong> ${onboardingData.brandedTracking.statics}</p>`);
       if (onboardingData.productFeedUrl)
-        parts.push(
-          `<p><strong>Feed URL:</strong> ${onboardingData.productFeedUrl}</p>`
-        );
+        parts.push(`<p><strong>Feed URL:</strong> ${onboardingData.productFeedUrl}</p>`);
       if (onboardingData.officeIPs?.length)
-        parts.push(
-          `<p><strong>IPs:</strong> ${onboardingData.officeIPs.length} address(es)</p>`
-        );
+        parts.push(`<p><strong>IPs:</strong> ${onboardingData.officeIPs.length} address(es)</p>`);
 
       dataSummary.innerHTML =
         parts.length > 0 ? parts.join('') : '<p>No data collected yet</p>';
     }
 
     // ==============================
-    // FILE UPLOADS (Assets step)
+    // FILE UPLOADS
     // ==============================
     function handleFileUpload(event, category, listId) {
       const files = Array.from(event.target.files);
@@ -937,7 +879,7 @@
 
           const fileDiv = document.createElement('div');
           fileDiv.className =
-            'text-xs text-gray-600 dark:text-gray-200 flex items-center gap-2 p-1.5 bg-white dark:bg-gray-900 rounded border border-gray-200 dark:border-gray-700';
+            'text-xs text-gray-700 flex items-center gap-2 p-1.5 bg-white rounded border border-gray-200';
           fileDiv.innerHTML = `
             <svg class="w-3 h-3 text-green-500 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
               <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/>
@@ -961,9 +903,7 @@
     }
 
     function removeFile(category, fileName) {
-      uploadedFiles[category] = uploadedFiles[category].filter(
-        (f) => f.name !== fileName
-      );
+      uploadedFiles[category] = uploadedFiles[category].filter((f) => f.name !== fileName);
       updateFileLists();
       updateSendAllButton();
       saveState();
@@ -985,7 +925,7 @@
         (uploadedFiles[category] || []).forEach((file) => {
           const fileDiv = document.createElement('div');
           fileDiv.className =
-            'text-xs text-gray-600 dark:text-gray-200 flex items-center gap-2 p-1.5 bg-white dark:bg-gray-900 rounded border border-gray-200 dark:border-gray-700';
+            'text-xs text-gray-700 flex items-center gap-2 p-1.5 bg-white rounded border border-gray-200';
           fileDiv.innerHTML = `
             <svg class="w-3 h-3 text-green-500 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
               <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/>
