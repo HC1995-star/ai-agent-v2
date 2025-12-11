@@ -431,12 +431,10 @@
       const chatEl = document.getElementById('chat-' + step);
       chatEl.innerHTML = '';
       histories[step].forEach((m) => addMessageToChat(step, m.role, m.content));
-      // Scroll to bottom after loading all messages
-      requestAnimationFrame(() => {
-        requestAnimationFrame(() => {
-          chatEl.scrollTop = chatEl.scrollHeight;
-        });
-      });
+      // Scroll to bottom after loading all messages - wait longer for all animations
+      setTimeout(() => {
+        chatEl.scrollTop = chatEl.scrollHeight;
+      }, 400);
       saveState();
     }
 
@@ -540,10 +538,10 @@
       inner.appendChild(timestamp);
       wrapper.appendChild(inner);
       chatEl.appendChild(wrapper);
-      // Auto-scroll to bottom
-      requestAnimationFrame(() => {
+      // Force scroll to bottom - wait for animations
+      setTimeout(() => {
         chatEl.scrollTop = chatEl.scrollHeight;
-      });
+      }, 300);
     }
 
     function addLoadingIndicator(step) {
@@ -558,10 +556,10 @@
       inner.innerHTML = `<div class="px-3 py-2 rounded-[14px] bg-white border border-gray-200"><div class="flex gap-1"><div class="w-2 h-2 rounded-full bg-[#2A73FF] pulse-loader"></div><div class="w-2 h-2 rounded-full bg-[#2A73FF] pulse-loader" style="animation-delay:0.15s"></div><div class="w-2 h-2 rounded-full bg-[#2A73FF] pulse-loader" style="animation-delay:0.3s"></div></div></div>`;
       wrapper.appendChild(inner);
       chatEl.appendChild(wrapper);
-      // Auto-scroll to bottom
-      requestAnimationFrame(() => {
+      // Force scroll to bottom
+      setTimeout(() => {
         chatEl.scrollTop = chatEl.scrollHeight;
-      });
+      }, 300);
       return id;
     }
 
