@@ -432,12 +432,11 @@
       chatEl.innerHTML = '';
       histories[step].forEach((m) => addMessageToChat(step, m.role, m.content));
       // Scroll to bottom after loading all messages
-      setTimeout(() => {
-        chatEl.scrollTo({
-          top: chatEl.scrollHeight,
-          behavior: 'instant'
+      requestAnimationFrame(() => {
+        requestAnimationFrame(() => {
+          chatEl.scrollTop = chatEl.scrollHeight;
         });
-      }, 150);
+      });
       saveState();
     }
 
@@ -541,13 +540,10 @@
       inner.appendChild(timestamp);
       wrapper.appendChild(inner);
       chatEl.appendChild(wrapper);
-      // Auto-scroll to bottom with smooth behavior
-      setTimeout(() => { 
-        chatEl.scrollTo({
-          top: chatEl.scrollHeight,
-          behavior: 'smooth'
-        });
-      }, 100);
+      // Auto-scroll to bottom
+      requestAnimationFrame(() => {
+        chatEl.scrollTop = chatEl.scrollHeight;
+      });
     }
 
     function addLoadingIndicator(step) {
@@ -562,13 +558,10 @@
       inner.innerHTML = `<div class="px-3 py-2 rounded-[14px] bg-white border border-gray-200"><div class="flex gap-1"><div class="w-2 h-2 rounded-full bg-[#2A73FF] pulse-loader"></div><div class="w-2 h-2 rounded-full bg-[#2A73FF] pulse-loader" style="animation-delay:0.15s"></div><div class="w-2 h-2 rounded-full bg-[#2A73FF] pulse-loader" style="animation-delay:0.3s"></div></div></div>`;
       wrapper.appendChild(inner);
       chatEl.appendChild(wrapper);
-      // Auto-scroll to bottom with smooth behavior
-      setTimeout(() => { 
-        chatEl.scrollTo({
-          top: chatEl.scrollHeight,
-          behavior: 'smooth'
-        });
-      }, 100);
+      // Auto-scroll to bottom
+      requestAnimationFrame(() => {
+        chatEl.scrollTop = chatEl.scrollHeight;
+      });
       return id;
     }
 
