@@ -468,7 +468,16 @@
       const loadingId = addLoadingIndicator(step);
 
       try {
-        const trimmedHistory = histories[step].slice(-6);
+        // Build full conversation history from ALL steps (not just current)
+        const fullHistory = [];
+        STEPS.forEach(s => {
+          if (histories[s] && histories[s].length > 0) {
+            fullHistory.push(...histories[s]);
+          }
+        });
+        // Keep only last 12 messages total to avoid token limits
+        const trimmedHistory = fullHistory.slice(-12);
+        
         const totalFiles = Object.values(uploadedFiles).reduce((sum, arr) => sum + (arr ? arr.length : 0), 0);
         const filesPayload = step === 'assets' && totalFiles > 0 && text.toLowerCase().includes('upload') ? uploadedFiles : {};
 
