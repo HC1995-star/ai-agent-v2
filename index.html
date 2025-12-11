@@ -523,7 +523,7 @@
       const wrapper = document.createElement('div');
       wrapper.className = `flex ${role === 'user' ? 'justify-end' : 'justify-start'}`;
       const inner = document.createElement('div');
-      inner.className = 'max-w-[1100px] w-full flex ' + (role === 'user' ? 'justify-end' : 'justify-start');
+      inner.className = 'max-w-[1100px] w-full flex flex-col ' + (role === 'user' ? 'items-end' : 'items-start');
       const bubble = document.createElement('div');
       bubble.className = role === 'user'
         ? 'max-w-2xl px-3 py-2 rounded-[14px] text-sm chat-message bg-gray-100 text-gray-900 shadow-md'
@@ -533,7 +533,12 @@
         if (line.startsWith('•') || line.startsWith('-')) return `<p class="ml-4">${line}</p>`;
         return `<p class="mb-1">${line}</p>`;
       }).join('');
+      const timestamp = document.createElement('div');
+      timestamp.className = 'text-xs text-gray-400 mt-1 px-1';
+      const now = new Date();
+      timestamp.textContent = now.toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit' });
       inner.appendChild(bubble);
+      inner.appendChild(timestamp);
       wrapper.appendChild(inner);
       chatEl.appendChild(wrapper);
       // Auto-scroll to bottom with smooth behavior
