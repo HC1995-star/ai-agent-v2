@@ -525,7 +525,9 @@
       const inner = document.createElement('div');
       inner.className = 'max-w-[1100px] w-full flex ' + (role === 'user' ? 'justify-end' : 'justify-start');
       const bubble = document.createElement('div');
-      bubble.className = 'max-w-2xl px-3 py-2 rounded-[14px] text-sm chat-message bg-[#2A73FF] text-white shadow-md';
+      bubble.className = role === 'user'
+        ? 'max-w-2xl px-3 py-2 rounded-[14px] text-sm chat-message bg-gray-100 text-gray-900 shadow-md'
+        : 'max-w-2xl px-3 py-2 rounded-[14px] text-sm chat-message bg-[#2A73FF] text-white shadow-md';
       bubble.innerHTML = content.split('\n').map((line) => {
         if (!line.trim()) return '<p class="mb-1">&nbsp;</p>';
         if (line.startsWith('•') || line.startsWith('-')) return `<p class="ml-4">${line}</p>`;
