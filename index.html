@@ -498,6 +498,14 @@
         histories[step].push({ role: 'assistant', content: data.response });
         addMessageToChat(step, 'assistant', data.response);
 
+        // Ensure scroll after agent response
+        const chatEl = document.getElementById('chat-' + step);
+        if (chatEl) {
+          setTimeout(() => {
+            chatEl.scrollTop = chatEl.scrollHeight;
+          }, 350);
+        }
+
         if (data.onboardingData) onboardingData = data.onboardingData;
         if (data.checklist) checklist = data.checklist;
         if (data.triggerGoToStep && STEPS.includes(data.triggerGoToStep)) goToStep(data.triggerGoToStep);
@@ -511,6 +519,14 @@
         const msg = 'I ran into an issue responding just now. Please try again in a moment.';
         histories[step].push({ role: 'assistant', content: msg });
         addMessageToChat(step, 'assistant', msg);
+
+        // Ensure scroll after error message
+        const chatEl = document.getElementById('chat-' + step);
+        if (chatEl) {
+          setTimeout(() => {
+            chatEl.scrollTop = chatEl.scrollHeight;
+          }, 350);
+        }
       }
     }
 
