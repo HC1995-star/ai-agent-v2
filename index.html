@@ -431,7 +431,15 @@
       const chatEl = document.getElementById('chat-' + step);
       chatEl.innerHTML = '';
       histories[step].forEach((m) => addMessageToChat(step, m.role, m.content));
-      chatEl.scrollTop = chatEl.scrollHeight;
+
+      // Ensure scroll to bottom after all messages are loaded
+      requestAnimationFrame(() => {
+        chatEl.scrollTop = chatEl.scrollHeight;
+        setTimeout(() => {
+          chatEl.scrollTop = chatEl.scrollHeight;
+        }, 100);
+      });
+
       saveState();
     }
 
@@ -495,14 +503,6 @@
         histories[step].push({ role: 'assistant', content: data.response });
         addMessageToChat(step, 'assistant', data.response);
 
-        // Ensure scroll after agent response
-        const chatEl = document.getElementById('chat-' + step);
-        if (chatEl) {
-          setTimeout(() => {
-            chatEl.scrollTop = chatEl.scrollHeight;
-          }, 350);
-        }
-
         if (data.onboardingData) onboardingData = data.onboardingData;
         if (data.checklist) checklist = data.checklist;
         if (data.triggerGoToStep && STEPS.includes(data.triggerGoToStep)) goToStep(data.triggerGoToStep);
@@ -516,14 +516,6 @@
         const msg = 'I ran into an issue responding just now. Please try again in a moment.';
         histories[step].push({ role: 'assistant', content: msg });
         addMessageToChat(step, 'assistant', msg);
-
-        // Ensure scroll after error message
-        const chatEl = document.getElementById('chat-' + step);
-        if (chatEl) {
-          setTimeout(() => {
-            chatEl.scrollTop = chatEl.scrollHeight;
-          }, 350);
-        }
       }
     }
 
@@ -551,7 +543,17 @@
       inner.appendChild(timestamp);
       wrapper.appendChild(inner);
       chatEl.appendChild(wrapper);
-      chatEl.scrollTop = chatEl.scrollHeight;
+
+      // Force scroll after DOM update with multiple retries
+      requestAnimationFrame(() => {
+        chatEl.scrollTop = chatEl.scrollHeight;
+        setTimeout(() => {
+          chatEl.scrollTop = chatEl.scrollHeight;
+        }, 50);
+        setTimeout(() => {
+          chatEl.scrollTop = chatEl.scrollHeight;
+        }, 150);
+      });
     }
 
     function addLoadingIndicator(step) {
@@ -566,7 +568,14 @@
       inner.innerHTML = `<div class="px-3 py-2 rounded-[14px] bg-white border border-gray-200"><div class="flex gap-1"><div class="w-2 h-2 rounded-full bg-[#2A73FF] pulse-loader"></div><div class="w-2 h-2 rounded-full bg-[#2A73FF] pulse-loader" style="animation-delay:0.15s"></div><div class="w-2 h-2 rounded-full bg-[#2A73FF] pulse-loader" style="animation-delay:0.3s"></div></div></div>`;
       wrapper.appendChild(inner);
       chatEl.appendChild(wrapper);
-      chatEl.scrollTop = chatEl.scrollHeight;
+
+      // Force scroll after DOM update
+      requestAnimationFrame(() => {
+        chatEl.scrollTop = chatEl.scrollHeight;
+        setTimeout(() => {
+          chatEl.scrollTop = chatEl.scrollHeight;
+        }, 50);
+      });
       return id;
     }
 
