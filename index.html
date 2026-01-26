@@ -548,17 +548,16 @@
       wrapper.appendChild(inner);
       chatEl.appendChild(wrapper);
 
-      // Scroll to the new message - use scrollIntoView for reliability
+      // Scroll to bottom - use scrollTop which respects the pb-32 padding
       const scrollToBottom = () => {
-        wrapper.scrollIntoView({ behavior: 'smooth', block: 'end' });
+        chatEl.scrollTop = chatEl.scrollHeight;
       };
 
       // Initial scroll after DOM update
       requestAnimationFrame(() => {
         scrollToBottom();
-        // Retry after animation starts (animation is 250ms)
-        setTimeout(scrollToBottom, 100);
-        // Retry after animation completes
+        // Retry after animation completes (animation is 250ms)
+        setTimeout(scrollToBottom, 150);
         setTimeout(scrollToBottom, 300);
       });
     }
@@ -576,9 +575,9 @@
       wrapper.appendChild(inner);
       chatEl.appendChild(wrapper);
 
-      // Scroll to loading indicator
+      // Scroll to bottom
       const scrollToBottom = () => {
-        wrapper.scrollIntoView({ behavior: 'smooth', block: 'end' });
+        chatEl.scrollTop = chatEl.scrollHeight;
       };
 
       requestAnimationFrame(() => {
