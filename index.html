@@ -433,11 +433,15 @@
       histories[step].forEach((m) => addMessageToChat(step, m.role, m.content));
 
       // Ensure scroll to bottom after all messages are loaded
-      requestAnimationFrame(() => {
+      const scrollToBottom = () => {
         chatEl.scrollTop = chatEl.scrollHeight;
-        setTimeout(() => {
-          chatEl.scrollTop = chatEl.scrollHeight;
-        }, 100);
+      };
+
+      requestAnimationFrame(() => {
+        scrollToBottom();
+        // Allow time for all message animations to complete
+        setTimeout(scrollToBottom, 150);
+        setTimeout(scrollToBottom, 350);
       });
 
       saveState();
@@ -544,15 +548,18 @@
       wrapper.appendChild(inner);
       chatEl.appendChild(wrapper);
 
-      // Force scroll after DOM update with multiple retries
+      // Scroll to the new message - use scrollIntoView for reliability
+      const scrollToBottom = () => {
+        wrapper.scrollIntoView({ behavior: 'smooth', block: 'end' });
+      };
+
+      // Initial scroll after DOM update
       requestAnimationFrame(() => {
-        chatEl.scrollTop = chatEl.scrollHeight;
-        setTimeout(() => {
-          chatEl.scrollTop = chatEl.scrollHeight;
-        }, 50);
-        setTimeout(() => {
-          chatEl.scrollTop = chatEl.scrollHeight;
-        }, 150);
+        scrollToBottom();
+        // Retry after animation starts (animation is 250ms)
+        setTimeout(scrollToBottom, 100);
+        // Retry after animation completes
+        setTimeout(scrollToBottom, 300);
       });
     }
 
@@ -569,12 +576,14 @@
       wrapper.appendChild(inner);
       chatEl.appendChild(wrapper);
 
-      // Force scroll after DOM update
+      // Scroll to loading indicator
+      const scrollToBottom = () => {
+        wrapper.scrollIntoView({ behavior: 'smooth', block: 'end' });
+      };
+
       requestAnimationFrame(() => {
-        chatEl.scrollTop = chatEl.scrollHeight;
-        setTimeout(() => {
-          chatEl.scrollTop = chatEl.scrollHeight;
-        }, 50);
+        scrollToBottom();
+        setTimeout(scrollToBottom, 100);
       });
       return id;
     }
