@@ -34,12 +34,23 @@
       0%, 100% { opacity: 1; }
       50%      { opacity: 0.4; }
     }
+    .step-marker {
+      scroll-margin-top: 20px;
+    }
+    .upload-panel {
+      transition: transform 0.3s ease, opacity 0.3s ease;
+    }
+    .upload-panel.hidden {
+      transform: translateX(100%);
+      opacity: 0;
+      pointer-events: none;
+    }
   </style>
 </head>
 
 <body class="bg-white text-gray-900 h-screen overflow-hidden">
   <div class="flex h-screen">
-    <!-- Sidebar (sticky) -->
+    <!-- Sidebar -->
     <aside class="w-80 bg-white border-r border-gray-200 p-5 flex flex-col sticky top-0 h-screen overflow-y-auto">
       <div class="flex items-center justify-between mb-5">
         <div>
@@ -54,41 +65,29 @@
           Onboarding steps
         </h2>
         <nav id="steps-nav" class="space-y-1 text-sm">
-          <button
-            data-step="intro"
-            class="step-nav-btn w-full flex items-center justify-between px-3 py-2 rounded-lg text-left hover:bg-gray-100"
-          >
+          <button data-step="intro" class="step-nav-btn w-full flex items-center justify-between px-3 py-2 rounded-lg text-left hover:bg-gray-100">
             <span>1. Introduction</span>
+            <span class="step-check hidden text-green-500">✓</span>
           </button>
-          <button
-            data-step="branded"
-            class="step-nav-btn w-full flex items-center justify-between px-3 py-2 rounded-lg text-left hover:bg-gray-100"
-          >
+          <button data-step="branded" class="step-nav-btn w-full flex items-center justify-between px-3 py-2 rounded-lg text-left hover:bg-gray-100">
             <span>2. Branded Tracking</span>
+            <span class="step-check hidden text-green-500">✓</span>
           </button>
-          <button
-            data-step="feed"
-            class="step-nav-btn w-full flex items-center justify-between px-3 py-2 rounded-lg text-left hover:bg-gray-100"
-          >
+          <button data-step="feed" class="step-nav-btn w-full flex items-center justify-between px-3 py-2 rounded-lg text-left hover:bg-gray-100">
             <span>3. Product Feed</span>
+            <span class="step-check hidden text-green-500">✓</span>
           </button>
-          <button
-            data-step="assets"
-            class="step-nav-btn w-full flex items-center justify-between px-3 py-2 rounded-lg text-left hover:bg-gray-100"
-          >
-            <span>4. Program Assets (Upload)</span>
+          <button data-step="assets" class="step-nav-btn w-full flex items-center justify-between px-3 py-2 rounded-lg text-left hover:bg-gray-100">
+            <span>4. Program Assets</span>
+            <span class="step-check hidden text-green-500">✓</span>
           </button>
-          <button
-            data-step="ip"
-            class="step-nav-btn w-full flex items-center justify-between px-3 py-2 rounded-lg text-left hover:bg-gray-100"
-          >
+          <button data-step="ip" class="step-nav-btn w-full flex items-center justify-between px-3 py-2 rounded-lg text-left hover:bg-gray-100">
             <span>5. IP Addresses</span>
+            <span class="step-check hidden text-green-500">✓</span>
           </button>
-          <button
-            data-step="scripts"
-            class="step-nav-btn w-full flex items-center justify-between px-3 py-2 rounded-lg text-left hover:bg-gray-100"
-          >
+          <button data-step="scripts" class="step-nav-btn w-full flex items-center justify-between px-3 py-2 rounded-lg text-left hover:bg-gray-100">
             <span>6. Tracking Scripts</span>
+            <span class="step-check hidden text-green-500">✓</span>
           </button>
         </nav>
       </div>
@@ -100,23 +99,25 @@
           <span id="progress-percentage" class="text-xs font-semibold text-[#2A73FF]">0%</span>
         </div>
         <div class="w-full h-1.5 rounded-full bg-gray-200 overflow-hidden">
-          <div
-            id="progress-bar"
-            class="h-1.5 rounded-full bg-[#2A73FF] transition-all duration-500"
-            style="width: 0%"
-          ></div>
+          <div id="progress-bar" class="h-1.5 rounded-full bg-[#2A73FF] transition-all duration-500" style="width: 0%"></div>
         </div>
       </div>
 
+      <!-- Upload Assets Button -->
+      <button
+        id="toggle-upload-panel"
+        class="mb-4 w-full px-3 py-2 bg-[#F7F9FF] border border-[#2A73FF]/30 text-[#2A73FF] rounded-lg text-sm font-medium hover:bg-[#2A73FF]/10 transition flex items-center justify-center gap-2"
+      >
+        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"/>
+        </svg>
+        Upload Assets
+      </button>
+
       <!-- Summary -->
       <div class="mt-auto pt-4 border-t border-gray-200">
-        <h3 class="text-xs font-semibold text-gray-500 mb-1">
-          Collected Data
-        </h3>
-        <div
-          id="data-summary"
-          class="text-xs text-gray-600 space-y-0.5"
-        >
+        <h3 class="text-xs font-semibold text-gray-500 mb-1">Collected Data</h3>
+        <div id="data-summary" class="text-xs text-gray-600 space-y-0.5">
           <p>No data collected yet</p>
         </div>
 
@@ -130,145 +131,12 @@
     </aside>
 
     <!-- Main area -->
-    <main class="flex-1 flex flex-col bg-white h-full overflow-hidden">
-      <!-- Step header -->
-      <div class="border-b border-gray-200 bg-white px-6 py-3 flex items-center justify-between">
-        <div class="max-w-[1100px] w-full mx-auto">
-          <h2 id="step-title" class="text-sm font-semibold text-gray-900">
-            Introduction
-          </h2>
-          <p id="step-subtitle" class="text-xs text-gray-500">
-            Tell me who you are and which company you represent.
-          </p>
-        </div>
-      </div>
-
-      <!-- Step content (above global input) -->
-      <div class="flex-1 overflow-hidden bg-white">
-        <!-- INTRO -->
-        <section id="step-intro" class="step-page h-full flex flex-col">
-          <div
-            id="chat-intro"
-            class="flex-1 overflow-y-auto p-6 space-y-3 pb-16"
-          ></div>
-        </section>
-
-        <!-- BRANDED TRACKING -->
-        <section id="step-branded" class="step-page h-full flex flex-col hidden">
-          <div
-            id="chat-branded"
-            class="flex-1 overflow-y-auto p-6 space-y-3 pb-16"
-          ></div>
-        </section>
-
-        <!-- PRODUCT FEED -->
-        <section id="step-feed" class="step-page h-full flex flex-col hidden">
-          <div
-            id="chat-feed"
-            class="flex-1 overflow-y-auto p-6 space-y-3 pb-16"
-          ></div>
-        </section>
-
-        <!-- PROGRAM ASSETS -->
-        <section id="step-assets" class="step-page h-full flex flex-col hidden">
-          <div class="p-6 space-y-4 max-w-[1100px] w-full mx-auto">
-            <div class="p-3 bg-[#F7F9FF] border border-[#2A73FF]/30 text-[#2A73FF] rounded-[14px] text-sm">
-              Upload your logo, banners, T&Cs and any additional program documents below 👇
-            </div>
-
-            <!-- Logo -->
-            <div class="bg-[#F7F9FF] rounded-lg p-3 border border-gray-200">
-              <div class="flex items-center justify-between mb-2">
-                <h4 class="text-xs font-medium text-gray-700">Logo</h4>
-                <span class="text-xs text-gray-500">350×130px</span>
-              </div>
-              <button
-                onclick="document.getElementById('logo-input').click()"
-                class="w-full flex items-center justify-center gap-2 px-3 py-2 bg-white border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors text-xs"
-              >
-                Upload Logo
-              </button>
-              <input type="file" id="logo-input" accept=".png,.jpg,.jpeg" class="hidden" />
-              <div id="logo-list" class="mt-2 space-y-1"></div>
-            </div>
-
-            <!-- Banners -->
-            <div class="bg-[#F7F9FF] rounded-lg p-3 border border-gray-200">
-              <div class="flex items-center justify-between mb-2">
-                <h4 class="text-xs font-medium text-gray-700">Banners</h4>
-                <span class="text-xs text-gray-500">Multiple sizes</span>
-              </div>
-              <p class="text-xs text-gray-500 mb-2">
-                160×600, 300×250, 300×600, 728×90, 928×70
-              </p>
-              <button
-                onclick="document.getElementById('banners-input').click()"
-                class="w-full flex items-center justify-center gap-2 px-3 py-2 bg-white border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors text-xs"
-              >
-                Upload Banners
-              </button>
-              <input type="file" id="banners-input" accept=".jpg,.jpeg,.gif,.png" multiple class="hidden" />
-              <div id="banners-list" class="mt-2 space-y-1"></div>
-            </div>
-
-            <!-- Terms & Conditions -->
-            <div class="bg-[#F7F9FF] rounded-lg p-3 border border-gray-200">
-              <div class="flex items-center justify-between mb-2">
-                <h4 class="text-xs font-medium text-gray-700">Terms &amp; Conditions</h4>
-                <span class="text-xs text-gray-500">PDF</span>
-              </div>
-              <button
-                onclick="document.getElementById('terms-input').click()"
-                class="w-full flex items-center justify-center gap-2 px-3 py-2 bg-white border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors text-xs"
-              >
-                Upload T&amp;Cs
-              </button>
-              <input type="file" id="terms-input" accept=".pdf" class="hidden" />
-              <div id="terms-list" class="mt-2 space-y-1"></div>
-            </div>
-
-            <!-- Other Documents -->
-            <div class="bg-[#F7F9FF] rounded-lg p-3 border border-gray-200">
-              <div class="flex items-center justify-between mb-2">
-                <h4 class="text-xs font-medium text-gray-700">Other Documents</h4>
-                <span class="text-xs text-gray-500">Optional</span>
-              </div>
-              <button
-                onclick="document.getElementById('other-input').click()"
-                class="w-full flex items-center justify-center gap-2 px-3 py-2 bg-white border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors text-xs"
-              >
-                Upload Files
-              </button>
-              <input type="file" id="other-input" multiple class="hidden" />
-              <div id="other-list" class="mt-2 space-y-1"></div>
-            </div>
-
-            <!-- Send all -->
-            <button
-              id="send-all-files"
-              class="w-full mt-1 px-4 py-2.5 bg-[#2A73FF] text-white rounded-lg hover:bg-[#1F5ED8] transition-colors text-sm font-medium shadow-md disabled:bg-gray-300 disabled:cursor-not-allowed"
-              disabled
-            >
-              Send All Files
-            </button>
-          </div>
-
-          <div id="chat-assets" class="flex-1 overflow-y-auto p-6 space-y-3 pb-16"></div>
-        </section>
-
-        <!-- IP ADDRESSES -->
-        <section id="step-ip" class="step-page h-full flex flex-col hidden">
-          <div id="chat-ip" class="flex-1 overflow-y-auto p-6 space-y-3 pb-16"></div>
-        </section>
-
-        <!-- TRACKING SCRIPTS -->
-        <section id="step-scripts" class="step-page h-full flex flex-col hidden">
-          <div id="chat-scripts" class="flex-1 overflow-y-auto p-6 space-y-3 pb-16"></div>
-        </section>
-      </div>
+    <main class="flex-1 flex flex-col bg-white h-full overflow-hidden relative">
+      <!-- Single Chat Container -->
+      <div id="chat-container" class="flex-1 overflow-y-auto p-6 space-y-3 pb-16"></div>
 
       <!-- GLOBAL FIXED INPUT BAR -->
-      <div class="fixed bottom-0 left-[320px] right-0 bg-white border-t border-gray-200 p-3 z-50">
+      <div class="fixed bottom-0 left-[320px] right-0 bg-white border-t border-gray-200 p-3 z-40">
         <div class="max-w-[1100px] w-full mx-auto flex gap-2">
           <input
             id="global-input"
@@ -284,6 +152,84 @@
           </button>
         </div>
       </div>
+
+      <!-- Upload Panel (Slide-out) -->
+      <div id="upload-panel" class="upload-panel hidden fixed top-0 right-0 w-96 h-full bg-white border-l border-gray-200 shadow-xl z-50 overflow-y-auto">
+        <div class="p-4">
+          <div class="flex items-center justify-between mb-4">
+            <h3 class="text-lg font-semibold text-gray-900">Upload Assets</h3>
+            <button id="close-upload-panel" class="text-gray-500 hover:text-gray-700">
+              <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
+              </svg>
+            </button>
+          </div>
+
+          <div class="space-y-4">
+            <!-- Logo -->
+            <div class="bg-[#F7F9FF] rounded-lg p-3 border border-gray-200">
+              <div class="flex items-center justify-between mb-2">
+                <h4 class="text-xs font-medium text-gray-700">Logo</h4>
+                <span class="text-xs text-gray-500">350×130px</span>
+              </div>
+              <button onclick="document.getElementById('logo-input').click()" class="w-full flex items-center justify-center gap-2 px-3 py-2 bg-white border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors text-xs">
+                Upload Logo
+              </button>
+              <input type="file" id="logo-input" accept=".png,.jpg,.jpeg" class="hidden" />
+              <div id="logo-list" class="mt-2 space-y-1"></div>
+            </div>
+
+            <!-- Banners -->
+            <div class="bg-[#F7F9FF] rounded-lg p-3 border border-gray-200">
+              <div class="flex items-center justify-between mb-2">
+                <h4 class="text-xs font-medium text-gray-700">Banners</h4>
+                <span class="text-xs text-gray-500">Multiple sizes</span>
+              </div>
+              <p class="text-xs text-gray-500 mb-2">160×600, 300×250, 300×600, 728×90, 928×70</p>
+              <button onclick="document.getElementById('banners-input').click()" class="w-full flex items-center justify-center gap-2 px-3 py-2 bg-white border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors text-xs">
+                Upload Banners
+              </button>
+              <input type="file" id="banners-input" accept=".jpg,.jpeg,.gif,.png" multiple class="hidden" />
+              <div id="banners-list" class="mt-2 space-y-1"></div>
+            </div>
+
+            <!-- Terms & Conditions -->
+            <div class="bg-[#F7F9FF] rounded-lg p-3 border border-gray-200">
+              <div class="flex items-center justify-between mb-2">
+                <h4 class="text-xs font-medium text-gray-700">Terms & Conditions</h4>
+                <span class="text-xs text-gray-500">PDF</span>
+              </div>
+              <button onclick="document.getElementById('terms-input').click()" class="w-full flex items-center justify-center gap-2 px-3 py-2 bg-white border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors text-xs">
+                Upload T&Cs
+              </button>
+              <input type="file" id="terms-input" accept=".pdf" class="hidden" />
+              <div id="terms-list" class="mt-2 space-y-1"></div>
+            </div>
+
+            <!-- Other Documents -->
+            <div class="bg-[#F7F9FF] rounded-lg p-3 border border-gray-200">
+              <div class="flex items-center justify-between mb-2">
+                <h4 class="text-xs font-medium text-gray-700">Other Documents</h4>
+                <span class="text-xs text-gray-500">Optional</span>
+              </div>
+              <button onclick="document.getElementById('other-input').click()" class="w-full flex items-center justify-center gap-2 px-3 py-2 bg-white border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors text-xs">
+                Upload Files
+              </button>
+              <input type="file" id="other-input" multiple class="hidden" />
+              <div id="other-list" class="mt-2 space-y-1"></div>
+            </div>
+
+            <!-- Send all -->
+            <button
+              id="send-all-files"
+              class="w-full mt-1 px-4 py-2.5 bg-[#2A73FF] text-white rounded-lg hover:bg-[#1F5ED8] transition-colors text-sm font-medium shadow-md disabled:bg-gray-300 disabled:cursor-not-allowed"
+              disabled
+            >
+              Send All Files
+            </button>
+          </div>
+        </div>
+      </div>
     </main>
   </div>
 
@@ -294,24 +240,32 @@
 
     const stepMeta = {
       intro: { title: 'Introduction', subtitle: 'Tell me who you are and which company you represent.' },
-      branded: { title: 'Branded Tracking', subtitle: 'Well configure your visit.* and statics.* tracking domains.' },
-      feed: { title: 'Product Feed', subtitle: 'Share your product feed URL and format so we can map it.' },
-      assets: { title: 'Program Assets', subtitle: 'Upload your logo, banners, T&Cs and additional program documents.' },
-      ip: { title: 'IP Addresses', subtitle: 'Provide office IPs so we can exclude internal traffic from tracking.' },
-      scripts: { title: 'Tracking Scripts', subtitle: 'Well walk through integrating your Tradedoubler tags.' },
+      branded: { title: 'Branded Tracking', subtitle: 'Configure your visit.* and statics.* tracking domains.' },
+      feed: { title: 'Product Feed', subtitle: 'Share your product feed URL and format.' },
+      assets: { title: 'Program Assets', subtitle: 'Upload your logo, banners, T&Cs and documents.' },
+      ip: { title: 'IP Addresses', subtitle: 'Provide office IPs to exclude from tracking.' },
+      scripts: { title: 'Tracking Scripts', subtitle: 'Integrate your Tradedoubler tracking tags.' },
     };
 
-    // STATE
-    let currentStep = 'intro';
+    const checklistMap = {
+      intro: 'intro',
+      branded: 'brandedTracking',
+      feed: 'productFeed',
+      assets: 'assets',
+      ip: 'ipAddresses',
+      scripts: 'trackingScripts'
+    };
+
+    // STATE - Single conversation history
     let sessionId = generateSessionId();
-    let histories = {};
+    let conversationHistory = []; // Array of {role, content, step, timestamp}
+    let currentStep = 'intro';
     let onboardingData = {};
     let checklist = { intro: false, brandedTracking: false, productFeed: false, assets: false, ipAddresses: false, trackingScripts: false };
     let uploadedFiles = { logo: [], banners: [], terms: [], other: [] };
 
     // DOM
-    const stepTitle = document.getElementById('step-title');
-    const stepSubtitle = document.getElementById('step-subtitle');
+    const chatContainer = document.getElementById('chat-container');
     const navButtons = document.querySelectorAll('.step-nav-btn');
     const progressBar = document.getElementById('progress-bar');
     const progressPct = document.getElementById('progress-percentage');
@@ -323,180 +277,252 @@
     const otherInput = document.getElementById('other-input');
     const globalInput = document.getElementById('global-input');
     const globalSend = document.getElementById('global-send');
+    const uploadPanel = document.getElementById('upload-panel');
+    const toggleUploadBtn = document.getElementById('toggle-upload-panel');
+    const closeUploadBtn = document.getElementById('close-upload-panel');
 
     // STORAGE
     function saveState() {
-      localStorage.setItem('td_step', currentStep);
-      localStorage.setItem('td_histories', JSON.stringify(histories));
-      localStorage.setItem('td_onboarding_data', JSON.stringify(onboardingData));
-      localStorage.setItem('td_checklist', JSON.stringify(checklist));
-      localStorage.setItem('td_uploaded_files', JSON.stringify(uploadedFiles));
-      localStorage.setItem('td_has_visited', '1');
+      localStorage.setItem('td_v2_session', sessionId);
+      localStorage.setItem('td_v2_history', JSON.stringify(conversationHistory));
+      localStorage.setItem('td_v2_step', currentStep);
+      localStorage.setItem('td_v2_data', JSON.stringify(onboardingData));
+      localStorage.setItem('td_v2_checklist', JSON.stringify(checklist));
+      localStorage.setItem('td_v2_files', JSON.stringify(uploadedFiles));
     }
 
     function loadState() {
-      const s = localStorage.getItem('td_step');
-      const h = localStorage.getItem('td_histories');
-      const d = localStorage.getItem('td_onboarding_data');
-      const c = localStorage.getItem('td_checklist');
-      const f = localStorage.getItem('td_uploaded_files');
-      if (s && STEPS.includes(s)) currentStep = s;
-      histories = h ? JSON.parse(h) : {};
-      onboardingData = d ? JSON.parse(d) : {};
-      checklist = c ? JSON.parse(c) : checklist;
-      uploadedFiles = f ? JSON.parse(f) : uploadedFiles;
+      const s = localStorage.getItem('td_v2_session');
+      const h = localStorage.getItem('td_v2_history');
+      const st = localStorage.getItem('td_v2_step');
+      const d = localStorage.getItem('td_v2_data');
+      const c = localStorage.getItem('td_v2_checklist');
+      const f = localStorage.getItem('td_v2_files');
+
+      if (s) sessionId = s;
+      if (h) conversationHistory = JSON.parse(h);
+      if (st && STEPS.includes(st)) currentStep = st;
+      if (d) onboardingData = JSON.parse(d);
+      if (c) checklist = JSON.parse(c);
+      if (f) uploadedFiles = JSON.parse(f);
     }
 
     function resetOnboarding() {
-      localStorage.removeItem('td_step');
-      localStorage.removeItem('td_histories');
-      localStorage.removeItem('td_onboarding_data');
-      localStorage.removeItem('td_checklist');
-      localStorage.removeItem('td_uploaded_files');
-      localStorage.removeItem('td_has_visited');
+      localStorage.removeItem('td_v2_session');
+      localStorage.removeItem('td_v2_history');
+      localStorage.removeItem('td_v2_step');
+      localStorage.removeItem('td_v2_data');
+      localStorage.removeItem('td_v2_checklist');
+      localStorage.removeItem('td_v2_files');
       location.reload();
     }
 
     // INIT
     loadState();
-    const hasVisitedBefore = localStorage.getItem('td_has_visited') === '1';
 
-    STEPS.forEach((step) => {
-      if (!Array.isArray(histories[step])) histories[step] = [];
-    });
-
-    if (!hasVisitedBefore && histories.intro.length === 0) {
-      histories.intro.push({
+    // Add welcome message if new session
+    if (conversationHistory.length === 0) {
+      conversationHistory.push({
         role: 'assistant',
-        content: "Hi! 👋 I'm your Tradedoubler onboarding assistant.\n\nWe'll go through your setup step by step.\n\nLet's start with a quick introduction. What's your name and company?",
+        content: "Hi! I'm your Tradedoubler onboarding assistant.\n\nI'll walk you through your technical setup step-by-step.\n\nWhat you'll need from you:\n\n• Website domain\n\n• Product feed URL\n\n• Office IP addresses\n\n• Company logos & banners\n\nWhat requires your technical team:\n\n• DNS/CNAME setup (I'll provide exact records)\n\n• Tracking script integration (I'll provide the code)\n\n• Test transaction (I'll provide test link)\n\nDon't have everything ready? That's fine! We can pause at any step and you can provide information later. I'll make a note of what's pending.\n\nNeed to understand something better? Just ask!\n\nLet's get started! What's your name, company, and email address?",
+        step: 'intro',
+        timestamp: Date.now()
       });
+      saveState();
     }
 
-    if (hasVisitedBefore && histories[currentStep].length > 0) {
-      histories[currentStep].unshift({
-        role: 'assistant',
-        content: "Welcome back 👋 Here's where we left off last time. We can continue from this step or jump to any step in the sidebar.",
-      });
-    }
-
-    navButtons.forEach((btn) => {
-      btn.addEventListener('click', () => {
-        const step = btn.getAttribute('data-step');
-        goToStep(step);
-      });
-    });
-
-    if (globalSend) globalSend.addEventListener('click', () => sendMessage());
-    if (globalInput) {
-      globalInput.addEventListener('keypress', (e) => {
-        if (e.key === 'Enter' && !e.shiftKey) {
-          e.preventDefault();
-          sendMessage();
-        }
-      });
-    }
-
-    if (logoInput) logoInput.addEventListener('change', (e) => handleFileUpload(e, 'logo', 'logo-list'));
-    if (bannersInput) bannersInput.addEventListener('change', (e) => handleFileUpload(e, 'banners', 'banners-list'));
-    if (termsInput) termsInput.addEventListener('change', (e) => handleFileUpload(e, 'terms', 'terms-list'));
-    if (otherInput) otherInput.addEventListener('change', (e) => handleFileUpload(e, 'other', 'other-list'));
-    if (sendAllFilesBtn) sendAllFilesBtn.addEventListener('click', sendAllFiles);
-
-    goToStep(currentStep);
+    // Render conversation
+    renderConversation();
     updateChecklistUI();
     updateDataSummary();
     updateFileLists();
     updateSendAllButton();
+    highlightCurrentStep();
 
-    // CORE
+    // Event listeners
+    navButtons.forEach((btn) => {
+      btn.addEventListener('click', () => {
+        const step = btn.getAttribute('data-step');
+        scrollToStep(step);
+      });
+    });
+
+    globalSend.addEventListener('click', () => sendMessage());
+    globalInput.addEventListener('keypress', (e) => {
+      if (e.key === 'Enter' && !e.shiftKey) {
+        e.preventDefault();
+        sendMessage();
+      }
+    });
+
+    logoInput.addEventListener('change', (e) => handleFileUpload(e, 'logo', 'logo-list'));
+    bannersInput.addEventListener('change', (e) => handleFileUpload(e, 'banners', 'banners-list'));
+    termsInput.addEventListener('change', (e) => handleFileUpload(e, 'terms', 'terms-list'));
+    otherInput.addEventListener('change', (e) => handleFileUpload(e, 'other', 'other-list'));
+    sendAllFilesBtn.addEventListener('click', sendAllFiles);
+
+    toggleUploadBtn.addEventListener('click', () => {
+      uploadPanel.classList.remove('hidden');
+    });
+    closeUploadBtn.addEventListener('click', () => {
+      uploadPanel.classList.add('hidden');
+    });
+
+    // CORE FUNCTIONS
     function generateSessionId() {
       return 'session_' + Date.now() + '_' + Math.random().toString(36).slice(2, 10);
     }
 
-    function goToStep(step) {
-      if (!STEPS.includes(step)) step = 'intro';
-      currentStep = step;
-      document.querySelectorAll('.step-page').forEach((s) => s.classList.add('hidden'));
-      document.getElementById('step-' + step).classList.remove('hidden');
-      stepTitle.textContent = stepMeta[step].title;
-      stepSubtitle.textContent = stepMeta[step].subtitle;
+    function renderConversation() {
+      chatContainer.innerHTML = '';
+      let lastStep = null;
+
+      conversationHistory.forEach((msg, index) => {
+        // Add step marker if step changed
+        if (msg.step && msg.step !== lastStep) {
+          addStepMarker(msg.step);
+          lastStep = msg.step;
+        }
+        addMessageToDOM(msg.role, msg.content, msg.step, false);
+      });
+
+      // Scroll to bottom
+      scrollToBottom();
+    }
+
+    function addStepMarker(step) {
+      const meta = stepMeta[step];
+      if (!meta) return;
+
+      const marker = document.createElement('div');
+      marker.id = `step-marker-${step}`;
+      marker.className = 'step-marker flex items-center gap-3 py-4 my-2';
+      marker.innerHTML = `
+        <div class="flex-1 h-px bg-gray-200"></div>
+        <div class="flex items-center gap-2 px-3 py-1 bg-gray-100 rounded-full">
+          <span class="text-xs font-medium text-gray-600">${meta.title}</span>
+        </div>
+        <div class="flex-1 h-px bg-gray-200"></div>
+      `;
+      chatContainer.appendChild(marker);
+    }
+
+    function addMessageToDOM(role, content, step, animate = true) {
+      const wrapper = document.createElement('div');
+      wrapper.className = `flex ${role === 'user' ? 'justify-end' : 'justify-start'}`;
+      if (step) wrapper.setAttribute('data-step', step);
+
+      const inner = document.createElement('div');
+      inner.className = 'max-w-[1100px] w-full flex flex-col ' + (role === 'user' ? 'items-end' : 'items-start');
+
+      const bubble = document.createElement('div');
+      bubble.className = role === 'user'
+        ? 'max-w-2xl px-3 py-2 rounded-[14px] text-sm bg-gray-100 text-gray-900 shadow-md' + (animate ? ' chat-message' : '')
+        : 'max-w-2xl px-3 py-2 rounded-[14px] text-sm bg-[#2A73FF] text-white shadow-md' + (animate ? ' chat-message' : '');
+
+      bubble.innerHTML = content.split('\n').map((line) => {
+        if (!line.trim()) return '<p class="mb-1">&nbsp;</p>';
+        if (line.startsWith('•') || line.startsWith('-')) return `<p class="ml-4">${line}</p>`;
+        return `<p class="mb-1">${line}</p>`;
+      }).join('');
+
+      const timestamp = document.createElement('div');
+      timestamp.className = 'text-xs text-gray-400 mt-1 px-1';
+      timestamp.textContent = new Date().toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit' });
+
+      inner.appendChild(bubble);
+      inner.appendChild(timestamp);
+      wrapper.appendChild(inner);
+      chatContainer.appendChild(wrapper);
+    }
+
+    function scrollToStep(step) {
+      const marker = document.getElementById(`step-marker-${step}`);
+      if (marker) {
+        marker.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      } else {
+        // No messages for this step yet - scroll to bottom and set as current
+        currentStep = step;
+        highlightCurrentStep();
+        scrollToBottom();
+      }
+    }
+
+    function scrollToBottom() {
+      requestAnimationFrame(() => {
+        chatContainer.scrollTop = chatContainer.scrollHeight;
+        setTimeout(() => {
+          chatContainer.scrollTop = chatContainer.scrollHeight;
+        }, 150);
+      });
+    }
+
+    function highlightCurrentStep() {
       navButtons.forEach((btn) => {
         const s = btn.getAttribute('data-step');
-        if (s === step) {
+        if (s === currentStep) {
           btn.classList.add('bg-[#2A73FF]', 'text-white', 'shadow-md');
         } else {
           btn.classList.remove('bg-[#2A73FF]', 'text-white', 'shadow-md');
         }
       });
-      const chatEl = document.getElementById('chat-' + step);
-      chatEl.innerHTML = '';
-      histories[step].forEach((m) => addMessageToChat(step, m.role, m.content));
-
-      // Ensure scroll to bottom after all messages are loaded
-      const scrollToBottom = () => {
-        chatEl.scrollTop = chatEl.scrollHeight;
-      };
-
-      requestAnimationFrame(() => {
-        scrollToBottom();
-        // Allow time for all message animations to complete
-        setTimeout(scrollToBottom, 150);
-        setTimeout(scrollToBottom, 350);
-      });
-
-      saveState();
     }
 
     async function sendMessage() {
-      if (!globalInput) return;
-      let text = globalInput.value.trim();
+      const text = globalInput.value.trim();
       if (!text) return;
 
-      let step = currentStep;
+      // Detect if user is talking about a specific topic and update current step
       const lower = text.toLowerCase();
-
-      if (
-        step !== 'assets' &&
-        (lower.includes('upload') || lower.includes('banner') || lower.includes('logo') ||
-          lower.includes('creative') || lower.includes('t&c') || lower.includes('terms'))
-      ) {
-        step = 'assets';
-        goToStep('assets');
+      if (lower.includes('upload') || lower.includes('banner') || lower.includes('logo') || lower.includes('asset')) {
+        currentStep = 'assets';
+      } else if (lower.includes('dns') || lower.includes('cname') || lower.includes('branded') || lower.includes('subdomain')) {
+        currentStep = 'branded';
+      } else if (lower.includes('feed') || lower.includes('product')) {
+        currentStep = 'feed';
+      } else if (lower.includes('ip') || lower.includes('office')) {
+        currentStep = 'ip';
+      } else if (lower.includes('script') || lower.includes('tag') || lower.includes('tracking code')) {
+        currentStep = 'scripts';
       }
 
-      const chatEl = document.getElementById('chat-' + step);
-      if (!chatEl) return;
+      // Check if we need to add a step marker
+      const lastMsg = conversationHistory[conversationHistory.length - 1];
+      const needsMarker = !lastMsg || lastMsg.step !== currentStep;
 
-      histories[step].push({ role: 'user', content: text });
-      addMessageToChat(step, 'user', text);
+      // Add user message
+      const userMsg = { role: 'user', content: text, step: currentStep, timestamp: Date.now() };
+      conversationHistory.push(userMsg);
+
+      if (needsMarker) {
+        addStepMarker(currentStep);
+      }
+      addMessageToDOM('user', text, currentStep, true);
       globalInput.value = '';
+      highlightCurrentStep();
+      scrollToBottom();
+      saveState();
 
-      const loadingId = addLoadingIndicator(step);
+      // Show loading
+      const loadingId = addLoadingIndicator();
 
       try {
-        // Build full conversation history from ALL steps (not just current)
-        const fullHistory = [];
-        STEPS.forEach(s => {
-          if (histories[s] && histories[s].length > 0) {
-            fullHistory.push(...histories[s]);
-          }
-        });
-        // Keep only last 12 messages total to avoid token limits
-        const trimmedHistory = fullHistory.slice(-12);
-        
+        // Build trimmed history for API (last 12 messages)
+        const trimmedHistory = conversationHistory.slice(-12).map(m => ({ role: m.role, content: m.content }));
+
         const totalFiles = Object.values(uploadedFiles).reduce((sum, arr) => sum + (arr ? arr.length : 0), 0);
-        const filesPayload = step === 'assets' && totalFiles > 0 && text.toLowerCase().includes('upload') ? uploadedFiles : {};
+        const filesPayload = totalFiles > 0 && lower.includes('upload') ? uploadedFiles : {};
 
         const response = await fetch(N8N_WEBHOOK_URL, {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({
             sessionId,
-            step,
+            step: currentStep,
             message: text,
             conversationHistory: trimmedHistory,
-            onboardingData: onboardingData,
-            checklist: checklist,
+            onboardingData,
+            checklist,
             uploadedFiles: filesPayload,
           }),
         });
@@ -504,68 +530,36 @@
         const data = await response.json();
         removeLoadingIndicator(loadingId);
 
-        histories[step].push({ role: 'assistant', content: data.response });
-        addMessageToChat(step, 'assistant', data.response);
+        // Add assistant response
+        const assistantMsg = { role: 'assistant', content: data.response, step: currentStep, timestamp: Date.now() };
+        conversationHistory.push(assistantMsg);
+        addMessageToDOM('assistant', data.response, currentStep, true);
 
+        // Update state from response
         if (data.onboardingData) onboardingData = data.onboardingData;
         if (data.checklist) checklist = data.checklist;
-        if (data.triggerGoToStep && STEPS.includes(data.triggerGoToStep)) goToStep(data.triggerGoToStep);
+
+        // If backend suggests a step change
+        if (data.triggerGoToStep && STEPS.includes(data.triggerGoToStep)) {
+          currentStep = data.triggerGoToStep;
+          highlightCurrentStep();
+        }
 
         updateChecklistUI();
         updateDataSummary();
+        scrollToBottom();
         saveState();
       } catch (err) {
         console.error(err);
         removeLoadingIndicator(loadingId);
-        const msg = 'I ran into an issue responding just now. Please try again in a moment.';
-        histories[step].push({ role: 'assistant', content: msg });
-        addMessageToChat(step, 'assistant', msg);
+        const errorMsg = { role: 'assistant', content: 'I ran into an issue responding just now. Please try again in a moment.', step: currentStep, timestamp: Date.now() };
+        conversationHistory.push(errorMsg);
+        addMessageToDOM('assistant', errorMsg.content, currentStep, true);
       }
     }
 
-    function addMessageToChat(step, role, content) {
-      const chatEl = document.getElementById('chat-' + step);
-      if (!chatEl) return;
-      const wrapper = document.createElement('div');
-      wrapper.className = `flex ${role === 'user' ? 'justify-end' : 'justify-start'}`;
-      const inner = document.createElement('div');
-      inner.className = 'max-w-[1100px] w-full flex flex-col ' + (role === 'user' ? 'items-end' : 'items-start');
-      const bubble = document.createElement('div');
-      bubble.className = role === 'user'
-        ? 'max-w-2xl px-3 py-2 rounded-[14px] text-sm chat-message bg-gray-100 text-gray-900 shadow-md'
-        : 'max-w-2xl px-3 py-2 rounded-[14px] text-sm chat-message bg-[#2A73FF] text-white shadow-md';
-      bubble.innerHTML = content.split('\n').map((line) => {
-        if (!line.trim()) return '<p class="mb-1">&nbsp;</p>';
-        if (line.startsWith('•') || line.startsWith('-')) return `<p class="ml-4">${line}</p>`;
-        return `<p class="mb-1">${line}</p>`;
-      }).join('');
-      const timestamp = document.createElement('div');
-      timestamp.className = 'text-xs text-gray-400 mt-1 px-1';
-      const now = new Date();
-      timestamp.textContent = now.toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit' });
-      inner.appendChild(bubble);
-      inner.appendChild(timestamp);
-      wrapper.appendChild(inner);
-      chatEl.appendChild(wrapper);
-
-      // Scroll to bottom - use scrollTop which respects the pb-16 padding
-      const scrollToBottom = () => {
-        chatEl.scrollTop = chatEl.scrollHeight;
-      };
-
-      // Initial scroll after DOM update
-      requestAnimationFrame(() => {
-        scrollToBottom();
-        // Retry after animation completes (animation is 250ms)
-        setTimeout(scrollToBottom, 150);
-        setTimeout(scrollToBottom, 300);
-      });
-    }
-
-    function addLoadingIndicator(step) {
-      const chatEl = document.getElementById('chat-' + step);
-      if (!chatEl) return;
-      const id = `loading_${step}_${Date.now()}`;
+    function addLoadingIndicator() {
+      const id = `loading_${Date.now()}`;
       const wrapper = document.createElement('div');
       wrapper.id = id;
       wrapper.className = 'flex justify-start';
@@ -573,17 +567,8 @@
       inner.className = 'max-w-[1100px] w-full flex justify-start';
       inner.innerHTML = `<div class="px-3 py-2 rounded-[14px] bg-white border border-gray-200"><div class="flex gap-1"><div class="w-2 h-2 rounded-full bg-[#2A73FF] pulse-loader"></div><div class="w-2 h-2 rounded-full bg-[#2A73FF] pulse-loader" style="animation-delay:0.15s"></div><div class="w-2 h-2 rounded-full bg-[#2A73FF] pulse-loader" style="animation-delay:0.3s"></div></div></div>`;
       wrapper.appendChild(inner);
-      chatEl.appendChild(wrapper);
-
-      // Scroll to bottom
-      const scrollToBottom = () => {
-        chatEl.scrollTop = chatEl.scrollHeight;
-      };
-
-      requestAnimationFrame(() => {
-        scrollToBottom();
-        setTimeout(scrollToBottom, 100);
-      });
+      chatContainer.appendChild(wrapper);
+      scrollToBottom();
       return id;
     }
 
@@ -598,6 +583,18 @@
       const pct = Math.round((doneCount / total) * 100);
       progressPct.textContent = `${pct}%`;
       progressBar.style.width = `${pct}%`;
+
+      // Update checkmarks on nav buttons
+      navButtons.forEach((btn) => {
+        const step = btn.getAttribute('data-step');
+        const checkKey = checklistMap[step];
+        const checkEl = btn.querySelector('.step-check');
+        if (checkEl && checklist[checkKey]) {
+          checkEl.classList.remove('hidden');
+        } else if (checkEl) {
+          checkEl.classList.add('hidden');
+        }
+      });
     }
 
     function updateDataSummary() {
@@ -655,7 +652,6 @@
     }
 
     function updateSendAllButton() {
-      if (!sendAllFilesBtn) return;
       const totalFiles = Object.values(uploadedFiles).reduce((sum, arr) => sum + (arr ? arr.length : 0), 0);
       sendAllFilesBtn.disabled = totalFiles === 0;
       sendAllFilesBtn.textContent = totalFiles > 0 ? `Send All Files (${totalFiles})` : 'Send All Files';
@@ -665,10 +661,9 @@
       const totalFiles = Object.values(uploadedFiles).reduce((sum, arr) => sum + (arr ? arr.length : 0), 0);
       if (totalFiles === 0) return;
       const filesSummary = Object.entries(uploadedFiles).filter(([_, files]) => files && files.length > 0).map(([category, files]) => `${category}: ${files.length} file(s)`).join(', ');
-      if (globalInput) {
-        globalInput.value = `I'm uploading ${totalFiles} files: ${filesSummary}`;
-        await sendMessage();
-      }
+      globalInput.value = `I'm uploading ${totalFiles} files: ${filesSummary}`;
+      uploadPanel.classList.add('hidden');
+      await sendMessage();
     }
   </script>
 </body>
