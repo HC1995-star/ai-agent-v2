@@ -332,6 +332,7 @@
     }
 
     // Render conversation
+    normalizeConversationSteps();
     renderConversation();
     updateChecklistUI();
     updateDataSummary();
@@ -369,6 +370,67 @@
     });
 
     // CORE FUNCTIONS
+    function escapeRegExp(value) {
+      return value.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+    }
+
+    function inferStepFromText(text) {
+      if (!text) return null;
+      const lower = text.toLowerCase();
+
+      const stepKeywords = {
+        intro: ['name', 'company', 'email'],
+        branded: ['branded tracking', 'cname', 'subdomain', 'dns', 'visit.', 'statics.', 'branded'],
+        feed: ['product feed', 'feed url', 'feed', 'catalog'],
+        assets: ['upload', 'logo', 'banner', 'asset', 't&c', 'terms', 'document'],
+        ip: ['ip address', 'ip addresses', 'office ip', 'whitelist', 'exclude ip'],
+        scripts: ['tracking script', 'tracking code', 'tag', 'pixel', 'script'],
+      };
+
+      const priority = ['feed', 'assets', 'scripts', 'ip', 'branded', 'intro'];
+      let bestStep = null;
+      let bestScore = 0;
+
+      Object.entries(stepKeywords).forEach(([step, keywords]) => {
+        let score = 0;
+        keywords.forEach((keyword) => {
+          if (keyword.includes(' ') || keyword.includes('.')) {
+            if (lower.includes(keyword)) score += 1;
+            return;
+          }
+          const pattern = new RegExp(`\\b${escapeRegExp(keyword)}\\b`, 'i');
+          if (pattern.test(lower)) score += 1;
+        });
+
+        if (score > bestScore) {
+          bestScore = score;
+          bestStep = step;
+        } else if (score > 0 && score === bestScore) {
+          if (priority.indexOf(step) < priority.indexOf(bestStep)) {
+            bestStep = step;
+          }
+        }
+      });
+
+      return bestScore > 0 ? bestStep : null;
+    }
+
+    function normalizeConversationSteps() {
+      let updated = false;
+      conversationHistory.forEach((msg) => {
+        const inferred = inferStepFromText(msg.content);
+        if (inferred && msg.step !== inferred) {
+          msg.step = inferred;
+          updated = true;
+        }
+      });
+      if (conversationHistory.length > 0) {
+        const lastStep = conversationHistory[conversationHistory.length - 1].step;
+        if (lastStep && lastStep !== currentStep) currentStep = lastStep;
+      }
+      if (updated) saveState();
+    }
+
     function generateSessionId() {
       return 'session_' + Date.now() + '_' + Math.random().toString(36).slice(2, 10);
     }
@@ -473,18 +535,8 @@
       if (!text) return;
 
       // Detect if user is talking about a specific topic and update current step
-      const lower = text.toLowerCase();
-      if (lower.includes('upload') || lower.includes('banner') || lower.includes('logo') || lower.includes('asset')) {
-        currentStep = 'assets';
-      } else if (lower.includes('dns') || lower.includes('cname') || lower.includes('branded') || lower.includes('subdomain')) {
-        currentStep = 'branded';
-      } else if (lower.includes('feed') || lower.includes('product')) {
-        currentStep = 'feed';
-      } else if (lower.includes('ip') || lower.includes('office')) {
-        currentStep = 'ip';
-      } else if (lower.includes('script') || lower.includes('tag') || lower.includes('tracking code')) {
-        currentStep = 'scripts';
-      }
+      const inferredUserStep = inferStepFromText(text);
+      if (inferredUserStep) currentStep = inferredUserStep;
 
       // Check if we need to add a step marker
       const lastMsg = conversationHistory[conversationHistory.length - 1];
@@ -511,6 +563,7 @@
         const trimmedHistory = conversationHistory.slice(-12).map(m => ({ role: m.role, content: m.content }));
 
         const totalFiles = Object.values(uploadedFiles).reduce((sum, arr) => sum + (arr ? arr.length : 0), 0);
+        const lower = text.toLowerCase();
         const filesPayload = totalFiles > 0 && lower.includes('upload') ? uploadedFiles : {};
 
         const response = await fetch(N8N_WEBHOOK_URL, {
@@ -531,17 +584,25 @@
         removeLoadingIndicator(loadingId);
 
         // Add assistant response
-        const assistantMsg = { role: 'assistant', content: data.response, step: currentStep, timestamp: Date.now() };
+        let responseStep = currentStep;
+        if (data.triggerGoToStep && STEPS.includes(data.triggerGoToStep)) {
+          responseStep = data.triggerGoToStep;
+        } else {
+          const inferredAssistantStep = inferStepFromText(data.response);
+          if (inferredAssistantStep) responseStep = inferredAssistantStep;
+        }
+
+        const assistantMsg = { role: 'assistant', content: data.response, step: responseStep, timestamp: Date.now() };
         conversationHistory.push(assistantMsg);
-        addMessageToDOM('assistant', data.response, currentStep, true);
+        addMessageToDOM('assistant', data.response, responseStep, true);
 
         // Update state from response
         if (data.onboardingData) onboardingData = data.onboardingData;
         if (data.checklist) checklist = data.checklist;
 
-        // If backend suggests a step change
-        if (data.triggerGoToStep && STEPS.includes(data.triggerGoToStep)) {
-          currentStep = data.triggerGoToStep;
+        // If backend suggests a step change or we inferred one
+        if (responseStep && STEPS.includes(responseStep)) {
+          currentStep = responseStep;
           highlightCurrentStep();
         }
 
