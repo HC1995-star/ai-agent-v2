@@ -378,6 +378,15 @@
       if (!text) return null;
       const lower = text.toLowerCase();
 
+      if (
+        lower.includes("i'll walk you through") ||
+        lower.includes("what you'll need from you") ||
+        lower.includes("let's get started") ||
+        lower.includes("what requires your technical team")
+      ) {
+        return 'intro';
+      }
+
       const stepKeywords = {
         intro: ['name', 'company', 'email'],
         branded: ['branded tracking', 'cname', 'subdomain', 'dns', 'visit.', 'statics.', 'branded'],
@@ -417,17 +426,20 @@
 
     function normalizeConversationSteps() {
       let updated = false;
+      let stepCursor = currentStep || 'intro';
+
       conversationHistory.forEach((msg) => {
-        const inferred = inferStepFromText(msg.content);
-        if (inferred && msg.step !== inferred) {
-          msg.step = inferred;
+        if (msg.role === 'assistant') {
+          const inferred = inferStepFromText(msg.content);
+          if (inferred) stepCursor = inferred;
+        }
+        if (msg.step !== stepCursor) {
+          msg.step = stepCursor;
           updated = true;
         }
       });
-      if (conversationHistory.length > 0) {
-        const lastStep = conversationHistory[conversationHistory.length - 1].step;
-        if (lastStep && lastStep !== currentStep) currentStep = lastStep;
-      }
+
+      if (stepCursor && stepCursor !== currentStep) currentStep = stepCursor;
       if (updated) saveState();
     }
 
@@ -533,10 +545,6 @@
     async function sendMessage() {
       const text = globalInput.value.trim();
       if (!text) return;
-
-      // Detect if user is talking about a specific topic and update current step
-      const inferredUserStep = inferStepFromText(text);
-      if (inferredUserStep) currentStep = inferredUserStep;
 
       // Check if we need to add a step marker
       const lastMsg = conversationHistory[conversationHistory.length - 1];
