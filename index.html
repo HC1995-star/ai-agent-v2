@@ -387,29 +387,77 @@
         return 'intro';
       }
 
+      const transitionPhrases = [
+        'next step',
+        'move on to',
+        'moving on to',
+        'proceed to',
+        'let\'s talk about',
+        'now let\'s',
+        'we can move to',
+        'we can move on to',
+        'we can proceed to',
+      ];
+      const hasTransition = transitionPhrases.some((phrase) => lower.includes(phrase));
+
       const stepKeywords = {
-        intro: ['name', 'company', 'email'],
-        branded: ['branded tracking', 'cname', 'subdomain', 'dns', 'visit.', 'statics.', 'branded'],
-        feed: ['product feed', 'feed url', 'feed', 'catalog'],
-        assets: ['upload', 'logo', 'banner', 'asset', 't&c', 'terms', 'document'],
-        ip: ['ip address', 'ip addresses', 'office ip', 'whitelist', 'exclude ip'],
-        scripts: ['tracking script', 'tracking code', 'tag', 'pixel', 'script'],
+        intro: {
+          strong: ['what\'s your name', 'what is your name', 'email address', 'name and company', 'name, company'],
+          weak: ['name', 'company', 'email'],
+        },
+        branded: {
+          strong: ['branded tracking', 'cname', 'subdomain', 'visit.', 'statics.'],
+          weak: ['dns', 'branded'],
+        },
+        feed: {
+          strong: ['product feed', 'product feeds', 'feed url', 'productfeed'],
+          weak: ['feed', 'catalog'],
+        },
+        assets: {
+          strong: ['program assets', 'terms and conditions', 't&c', 't&cs'],
+          weak: ['upload', 'logo', 'logos', 'banner', 'banners', 'asset', 'assets', 'document', 'documents', 'terms'],
+        },
+        ip: {
+          strong: ['ip address', 'ip addresses', 'office ip', 'office ips', 'ip list'],
+          weak: ['ip', 'ips', 'whitelist', 'exclude ip'],
+        },
+        scripts: {
+          strong: ['tracking script', 'tracking scripts', 'tracking code', 'tracking tag'],
+          weak: ['script', 'scripts', 'tag', 'tags', 'pixel', 'snippet'],
+        },
       };
 
       const priority = ['feed', 'assets', 'scripts', 'ip', 'branded', 'intro'];
       let bestStep = null;
       let bestScore = 0;
+      let matchedSteps = [];
 
-      Object.entries(stepKeywords).forEach(([step, keywords]) => {
-        let score = 0;
-        keywords.forEach((keyword) => {
+      Object.entries(stepKeywords).forEach(([step, keywordGroups]) => {
+        let strongHits = 0;
+        let weakHits = 0;
+
+        keywordGroups.strong.forEach((keyword) => {
           if (keyword.includes(' ') || keyword.includes('.')) {
-            if (lower.includes(keyword)) score += 1;
+            if (lower.includes(keyword)) strongHits += 1;
             return;
           }
           const pattern = new RegExp(`\\b${escapeRegExp(keyword)}\\b`, 'i');
-          if (pattern.test(lower)) score += 1;
+          if (pattern.test(lower)) strongHits += 1;
         });
+
+        keywordGroups.weak.forEach((keyword) => {
+          if (keyword.includes(' ') || keyword.includes('.')) {
+            if (lower.includes(keyword)) weakHits += 1;
+            return;
+          }
+          const pattern = new RegExp(`\\b${escapeRegExp(keyword)}\\b`, 'i');
+          if (pattern.test(lower)) weakHits += 1;
+        });
+
+        const score = strongHits * 2 + weakHits;
+        const qualifies = score > 0 && (hasTransition || strongHits > 0 || weakHits >= 2);
+
+        if (qualifies) matchedSteps.push(step);
 
         if (score > bestScore) {
           bestScore = score;
@@ -421,7 +469,9 @@
         }
       });
 
-      return bestScore > 0 ? bestStep : null;
+      if (matchedSteps.length === 0) return null;
+      if (!hasTransition && matchedSteps.length > 1) return null;
+      return bestStep;
     }
 
     function normalizeConversationSteps() {
