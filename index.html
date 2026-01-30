@@ -52,41 +52,54 @@
   <div class="flex h-screen">
     <!-- Sidebar -->
     <aside class="w-80 bg-white border-r border-gray-200 p-5 flex flex-col sticky top-0 h-screen overflow-y-auto">
-      <div class="flex items-center justify-between mb-5">
+      <div class="flex items-center justify-between mb-3">
         <div>
           <h1 class="text-xl font-semibold text-[#2A73FF]">Tradedoubler</h1>
-          <p class="text-xs text-gray-500">AI Onboarding Assistant</p>
+          <p class="text-xs text-gray-500" data-i18n="sidebar.subtitle">AI Onboarding Assistant</p>
         </div>
+      </div>
+      <div class="mb-5">
+        <label for="language-select" class="text-[11px] font-semibold text-gray-500" data-i18n="sidebar.languageLabel">Language</label>
+        <select
+          id="language-select"
+          class="mt-1 w-full text-xs border border-gray-200 rounded-lg px-2 py-1.5 bg-white text-gray-700 focus:outline-none focus:ring-2 focus:ring-[#2A73FF] focus:border-transparent"
+        >
+          <option value="en">English</option>
+          <option value="es">Español</option>
+          <option value="fr">Français</option>
+          <option value="it">Italiano</option>
+          <option value="de">Deutsch</option>
+        </select>
       </div>
 
       <!-- Steps nav -->
       <div class="mb-5">
-        <h2 class="text-xs font-semibold text-gray-500 mb-2">
+        <h2 class="text-xs font-semibold text-gray-500 mb-2" data-i18n="sidebar.onboardingSteps">
           Onboarding steps
         </h2>
         <nav id="steps-nav" class="space-y-1 text-sm">
           <button data-step="intro" class="step-nav-btn w-full flex items-center justify-between px-3 py-2 rounded-lg text-left hover:bg-gray-100">
-            <span>1. Introduction</span>
+            <span class="step-label">1. Introduction</span>
             <span class="step-check hidden text-green-500">✓</span>
           </button>
           <button data-step="branded" class="step-nav-btn w-full flex items-center justify-between px-3 py-2 rounded-lg text-left hover:bg-gray-100">
-            <span>2. Branded Tracking</span>
+            <span class="step-label">2. Branded Tracking</span>
             <span class="step-check hidden text-green-500">✓</span>
           </button>
           <button data-step="feed" class="step-nav-btn w-full flex items-center justify-between px-3 py-2 rounded-lg text-left hover:bg-gray-100">
-            <span>3. Product Feed</span>
+            <span class="step-label">3. Product Feed</span>
             <span class="step-check hidden text-green-500">✓</span>
           </button>
           <button data-step="assets" class="step-nav-btn w-full flex items-center justify-between px-3 py-2 rounded-lg text-left hover:bg-gray-100">
-            <span>4. Program Assets</span>
+            <span class="step-label">4. Program Assets</span>
             <span class="step-check hidden text-green-500">✓</span>
           </button>
           <button data-step="ip" class="step-nav-btn w-full flex items-center justify-between px-3 py-2 rounded-lg text-left hover:bg-gray-100">
-            <span>5. IP Addresses</span>
+            <span class="step-label">5. IP Addresses</span>
             <span class="step-check hidden text-green-500">✓</span>
           </button>
           <button data-step="scripts" class="step-nav-btn w-full flex items-center justify-between px-3 py-2 rounded-lg text-left hover:bg-gray-100">
-            <span>6. Tracking Scripts</span>
+            <span class="step-label">6. Tracking Scripts</span>
             <span class="step-check hidden text-green-500">✓</span>
           </button>
         </nav>
@@ -95,7 +108,7 @@
       <!-- Progress -->
       <div class="mb-5">
         <div class="flex items-center justify-between mb-1">
-          <span class="text-xs font-medium text-gray-600">Overall Progress</span>
+          <span class="text-xs font-medium text-gray-600" data-i18n="sidebar.overallProgress">Overall Progress</span>
           <span id="progress-percentage" class="text-xs font-semibold text-[#2A73FF]">0%</span>
         </div>
         <div class="w-full h-1.5 rounded-full bg-gray-200 overflow-hidden">
@@ -111,21 +124,21 @@
         <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
           <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"/>
         </svg>
-        Upload Assets
+        <span data-i18n="sidebar.uploadAssets">Upload Assets</span>
       </button>
 
       <!-- Summary -->
       <div class="mt-auto pt-4 border-t border-gray-200">
-        <h3 class="text-xs font-semibold text-gray-500 mb-1">Collected Data</h3>
+        <h3 class="text-xs font-semibold text-gray-500 mb-1" data-i18n="sidebar.collectedData">Collected Data</h3>
         <div id="data-summary" class="text-xs text-gray-600 space-y-0.5">
-          <p>No data collected yet</p>
+          <p data-i18n="sidebar.noData">No data collected yet</p>
         </div>
 
         <button
           onclick="resetOnboarding()"
           class="mt-3 w-full px-3 py-1.5 rounded-lg border border-red-200 text-[11px] text-red-600 hover:bg-red-50"
         >
-          Reset onboarding
+          <span data-i18n="sidebar.resetOnboarding">Reset onboarding</span>
         </button>
       </div>
     </aside>
@@ -142,13 +155,14 @@
             id="global-input"
             type="text"
             placeholder="Type your message..."
+            data-i18n-placeholder="chat.placeholder"
             class="flex-1 px-3 py-2 text-sm border border-gray-300 rounded-xl bg-white text-gray-900 placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-[#2A73FF] focus:border-transparent"
           />
           <button
             id="global-send"
             class="px-4 py-2 bg-[#2A73FF] text-white text-sm rounded-xl hover:bg-[#1F5ED8] transition shadow-md"
           >
-            Send
+            <span data-i18n="chat.send">Send</span>
           </button>
         </div>
       </div>
@@ -157,7 +171,7 @@
       <div id="upload-panel" class="upload-panel hidden fixed top-0 right-0 w-96 h-full bg-white border-l border-gray-200 shadow-xl z-50 overflow-y-auto">
         <div class="p-4">
           <div class="flex items-center justify-between mb-4">
-            <h3 class="text-lg font-semibold text-gray-900">Upload Assets</h3>
+            <h3 class="text-lg font-semibold text-gray-900" data-i18n="uploadPanel.title">Upload Assets</h3>
             <button id="close-upload-panel" class="text-gray-500 hover:text-gray-700">
               <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
@@ -169,11 +183,11 @@
             <!-- Logo -->
             <div class="bg-[#F7F9FF] rounded-lg p-3 border border-gray-200">
               <div class="flex items-center justify-between mb-2">
-                <h4 class="text-xs font-medium text-gray-700">Logo</h4>
-                <span class="text-xs text-gray-500">350×130px</span>
+                <h4 class="text-xs font-medium text-gray-700" data-i18n="uploadPanel.logo">Logo</h4>
+                <span class="text-xs text-gray-500" data-i18n="uploadPanel.logoHint">350×130px</span>
               </div>
               <button onclick="document.getElementById('logo-input').click()" class="w-full flex items-center justify-center gap-2 px-3 py-2 bg-white border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors text-xs">
-                Upload Logo
+                <span data-i18n="uploadPanel.uploadLogo">Upload Logo</span>
               </button>
               <input type="file" id="logo-input" accept=".png,.jpg,.jpeg" class="hidden" />
               <div id="logo-list" class="mt-2 space-y-1"></div>
@@ -182,12 +196,12 @@
             <!-- Banners -->
             <div class="bg-[#F7F9FF] rounded-lg p-3 border border-gray-200">
               <div class="flex items-center justify-between mb-2">
-                <h4 class="text-xs font-medium text-gray-700">Banners</h4>
-                <span class="text-xs text-gray-500">Multiple sizes</span>
+                <h4 class="text-xs font-medium text-gray-700" data-i18n="uploadPanel.banners">Banners</h4>
+                <span class="text-xs text-gray-500" data-i18n="uploadPanel.bannersHint">Multiple sizes</span>
               </div>
-              <p class="text-xs text-gray-500 mb-2">160×600, 300×250, 300×600, 728×90, 928×70</p>
+              <p class="text-xs text-gray-500 mb-2" data-i18n="uploadPanel.bannerSizes">160×600, 300×250, 300×600, 728×90, 928×70</p>
               <button onclick="document.getElementById('banners-input').click()" class="w-full flex items-center justify-center gap-2 px-3 py-2 bg-white border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors text-xs">
-                Upload Banners
+                <span data-i18n="uploadPanel.uploadBanners">Upload Banners</span>
               </button>
               <input type="file" id="banners-input" accept=".jpg,.jpeg,.gif,.png" multiple class="hidden" />
               <div id="banners-list" class="mt-2 space-y-1"></div>
@@ -196,11 +210,11 @@
             <!-- Terms & Conditions -->
             <div class="bg-[#F7F9FF] rounded-lg p-3 border border-gray-200">
               <div class="flex items-center justify-between mb-2">
-                <h4 class="text-xs font-medium text-gray-700">Terms & Conditions</h4>
-                <span class="text-xs text-gray-500">PDF</span>
+                <h4 class="text-xs font-medium text-gray-700" data-i18n="uploadPanel.terms">Terms & Conditions</h4>
+                <span class="text-xs text-gray-500" data-i18n="uploadPanel.termsHint">PDF</span>
               </div>
               <button onclick="document.getElementById('terms-input').click()" class="w-full flex items-center justify-center gap-2 px-3 py-2 bg-white border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors text-xs">
-                Upload T&Cs
+                <span data-i18n="uploadPanel.uploadTerms">Upload T&Cs</span>
               </button>
               <input type="file" id="terms-input" accept=".pdf" class="hidden" />
               <div id="terms-list" class="mt-2 space-y-1"></div>
@@ -209,11 +223,11 @@
             <!-- Other Documents -->
             <div class="bg-[#F7F9FF] rounded-lg p-3 border border-gray-200">
               <div class="flex items-center justify-between mb-2">
-                <h4 class="text-xs font-medium text-gray-700">Other Documents</h4>
-                <span class="text-xs text-gray-500">Optional</span>
+                <h4 class="text-xs font-medium text-gray-700" data-i18n="uploadPanel.other">Other Documents</h4>
+                <span class="text-xs text-gray-500" data-i18n="uploadPanel.otherHint">Optional</span>
               </div>
               <button onclick="document.getElementById('other-input').click()" class="w-full flex items-center justify-center gap-2 px-3 py-2 bg-white border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors text-xs">
-                Upload Files
+                <span data-i18n="uploadPanel.uploadFiles">Upload Files</span>
               </button>
               <input type="file" id="other-input" multiple class="hidden" />
               <div id="other-list" class="mt-2 space-y-1"></div>
@@ -225,7 +239,7 @@
               class="w-full mt-1 px-4 py-2.5 bg-[#2A73FF] text-white rounded-lg hover:bg-[#1F5ED8] transition-colors text-sm font-medium shadow-md disabled:bg-gray-300 disabled:cursor-not-allowed"
               disabled
             >
-              Send All Files
+              <span data-i18n="uploadPanel.sendAll">Send All Files</span>
             </button>
           </div>
         </div>
@@ -236,16 +250,357 @@
   <script>
     // CONFIG
     const N8N_WEBHOOK_URL = 'https://coe-n8n.common-eu-de.services.tddrift.net/webhook/onboarding-chat';
+    const qs = new URLSearchParams(window.location.search);
+    const programID = qs.get('programID');
+    console.log('programID from page URL:', programID);
     const STEPS = ['intro', 'branded', 'feed', 'assets', 'ip', 'scripts'];
 
-    const stepMeta = {
-      intro: { title: 'Introduction', subtitle: 'Tell me who you are and which company you represent.' },
-      branded: { title: 'Branded Tracking', subtitle: 'Configure your visit.* and statics.* tracking domains.' },
-      feed: { title: 'Product Feed', subtitle: 'Share your product feed URL and format.' },
-      assets: { title: 'Program Assets', subtitle: 'Upload your logo, banners, T&Cs and documents.' },
-      ip: { title: 'IP Addresses', subtitle: 'Provide office IPs to exclude from tracking.' },
-      scripts: { title: 'Tracking Scripts', subtitle: 'Integrate your Tradedoubler tracking tags.' },
+    const SUPPORTED_LANGS = ['en', 'es', 'fr', 'it', 'de'];
+    const I18N = {
+      en: {
+        sidebar: {
+          subtitle: 'AI Onboarding Assistant',
+          languageLabel: 'Language',
+          onboardingSteps: 'Onboarding steps',
+          overallProgress: 'Overall Progress',
+          uploadAssets: 'Upload Assets',
+          collectedData: 'Collected Data',
+          noData: 'No data collected yet',
+          resetOnboarding: 'Reset onboarding',
+        },
+        steps: {
+          intro: 'Introduction',
+          branded: 'Branded Tracking',
+          feed: 'Product Feed',
+          assets: 'Program Assets',
+          ip: 'IP Addresses',
+          scripts: 'Tracking Scripts',
+        },
+        stepSubtitles: {
+          intro: 'Tell me who you are and which company you represent.',
+          branded: 'Configure your visit.* and statics.* tracking domains.',
+          feed: 'Share your product feed URL and format.',
+          assets: 'Upload your logo, banners, T&Cs and documents.',
+          ip: 'Provide office IPs to exclude from tracking.',
+          scripts: 'Integrate your Tradedoubler tracking tags.',
+        },
+        chat: {
+          placeholder: 'Type your message...',
+          send: 'Send',
+          uploadingFiles: "I'm uploading {count} files: {summary}",
+        },
+        uploadPanel: {
+          title: 'Upload Assets',
+          logo: 'Logo',
+          logoHint: '350×130px',
+          uploadLogo: 'Upload Logo',
+          banners: 'Banners',
+          bannersHint: 'Multiple sizes',
+          bannerSizes: '160×600, 300×250, 300×600, 728×90, 928×70',
+          uploadBanners: 'Upload Banners',
+          terms: 'Terms & Conditions',
+          termsHint: 'PDF',
+          uploadTerms: 'Upload T&Cs',
+          other: 'Other Documents',
+          otherHint: 'Optional',
+          uploadFiles: 'Upload Files',
+          sendAll: 'Send All Files',
+        },
+        summary: {
+          client: 'Client',
+          company: 'Company',
+          email: 'Email',
+          visit: 'Visit',
+          statics: 'Statics',
+          feedUrl: 'Feed URL',
+          ips: 'IPs',
+        },
+      },
+      es: {
+        sidebar: {
+          subtitle: 'Asistente de onboarding con IA',
+          languageLabel: 'Idioma',
+          onboardingSteps: 'Pasos de onboarding',
+          overallProgress: 'Progreso general',
+          uploadAssets: 'Subir recursos',
+          collectedData: 'Datos recopilados',
+          noData: 'Aún no hay datos recopilados',
+          resetOnboarding: 'Reiniciar onboarding',
+        },
+        steps: {
+          intro: 'Introducción',
+          branded: 'Seguimiento de marca',
+          feed: 'Feed de productos',
+          assets: 'Activos del programa',
+          ip: 'Direcciones IP',
+          scripts: 'Scripts de seguimiento',
+        },
+        stepSubtitles: {
+          intro: 'Dime quién eres y a qué empresa representas.',
+          branded: 'Configura tus dominios visit.* y statics.*.',
+          feed: 'Comparte la URL y el formato de tu feed de productos.',
+          assets: 'Sube tu logo, banners, T&C y documentos.',
+          ip: 'Proporciona las IPs de oficina para excluirlas del seguimiento.',
+          scripts: 'Integra las etiquetas de seguimiento de Tradedoubler.',
+        },
+        chat: {
+          placeholder: 'Escribe tu mensaje...',
+          send: 'Enviar',
+          uploadingFiles: 'Estoy subiendo {count} archivos: {summary}',
+        },
+        uploadPanel: {
+          title: 'Subir recursos',
+          logo: 'Logo',
+          logoHint: '350×130px',
+          uploadLogo: 'Subir logo',
+          banners: 'Banners',
+          bannersHint: 'Varios tamaños',
+          bannerSizes: '160×600, 300×250, 300×600, 728×90, 928×70',
+          uploadBanners: 'Subir banners',
+          terms: 'Términos y condiciones',
+          termsHint: 'PDF',
+          uploadTerms: 'Subir T&C',
+          other: 'Otros documentos',
+          otherHint: 'Opcional',
+          uploadFiles: 'Subir archivos',
+          sendAll: 'Enviar todos los archivos',
+        },
+        summary: {
+          client: 'Cliente',
+          company: 'Empresa',
+          email: 'Correo',
+          visit: 'Visit',
+          statics: 'Statics',
+          feedUrl: 'URL del feed',
+          ips: 'IPs',
+        },
+      },
+      fr: {
+        sidebar: {
+          subtitle: "Assistant d'onboarding IA",
+          languageLabel: 'Langue',
+          onboardingSteps: "Étapes d'onboarding",
+          overallProgress: 'Progression globale',
+          uploadAssets: 'Importer des ressources',
+          collectedData: 'Données collectées',
+          noData: 'Aucune donnée collectée',
+          resetOnboarding: "Réinitialiser l'onboarding",
+        },
+        steps: {
+          intro: 'Introduction',
+          branded: 'Suivi de marque',
+          feed: 'Flux produits',
+          assets: 'Ressources du programme',
+          ip: 'Adresses IP',
+          scripts: 'Scripts de suivi',
+        },
+        stepSubtitles: {
+          intro: 'Dites-moi qui vous êtes et quelle entreprise vous représentez.',
+          branded: 'Configurez vos domaines visit.* et statics.*.',
+          feed: 'Partagez l’URL et le format de votre flux produits.',
+          assets: 'Importez votre logo, bannières, CGU et documents.',
+          ip: 'Fournissez les IP du bureau à exclure du suivi.',
+          scripts: 'Intégrez les balises de suivi Tradedoubler.',
+        },
+        chat: {
+          placeholder: 'Tapez votre message...',
+          send: 'Envoyer',
+          uploadingFiles: "J'importe {count} fichiers : {summary}",
+        },
+        uploadPanel: {
+          title: 'Importer des ressources',
+          logo: 'Logo',
+          logoHint: '350×130px',
+          uploadLogo: 'Importer le logo',
+          banners: 'Bannières',
+          bannersHint: 'Tailles multiples',
+          bannerSizes: '160×600, 300×250, 300×600, 728×90, 928×70',
+          uploadBanners: 'Importer des bannières',
+          terms: 'Conditions générales',
+          termsHint: 'PDF',
+          uploadTerms: 'Importer les CGU',
+          other: 'Autres documents',
+          otherHint: 'Optionnel',
+          uploadFiles: 'Importer des fichiers',
+          sendAll: 'Envoyer tous les fichiers',
+        },
+        summary: {
+          client: 'Client',
+          company: 'Société',
+          email: 'Email',
+          visit: 'Visit',
+          statics: 'Statics',
+          feedUrl: 'URL du flux',
+          ips: 'IPs',
+        },
+      },
+      it: {
+        sidebar: {
+          subtitle: 'Assistente di onboarding IA',
+          languageLabel: 'Lingua',
+          onboardingSteps: "Fasi di onboarding",
+          overallProgress: 'Progresso complessivo',
+          uploadAssets: 'Carica risorse',
+          collectedData: 'Dati raccolti',
+          noData: 'Nessun dato raccolto',
+          resetOnboarding: 'Reimposta onboarding',
+        },
+        steps: {
+          intro: 'Introduzione',
+          branded: 'Tracking brandizzato',
+          feed: 'Feed prodotti',
+          assets: 'Asset del programma',
+          ip: 'Indirizzi IP',
+          scripts: 'Script di tracciamento',
+        },
+        stepSubtitles: {
+          intro: 'Dimmi chi sei e quale azienda rappresenti.',
+          branded: 'Configura i domini visit.* e statics.*.',
+          feed: 'Condividi URL e formato del feed prodotti.',
+          assets: 'Carica logo, banner, T&C e documenti.',
+          ip: 'Fornisci gli IP dell’ufficio da escludere dal tracciamento.',
+          scripts: 'Integra i tag di tracciamento Tradedoubler.',
+        },
+        chat: {
+          placeholder: 'Scrivi il tuo messaggio...',
+          send: 'Invia',
+          uploadingFiles: 'Sto caricando {count} file: {summary}',
+        },
+        uploadPanel: {
+          title: 'Carica risorse',
+          logo: 'Logo',
+          logoHint: '350×130px',
+          uploadLogo: 'Carica logo',
+          banners: 'Banner',
+          bannersHint: 'Più dimensioni',
+          bannerSizes: '160×600, 300×250, 300×600, 728×90, 928×70',
+          uploadBanners: 'Carica banner',
+          terms: 'Termini e condizioni',
+          termsHint: 'PDF',
+          uploadTerms: 'Carica T&C',
+          other: 'Altri documenti',
+          otherHint: 'Opzionale',
+          uploadFiles: 'Carica file',
+          sendAll: 'Invia tutti i file',
+        },
+        summary: {
+          client: 'Cliente',
+          company: 'Azienda',
+          email: 'Email',
+          visit: 'Visit',
+          statics: 'Statics',
+          feedUrl: 'URL del feed',
+          ips: 'IP',
+        },
+      },
+      de: {
+        sidebar: {
+          subtitle: 'KI-Onboarding-Assistent',
+          languageLabel: 'Sprache',
+          onboardingSteps: 'Onboarding-Schritte',
+          overallProgress: 'Gesamtfortschritt',
+          uploadAssets: 'Assets hochladen',
+          collectedData: 'Erfasste Daten',
+          noData: 'Noch keine Daten erfasst',
+          resetOnboarding: 'Onboarding zurücksetzen',
+        },
+        steps: {
+          intro: 'Einführung',
+          branded: 'Marken-Tracking',
+          feed: 'Produkt-Feed',
+          assets: 'Programm-Assets',
+          ip: 'IP-Adressen',
+          scripts: 'Tracking-Skripte',
+        },
+        stepSubtitles: {
+          intro: 'Sag mir, wer du bist und welches Unternehmen du vertrittst.',
+          branded: 'Konfiguriere deine visit.* und statics.* Domains.',
+          feed: 'Teile die URL und das Format deines Produkt-Feeds.',
+          assets: 'Lade Logo, Banner, AGB und Dokumente hoch.',
+          ip: 'Gib Büro-IPs an, die vom Tracking ausgeschlossen werden.',
+          scripts: 'Integriere die Tradedoubler-Tracking-Tags.',
+        },
+        chat: {
+          placeholder: 'Nachricht eingeben...',
+          send: 'Senden',
+          uploadingFiles: 'Ich lade {count} Dateien hoch: {summary}',
+        },
+        uploadPanel: {
+          title: 'Assets hochladen',
+          logo: 'Logo',
+          logoHint: '350×130px',
+          uploadLogo: 'Logo hochladen',
+          banners: 'Banner',
+          bannersHint: 'Mehrere Größen',
+          bannerSizes: '160×600, 300×250, 300×600, 728×90, 928×70',
+          uploadBanners: 'Banner hochladen',
+          terms: 'AGB',
+          termsHint: 'PDF',
+          uploadTerms: 'AGB hochladen',
+          other: 'Weitere Dokumente',
+          otherHint: 'Optional',
+          uploadFiles: 'Dateien hochladen',
+          sendAll: 'Alle Dateien senden',
+        },
+        summary: {
+          client: 'Kunde',
+          company: 'Unternehmen',
+          email: 'E-Mail',
+          visit: 'Visit',
+          statics: 'Statics',
+          feedUrl: 'Feed-URL',
+          ips: 'IPs',
+        },
+      },
     };
+
+    const WELCOME_MESSAGES = {
+      en: "Hi! I'm your Tradedoubler onboarding assistant.\n\nI'll walk you through your technical setup step-by-step.\n\nWhat you'll need from you:\n\n- Website domain\n\n- Product feed URL\n\n- Office IP addresses\n\n- Company logos & banners\n\nWhat requires your technical team:\n\n- DNS/CNAME setup (I'll provide exact records)\n\n- Tracking script integration (I'll provide the code)\n\n- Test transaction (I'll provide test link)\n\nDon't have everything ready? That's fine! We can pause at any step and you can provide information later. I'll make a note of what's pending.\n\nNeed to understand something better? Just ask!\n\nLet's get started! What's your name, company, and email address?",
+      es: "¡Hola! Soy tu asistente de onboarding de Tradedoubler.\n\nTe guiaré por la configuración técnica paso a paso.\n\nLo que necesito de ti:\n\n- Dominio del sitio web\n\n- URL del feed de productos\n\n- Direcciones IP de oficina\n\n- Logos y banners de la empresa\n\nLo que requiere tu equipo técnico:\n\n- Configuración DNS/CNAME (proporcionaré los registros exactos)\n\n- Integración del script de seguimiento (proporcionaré el código)\n\n- Transacción de prueba (proporcionaré el enlace de prueba)\n\n¿No tienes todo listo? No pasa nada. Podemos pausar en cualquier paso y puedes proporcionar la información más tarde. Tomaré nota de lo pendiente.\n\n¿Necesitas entender algo mejor? Solo pregunta.\n\n¡Empecemos! ¿Cuál es tu nombre, empresa y correo electrónico?",
+      fr: "Bonjour! Je suis votre assistant d'onboarding Tradedoubler.\n\nJe vais vous guider étape par étape dans la configuration technique.\n\nCe dont j'ai besoin de votre part:\n\n- Nom de domaine du site\n\n- URL du flux produits\n\n- Adresses IP du bureau\n\n- Logos et bannières de l'entreprise\n\nCe qui nécessite votre équipe technique:\n\n- Configuration DNS/CNAME (je fournirai les enregistrements exacts)\n\n- Intégration du script de suivi (je fournirai le code)\n\n- Transaction de test (je fournirai le lien de test)\n\nVous n'avez pas tout prêt? Aucun souci. Nous pouvons mettre en pause à n'importe quelle étape et vous pourrez fournir les informations plus tard. Je noterai ce qui manque.\n\nBesoin d'une explication? Demandez-moi.\n\nCommençons! Quel est votre nom, votre société et votre adresse email?",
+      it: "Ciao! Sono il tuo assistente di onboarding Tradedoubler.\n\nTi guiderò nella configurazione tecnica passo dopo passo.\n\nCosa mi serve da te:\n\n- Dominio del sito web\n\n- URL del feed prodotti\n\n- Indirizzi IP dell'ufficio\n\n- Loghi e banner dell'azienda\n\nCosa richiede il tuo team tecnico:\n\n- Configurazione DNS/CNAME (fornirò i record esatti)\n\n- Integrazione dello script di tracciamento (fornirò il codice)\n\n- Transazione di test (fornirò il link di test)\n\nNon hai tutto pronto? Nessun problema. Possiamo mettere in pausa in qualsiasi fase e potrai fornire le informazioni più tardi. Terrò nota di ciò che manca.\n\nVuoi capire meglio qualcosa? Chiedimi pure.\n\nIniziamo! Qual è il tuo nome, azienda ed email?",
+      de: "Hallo! Ich bin dein Tradedoubler-Onboarding-Assistent.\n\nIch begleite dich Schritt für Schritt durch das technische Setup.\n\nWas ich von dir brauche:\n\n- Website-Domain\n\n- Produkt-Feed-URL\n\n- Büro-IP-Adressen\n\n- Logos und Banner des Unternehmens\n\nWas dein Technikteam benötigt:\n\n- DNS/CNAME-Setup (ich liefere die genauen Einträge)\n\n- Integration des Tracking-Skripts (ich liefere den Code)\n\n- Testtransaktion (ich liefere den Testlink)\n\nDu hast noch nicht alles bereit? Kein Problem. Wir können jederzeit pausieren und du kannst die Informationen später liefern. Ich notiere, was noch fehlt.\n\nEtwas unklar? Frag einfach.\n\nLass uns starten! Wie heißen du, dein Unternehmen und deine E-Mail-Adresse?",
+    };
+
+    function getInitialLanguage() {
+      const stored = localStorage.getItem('td_v2_lang');
+      if (stored && SUPPORTED_LANGS.includes(stored)) return stored;
+      const browser = (navigator.language || 'en').slice(0, 2).toLowerCase();
+      return SUPPORTED_LANGS.includes(browser) ? browser : 'en';
+    }
+
+    function getStrings(lang) {
+      return I18N[lang] || I18N.en;
+    }
+
+    function getTranslation(key, lang) {
+      const source = getStrings(lang);
+      return key.split('.').reduce((acc, part) => (acc && acc[part] !== undefined ? acc[part] : null), source);
+    }
+
+    function formatTemplate(value, tokens) {
+      if (!value) return '';
+      return Object.keys(tokens).reduce((out, key) => out.replace(`{${key}}`, tokens[key]), value);
+    }
+
+    function getWelcomeMessage(lang) {
+      return WELCOME_MESSAGES[lang] || WELCOME_MESSAGES.en;
+    }
+
+    function getStepMeta(lang) {
+      const strings = getStrings(lang);
+      return {
+        intro: { title: strings.steps.intro, subtitle: strings.stepSubtitles.intro },
+        branded: { title: strings.steps.branded, subtitle: strings.stepSubtitles.branded },
+        feed: { title: strings.steps.feed, subtitle: strings.stepSubtitles.feed },
+        assets: { title: strings.steps.assets, subtitle: strings.stepSubtitles.assets },
+        ip: { title: strings.steps.ip, subtitle: strings.stepSubtitles.ip },
+        scripts: { title: strings.steps.scripts, subtitle: strings.stepSubtitles.scripts },
+      };
+    }
+
+    let currentLanguage = getInitialLanguage();
+    let stepMeta = getStepMeta(currentLanguage);
 
     const checklistMap = {
       intro: 'intro',
@@ -280,6 +635,7 @@
     const uploadPanel = document.getElementById('upload-panel');
     const toggleUploadBtn = document.getElementById('toggle-upload-panel');
     const closeUploadBtn = document.getElementById('close-upload-panel');
+    const languageSelect = document.getElementById('language-select');
 
     // STORAGE
     function saveState() {
@@ -374,7 +730,7 @@
       return value.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
     }
 
-    function inferStepFromText(text) {
+    function inferStepFromText(text, contextStep = null) {
       if (!text) return null;
       const lower = text.toLowerCase();
 
@@ -470,6 +826,16 @@
       });
 
       if (matchedSteps.length === 0) return null;
+
+      if (matchedSteps.length > 1 && contextStep) {
+        const sequence = ['intro', 'branded', 'feed', 'assets', 'ip', 'scripts'];
+        const contextIndex = sequence.indexOf(contextStep);
+        if (contextIndex >= 0) {
+          const nextMatch = sequence.slice(contextIndex + 1).find((step) => matchedSteps.includes(step));
+          if (nextMatch) return nextMatch;
+        }
+      }
+
       if (!hasTransition && matchedSteps.length > 1) return null;
       return bestStep;
     }
@@ -480,7 +846,7 @@
 
       conversationHistory.forEach((msg) => {
         if (msg.role === 'assistant') {
-          const inferred = inferStepFromText(msg.content);
+          const inferred = inferStepFromText(msg.content, stepCursor);
           if (inferred) stepCursor = inferred;
         }
         if (msg.step !== stepCursor) {
@@ -624,13 +990,18 @@
         const lower = text.toLowerCase();
         const filesPayload = totalFiles > 0 && lower.includes('upload') ? uploadedFiles : {};
 
-        const response = await fetch(N8N_WEBHOOK_URL, {
+        const webhookUrl = programID
+          ? `${N8N_WEBHOOK_URL}?programID=${encodeURIComponent(programID)}`
+          : N8N_WEBHOOK_URL;
+
+        const response = await fetch(webhookUrl, {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({
             sessionId,
             step: currentStep,
             message: text,
+            programID,
             conversationHistory: trimmedHistory,
             onboardingData,
             checklist,
@@ -646,7 +1017,7 @@
         if (data.triggerGoToStep && STEPS.includes(data.triggerGoToStep)) {
           responseStep = data.triggerGoToStep;
         } else {
-          const inferredAssistantStep = inferStepFromText(data.response);
+          const inferredAssistantStep = inferStepFromText(data.response, currentStep);
           if (inferredAssistantStep) responseStep = inferredAssistantStep;
         }
 
