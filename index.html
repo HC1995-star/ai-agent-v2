@@ -250,9 +250,6 @@
   <script>
     // CONFIG
     const N8N_WEBHOOK_URL = 'https://coe-n8n.common-eu-de.services.tddrift.net/webhook/onboarding-chat';
-    const qs = new URLSearchParams(window.location.search);
-    const programID = qs.get('programID');
-    console.log('programID from page URL:', programID);
     const STEPS = ['intro', 'branded', 'feed', 'assets', 'ip', 'scripts'];
 
     const SUPPORTED_LANGS = ['en', 'es', 'fr', 'it', 'de'];
@@ -989,6 +986,10 @@
         const totalFiles = Object.values(uploadedFiles).reduce((sum, arr) => sum + (arr ? arr.length : 0), 0);
         const lower = text.toLowerCase();
         const filesPayload = totalFiles > 0 && lower.includes('upload') ? uploadedFiles : {};
+
+        const qs = new URLSearchParams(window.location.search);
+        const programID = qs.get('programID');
+        console.log('programID from page URL:', programID);
 
         const webhookUrl = programID
           ? `${N8N_WEBHOOK_URL}?programID=${encodeURIComponent(programID)}`
