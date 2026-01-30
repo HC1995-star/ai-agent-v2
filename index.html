@@ -989,13 +989,9 @@
 
         const qs = new URLSearchParams(window.location.search);
         const programID = qs.get('programID');
-        console.log('programID from page URL:', programID);
+        console.log('programID sent to backend:', programID);
 
-        const webhookUrl = programID
-          ? `${N8N_WEBHOOK_URL}?programID=${encodeURIComponent(programID)}`
-          : N8N_WEBHOOK_URL;
-
-        const response = await fetch(webhookUrl, {
+        const response = await fetch(N8N_WEBHOOK_URL, {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({
